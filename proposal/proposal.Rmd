@@ -9,7 +9,6 @@ library(tidyverse)
 library(broom)
 ```
 
-*For instructions on what each section should include, please see the [project page](https://idsed.digital/assessments/project/#proposal) on the course website. Remove this text when completing your proposal*.
 
 ## 1. Introduction
 We will be looking at the question; What makes a successful Formula One (F1) team. In particular we will look at Mercedes-AMG Petronas F1 Team, and their success in the hybrid era (2014-2020).
@@ -60,8 +59,6 @@ glimpse(drivers)
 
 ## 3. Data analysis plan
 
-The plan for this data analysis is to explore the question   
-**"Question Here"**
+To support our thesis, we will look at the predictor variables('position' from the qualifying dataframe, 'duration', 'stop' from the pit_stops dataframe and 'fastestLapTime', 'fastestLapSpeed', 'rank', 'points' and 'positionText' from the results dataframe) and outcome variable('wins' from the constructor_standings dataframe) for Mercedes-AMG Petronas F1 Team during the hybrid era.
 
-We will do this by combining the dataframes **a, b, c...** and visualising **x, y, z**.
-
+To do this we will compare the duration of a pit stop for the team throughout a season, and look at the efficiency and reliability of the pit crew. We will also compare the fastest lap time to other teams to show the effect that updated  engineering has had on the sport.
