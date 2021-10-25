@@ -43,6 +43,7 @@ We will also use the *drivers* and *constructors* dataframes to link driver name
  
 
 
+
 ## 2. Data
 
 For this project, we will be using a combination of dataframes from the Formula One dataset. This combined dataframe will give us the variables referenced above in the **Introduction** section.
@@ -52,6 +53,8 @@ Here is a glimpse at one of the data frames we will be using called *results*.
 results <- read_csv("/cloud/project/data/results.csv")
 glimpse(results)
 ```
+
+
 
 
 ## 3. Data analysis plan
