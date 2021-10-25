@@ -12,8 +12,37 @@ library(broom)
 *For instructions on what each section should include, please see the [project page](https://idsed.digital/assessments/project/#proposal) on the course website. Remove this text when completing your proposal*.
 
 ## 1. Introduction
+We will be looking at the question; What makes a successful Formula One (F1) team. In particular we will look at Mercedes-AMG Petronas F1 Team, and their success in the hybrid era (2014-2020).
 
-The dataframes we are using are from the website **website here** and has information on Formula 1 races. This includes variables such as the drivers information, the races they participated in, the race results and more.
+The data we are using comes from the Ergast Developer API **http://ergast.com/mrd/**, it provides data for the Formula One racing series from 1950 to present. The data is collected from official race classifications released by the FIA, Formula One's governing body.
+
+Much of our analysis will focus on the "results" dataframe. Each observation in this dataframe represents the result of one driver at one race. The variables are; 
+
+Result ID, 
+Race ID, 
+Driver ID, 
+Constructor ID,
+Driver number,
+Starting grid position,
+Official classification,
+Points gained,
+Laps completed,
+Finishing time or gap,
+Finishing time in milliseconds,
+Lap number of fastest lap,
+Fastest lap ranking relative to other drivers,
+Fastest lap time,
+Fastest lap speed &
+ Status ID
+ 
+ We will also look at several other data frames, both in conjunction with the "results" frame, and separately.
+ 
+ These will include the "qualifying" data frame, with variables for race, driver, constructor & position as well as lap time.
+ 
+Similarly we will use the "pit_stops" data frame, with variables for race, driver, stop number, lap number, time, duration, and duration in milliseconds.
+ 
+ 
+
 
 ## 2. Data
 
