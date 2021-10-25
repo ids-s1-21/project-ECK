@@ -40,6 +40,7 @@ Fastest lap speed &
  
 Similarly we will use the "pit_stops" data frame, with variables for race, driver, stop number, lap number, time, duration, and duration in milliseconds.
  
+We will also use the "drivers" and "constructors" dataframes, to link Id numbers to names.
  
 
 
@@ -52,8 +53,8 @@ For this project, we will be using a combination of dataframes from the Formula 
 
 Here is a glimpse at the combined data frame we will be using. **(Change the dataframe here to the combined one once goal is decided)**
 ```{r echo = FALSE}
-drivers <- read_csv("/cloud/project/data/drivers.csv")
-glimpse(drivers)
+results <- read_csv("/cloud/project/data/results.csv")
+glimpse(results)
 ```
 
 
