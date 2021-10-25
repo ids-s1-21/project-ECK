@@ -234,6 +234,125 @@ pre code {
 ## 10       10             7 &quot;\\N&quot;    glock      &quot;\\N&quot;  GLO   Timo      Glock     
 ## # … with 25,270 more rows, and 3 more variables: dob &lt;date&gt;, nationality &lt;chr&gt;,
 ## #   url &lt;chr&gt;</code></pre>
+<pre class="r"><code>circuits &lt;- read_csv(&quot;/cloud/project/data/circuits.csv&quot;)</code></pre>
+<pre><code>## Rows: 77 Columns: 9</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): circuitRef, name, location, country, url
+## dbl (4): circuitId, lat, lng, alt</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>constructor_results &lt;- read_csv(&quot;/cloud/project/data/constructor_results.csv&quot;)</code></pre>
+<pre><code>## Rows: 11890 Columns: 5</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): status
+## dbl (4): constructorResultsId, raceId, constructorId, points</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>constructor_standings &lt;- read_csv(&quot;/cloud/project/data/constructor_standings.csv&quot;)</code></pre>
+<pre><code>## Rows: 12656 Columns: 7</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (7): constructorStandingsId, raceId, constructorId, points, position, po...</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>constructors &lt;- read_csv(&quot;/cloud/project/data/constructors.csv&quot;)</code></pre>
+<pre><code>## Rows: 211 Columns: 5</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): constructorRef, name, nationality, url
+## dbl (1): constructorId</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>driver_standings &lt;- read_csv(&quot;/cloud/project/data/driver_standings.csv&quot;)</code></pre>
+<pre><code>## Rows: 33269 Columns: 7</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): positionText
+## dbl (6): driverStandingsId, raceId, driverId, points, position, wins</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>drivers &lt;- read_csv(&quot;/cloud/project/data/drivers.csv&quot;)</code></pre>
+<pre><code>## Rows: 853 Columns: 9</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (7): driverRef, number, code, forename, surname, nationality, url
+## dbl  (1): driverId
+## date (1): dob</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>lap_times &lt;- read_csv(&quot;/cloud/project/data/lap_times.csv&quot;)</code></pre>
+<pre><code>## Rows: 507978 Columns: 6</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): time
+## dbl (5): raceId, driverId, lap, position, milliseconds</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>pit_stops &lt;- read_csv(&quot;/cloud/project/data/pit_stops.csv&quot;)</code></pre>
+<pre><code>## Rows: 8577 Columns: 7</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (1): duration
+## dbl  (5): raceId, driverId, stop, lap, milliseconds
+## time (1): time</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>qualifying &lt;- read_csv(&quot;/cloud/project/data/qualifying.csv&quot;)</code></pre>
+<pre><code>## Rows: 9015 Columns: 9</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (3): q1, q2, q3
+## dbl (6): qualifyId, raceId, driverId, constructorId, number, position</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>races &lt;- read_csv(&quot;/cloud/project/data/races.csv&quot;)</code></pre>
+<pre><code>## Rows: 1057 Columns: 8</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): name, time, url
+## dbl  (4): raceId, year, round, circuitId
+## date (1): date</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>results &lt;- read_csv(&quot;/cloud/project/data/results.csv&quot;)</code></pre>
+<pre><code>## Rows: 25280 Columns: 18</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (8): position, positionText, time, milliseconds, fastestLap, rank, fast...
+## dbl (10): resultId, raceId, driverId, constructorId, number, grid, positionO...</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>seasons &lt;- read_csv(&quot;/cloud/project/data/seasons.csv&quot;)</code></pre>
+<pre><code>## Rows: 72 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): url
+## dbl (1): year</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>status &lt;- read_csv(&quot;/cloud/project/data/status.csv&quot;)</code></pre>
+<pre><code>## Rows: 137 Columns: 2</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): status
+## dbl (1): statusId</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 
 
 

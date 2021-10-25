@@ -7,54 +7,60 @@ library(tidyverse)
 library(broom)
 ```
 
-*For instructions on what each section should include, please see the
-[project page](https://idsed.digital/assessments/project/#proposal) on
-the course website. Remove this text when completing your proposal*.
-
 ## 1. Introduction
 
-We will be looking at the question; What makes a successful Formula One
-(F1) team. In particular we will look at Mercedes-AMG Petronas F1 Team,
-and their success in the hybrid era (2014-2020).
+We will be looking at the question **“What makes a successful Formula
+One (F1) team?”**. In particular, we will look at Mercedes-AMG Petronas
+F1 Team, and their success in the hybrid era (2014-2020).
 
 The data we are using comes from the Ergast Developer API
-**<http://ergast.com/mrd/>**, it provides data for the Formula One
+(**<http://ergast.com/mrd/>**). It provides data for the Formula One
 racing series from 1950 to present. The data is collected from official
 race classifications released by the FIA, Formula One’s governing body.
 
-Much of our analysis will focus on the “results” dataframe. Each
+Much of our analysis will focus on the *results* dataframe. Each
 observation in this dataframe represents the result of one driver at one
-race. The variables are;
+race. The variables are:
 
-Result ID, Race ID, Driver ID, Constructor ID, Driver number, Starting
-grid position, Official classification, Points gained, Laps completed,
-Finishing time or gap, Finishing time in milliseconds, Lap number of
-fastest lap, Fastest lap ranking relative to other drivers, Fastest lap
-time, Fastest lap speed & Status ID
+-   Result ID  
+-   Race ID  
+-   Driver ID  
+-   Constructor ID  
+-   Driver number  
+-   Starting grid position  
+-   Official classification  
+-   Points gained  
+-   Laps completed  
+-   Finishing time or gap  
+-   Finishing time in milliseconds  
+-   Lap number of fastest lap  
+-   Fastest lap ranking relative to other drivers  
+-   Fastest lap time  
+-   Fastest lap speed  
+-   Status ID
 
 We will also look at several other data frames, both in conjunction with
-the “results” frame, and separately.
+the *results* frame, and separately.
 
-These will include the “qualifying” data frame, with variables for race,
-driver, constructor & position as well as lap time.
+These will include the *qualifying* data frame, with variables for race,
+driver, constructor & and position, as well as lap time.
 
-Similarly we will use the “pit\_stops” data frame, with variables for
+Similarly we will use the *pit\_stops* data frame, with variables for
 race, driver, stop number, lap number, time, duration, and duration in
 milliseconds.
 
-We will also use the “drivers” and “constructors” dataframes, to link Id
-numbers to names.
+We will also use the *drivers* and *constructors* dataframes to link
+driver names to their corresponding ID number.
+
 
 ## 2. Data
 
 For this project, we will be using a combination of dataframes from the
-Formula 1 dataset. This combined dataframe will give us the following:  
-+ The drivers ID (*driverId*)  
-+ The place they achieved in the race (*resultId*)  
-+ **add more information here**
+Formula One dataset. This combined dataframe will give us the variables
+referenced above in the **Introduction** section.
 
-Here is a glimpse at the combined data frame we will be using. **(Change
-the dataframe here to the combined one once goal is decided)**
+Here is a glimpse at one of the data frames we will be using called
+*results*.
 
     ## Rows: 25280 Columns: 18
 
@@ -91,7 +97,17 @@ the dataframe here to the combined one once goal is decided)**
 ## 3. Data analysis plan
 
 The plan for this data analysis is to explore the question  
-**“Question Here”**
+**“What makes a successful Formula One (F1) team?”**
 
-We will do this by combining the dataframes **a, b, c…** and visualising
-**x, y, z**.
+To investigate this, we will look at the predictor variables(‘position’
+from the qualifying dataframe, ‘duration’, ‘stop’ from the pit\_stops
+dataframe and ‘fastestLapTime’, ‘fastestLapSpeed’, ‘rank’, ‘points’, and
+‘positionText’ from the results dataframe) and the outcome variable
+(‘wins’ from the constructor\_standings dataframe) for Mercedes-AMG
+Petronas F1 Team during the hybrid era.
+
+To do this we will compare the duration of a pit stop for the team
+throughout a season, and look at the efficiency and reliability of the
+pit crew. We will also compare the fastest lap time to other teams to
+explore the possible effect that updated engineering has had on the
+sport.
