@@ -1,6 +1,6 @@
 ---
 title: "Project proposal"
-author: "Team name"
+author: "ECK"
 output: github_document
 ---
 
@@ -13,13 +13,26 @@ library(broom)
 
 ## 1. Introduction
 
-
+The dataframes we are using are from the website **website here** and has information on Formula 1 races. This includes variables such as the drivers information, the races they participated in, the race results and more.
 
 ## 2. Data
 
+For this project, we will be using a combination of dataframes from the Formula 1 dataset. This combined dataframe will give us the following:  
++ The drivers ID (*driverId*)  
++ The place they achieved in the race (*resultId*)  
++ **add more information here**
+
+Here is a glimpse at the combined data frame we will be using. **(Change the dataframe here to the combined one once goal is decided)**
+```{r echo = FALSE}
+drivers <- read_csv("/cloud/project/data/drivers.csv")
+glimpse(drivers)
+```
 
 
 ## 3. Data analysis plan
 
+The plan for this data analysis is to explore the question   
+**"Question Here"**
 
+We will do this by combining the dataframes **a, b, c...** and visualising **x, y, z**.
 
