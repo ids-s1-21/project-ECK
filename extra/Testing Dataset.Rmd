@@ -1,0 +1,33 @@
+---
+title: "Testing Dataset"
+output: html_document
+---
+
+```{r libraries}
+library(tidyverse)
+library(readr)
+```
+
+```{r racewins}
+results <- read_csv("F1Data/results.csv")
+constructors <- read_csv("F1Data/constructors.csv")
+drivers <- read_csv("F1Data/drivers.csv") 
+
+resdrivers <- full_join(results %>% select(driverId, constructorId, position),
+                 drivers) 
+
+resdrivers %>% 
+  filter(position == "1") %>%
+  count(driverRef, sort = TRUE) %>%
+  filter(n > 10) %>%
+   ggplot(aes(x = n, y = driverRef)) +
+  geom_point() +
+  labs(x = "Race Wins",
+       y = "Driver")
+  
+```
+
+```{r}
+resdrivers
+```
+
