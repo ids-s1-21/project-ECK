@@ -52,7 +52,6 @@ milliseconds.
 We will also use the *drivers* and *constructors* dataframes to link
 driver names to their corresponding ID number.
 
-
 ## 2. Data
 
 For this project, we will be using a combination of dataframes from the

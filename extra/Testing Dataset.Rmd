@@ -6,46 +6,33 @@ output: html_document
 ```{r libraries}
 library(tidyverse)
 library(readr)
-```
-
-```{r racewins}
-results <- read_csv("F1Data/results.csv")
-constructors <- read_csv("F1Data/constructors.csv")
-drivers <- read_csv("F1Data/drivers.csv") 
-
-resdrivers <- full_join(results %>% select(driverId, constructorId, position),
-                 drivers) 
-
-resdrivers %>% 
-  filter(position == "1") %>%
-  count(driverRef, sort = TRUE) %>%
-  filter(n > 10) %>%
-   ggplot(aes(x = n, y = driverRef)) +
-  geom_point() +
-  labs(x = "Race Wins",
-       y = "Driver")
-  
-
-```
-
-```{r}
-resdrivers
+library(dplyr)
+library(skimr)
+library(here)
 ```
 
 
 ```{r}
-circuits <- read_csv("/cloud/project/data/circuits.csv")
-constructor_results <- read_csv("/cloud/project/data/constructor_results.csv")
-constructor_standings <- read_csv("/cloud/project/data/constructor_standings.csv")
-constructors <- read_csv("/cloud/project/data/constructors.csv")
-driver_standings <- read_csv("/cloud/project/data/driver_standings.csv")
-drivers <- read_csv("/cloud/project/data/drivers.csv")
-lap_times <- read_csv("/cloud/project/data/lap_times.csv")
-pit_stops <- read_csv("/cloud/project/data/pit_stops.csv")
-qualifying <- read_csv("/cloud/project/data/qualifying.csv")
-races <- read_csv("/cloud/project/data/races.csv")
-results <- read_csv("/cloud/project/data/results.csv")
-seasons <- read_csv("/cloud/project/data/seasons.csv")
-status <- read_csv("/cloud/project/data/status.csv")
+results <- read_csv(here(("data/results.csv")))
+constructors <- read_csv(here(("data/constructors.csv")))
+drivers <- read_csv(here(("data/drivers.csv")))
+races <- read_csv(here(("data/races.csv")))
+
+res_con <- inner_join(constructors %>% select(-url), 
+                     results)
+colnames(res_con) [colnames(res_con) %in% c("name", "nationality") ] <- 
+  c("constructorname", "constructornat")
+
+
+res_con_driv <- inner_join(drivers %>% select(driverId, driverRef, surname),
+                           res_con)
+f1merged <- inner_join(races %>% select(raceId, year, round, name, date),
+                       res_con_driv)
+
+colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
+
+#write_csv(f1merged, path = ".cloud/project/data/f1merged.csv")
 ```
+
+
 

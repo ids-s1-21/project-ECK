@@ -1,5 +1,36 @@
 # data
 
+## f1merged
+
+- `raceId`: Foreign key link to races table
+- `year`: Foreign key link to seasons table     
+- `round`: Round number
+- `racename`: Race name
+- `date`: Race date e.g. "1950-05-13"
+- `driverId`: Foreign key link to drivers table    
+- `driverRef`: Unique driver identifier
+- `surname`: Driver surname
+- `constructorId`: Foreign key link to constructors table
+- `constructorRef`: Unique constructor identifier
+- `constructorname`: Constructor name
+- `constructornat`: Constructor Nationality
+- `resultId`: Foreign key link to results table
+- `number`: Driver number 
+- `grid`: Starting grid position
+- `position`: Official classification, if applicable
+- `positionText`: Driver position string e.g. "1" or "R"
+- `positionOrder`: Driver position for ordering purposes
+- `points`: Driver points for race
+- `laps`: Number of completed laps
+- `time`: Finishing time or gap   
+- `milliseconds`: Finishing time in milliseconds
+- `fastestLap`: Lap number of fastest lap
+- `rank`: Fastest lap rank, compared to other drivers
+- `fastestLapTime`: Fastest lap time e.g. "1:27.453"
+- `fastestLapSpeed`: Fastest lap speed (km/h) e.g. "213.874"
+- `statusId`: Foreign key link to status table
+
+
 ## circuits
 
 - `circuitId`: Primary Key 
