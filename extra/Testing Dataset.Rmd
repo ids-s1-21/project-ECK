@@ -31,7 +31,7 @@ f1merged <- inner_join(races %>% select(raceId, year, round, name, date),
 
 colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 
-#write_csv(f1merged, path = ".cloud/project/data/f1merged.csv")
+write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
 
 
