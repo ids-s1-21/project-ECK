@@ -13,10 +13,11 @@ library(here)
 
 
 ```{r}
-results <- read_csv(here(("data/results.csv")))
-constructors <- read_csv(here(("data/constructors.csv")))
-drivers <- read_csv(here(("data/drivers.csv")))
-races <- read_csv(here(("data/races.csv")))
+status <- read_csv(here("data/status.csv"))
+results <- read_csv(here("data/results.csv"))
+constructors <- read_csv(here("data/constructors.csv"))
+drivers <- read_csv(here("data/drivers.csv"))
+races <- read_csv(here("data/races.csv"))
 
 res_con <- inner_join(constructors %>% select(-url), 
                      results)
@@ -33,6 +34,28 @@ colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
+
+```{r constructor_wins}
+f1merged %>%
+  filter(positionText == 1 & year %in% 2014:2020) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, y = constructorname)) +
+  geom_col() + 
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor")
+```
+
+```{r}
+f1merged %>%
+  distinct(constructorRef)
+
+f1merged %>%
+  distinct(constructorname)
+
+```
+
 
 
 

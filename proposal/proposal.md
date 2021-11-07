@@ -12,55 +12,50 @@ library(skimr)
 ## 1. Introduction
 
 We will be looking at the question **“What makes a successful Formula
-One (F1) team?”**. In particular, we will look at Mercedes-AMG Petronas
-F1 Team, and their success in the hybrid era (2014-2020).
+One team?”**. In particular, we will look at Mercedes-AMG Petronas F1
+Team, and their success in the hybrid era (2014-2020\*).
 
 The data we are using comes from the Ergast Developer API
 (**<http://ergast.com/mrd/>**). It provides data for the Formula One
-racing series from 1950 to present. The data is collected from official
-race classifications released by the FIA, Formula One’s governing body.
+(F1) racing series from 1950 to present. The data is collected from
+official race classifications released by the FIA, Formula One’s
+governing body.
 
 Much of our analysis will focus on the *f1merged* dataframe, which
-combines the data we need from the results, races, drivers &
-constructors data frames. Each observation in this dataframe represents
-the result of one driver at one race. The variables are:
+combines relevant data from the results, races, drivers & constructors
+data frames. Each observation in this dataframe represents the result of
+one driver at one race.
 
--   Result ID **(Add f1merged variables to this and expand on what they
-    are)**
--   Race ID  
--   Driver ID  
--   Constructor ID  
--   Driver number  
--   Starting grid position  
--   Official classification  
--   Points gained  
--   Laps completed  
--   Finishing time or gap  
--   Finishing time in milliseconds  
--   Lap number of fastest lap  
--   Fastest lap ranking relative to other drivers  
--   Fastest lap time  
--   Fastest lap speed  
--   Status ID
+Variables in this data frame include:
 
-We will also look at several other data frames, both in conjunction with
-the *f1merged* frame, and separately.
+-   Unique ID numbers and identifiers for each result, race, driver and
+    constructor.
+-   The year/season, round number, date and name of each race.
+-   Driver names and numbers. Constructor names and nationalities.
+-   Starting and finishing positions for each driver.
+-   Laps completed, points gained, finishing time.
+-   Fastest lap time, fastest lap speed and fastest lap ranking.
+-   Status ID, which links to a data frame with detailed finishing
+    statuses.
 
-These will include the *qualifying* data frame, with variables for race,
-driver, constructor & and position, as well as lap time.
+We will also look at the *qualifying* data frame, with variables for
+race, driver, constructor and qualifying position, as well as fastest
+lap times from each qualifying session.
 
 Similarly we will use the *pit\_stops* data frame, with variables for
-race, driver, stop number, lap number, time, duration, and duration in
-milliseconds.
+race, driver, stop number, lap number, time of the pit stop and duration
+of the pit stop.
+
+\**The 2021 season is excluded from our analysis because it is still
+ongoing at the time of writing*.
 
 ## 2. Data
 
-For this project, we will be using a combination of dataframes from the
-Formula One dataset. This combined dataframe will give us the variables
-referenced above in the **Introduction** section.
+For this project, we will be using a combination of data frames from the
+Formula One data set. The combined data frame *f1merged* will give us
+the variables referenced above in the **Introduction** section.
 
-Here is a glimpse at one of the data frames we will be using called
-*f1merged*.
+Here is a skim of the *f1merged* data frame.
 
     ## Rows: 25280 Columns: 27
 
@@ -73,36 +68,6 @@ Here is a glimpse at one of the data frames we will be using called
     ## 
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-    ## Rows: 25,280
-    ## Columns: 27
-    ## $ raceId          <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-    ## $ year            <dbl> 2009, 2009, 2009, 2009, 2009, 2009, 2009, 2009, 2009, …
-    ## $ round           <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-    ## $ racename        <chr> "Australian Grand Prix", "Australian Grand Prix", "Aus…
-    ## $ date            <date> 2009-03-29, 2009-03-29, 2009-03-29, 2009-03-29, 2009-…
-    ## $ driverId        <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 15, 16, 17, 18,…
-    ## $ driverRef       <chr> "hamilton", "heidfeld", "rosberg", "alonso", "kovalain…
-    ## $ surname         <chr> "Hamilton", "Heidfeld", "Rosberg", "Alonso", "Kovalain…
-    ## $ constructorId   <dbl> 1, 2, 3, 4, 1, 3, 5, 6, 2, 7, 4, 6, 7, 10, 9, 23, 9, 1…
-    ## $ constructorRef  <chr> "mclaren", "bmw_sauber", "williams", "renault", "mclar…
-    ## $ constructorname <chr> "McLaren", "BMW Sauber", "Williams", "Renault", "McLar…
-    ## $ constructornat  <chr> "British", "German", "British", "French", "British", "…
-    ## $ resultId        <dbl> 7573, 7563, 7559, 7558, 7572, 7571, 7561, 7568, 7567, …
-    ## $ number          <dbl> 1, 6, 16, 7, 2, 17, 11, 4, 5, 10, 8, 3, 9, 20, 14, 22,…
-    ## $ grid            <dbl> 18, 9, 5, 10, 12, 11, 17, 7, 4, 19, 14, 6, 20, 16, 8, …
-    ## $ position        <chr> "\\N", "10", "6", "5", "\\N", "\\N", "8", "15", "14", …
-    ## $ positionText    <chr> "D", "10", "6", "5", "R", "R", "8", "15", "14", "4", "…
-    ## $ positionOrder   <dbl> 20, 10, 6, 5, 19, 18, 8, 15, 14, 4, 17, 16, 3, 9, 12, …
-    ## $ points          <dbl> 0.0, 0.0, 3.0, 4.0, 0.0, 0.0, 1.0, 0.0, 0.0, 5.0, 0.0,…
-    ## $ laps            <dbl> 58, 58, 58, 58, 0, 17, 58, 55, 55, 58, 24, 45, 58, 58,…
-    ## $ time            <chr> "\\N", "+7.085", "+5.722", "+4.879", "\\N", "\\N", "+6…
-    ## $ milliseconds    <chr> "\\N", "5662869", "5661506", "5660663", "\\N", "\\N", …
-    ## $ fastestLap      <chr> "39", "48", "48", "53", "\\N", "6", "50", "35", "36", …
-    ## $ rank            <chr> "13", "5", "1", "9", "\\N", "18", "17", "7", "2", "6",…
-    ## $ fastestLapTime  <chr> "1:29.020", "1:28.283", "1:27.706", "1:28.712", "\\N",…
-    ## $ fastestLapSpeed <chr> "214.455", "216.245", "217.668", "215.199", "\\N", "21…
-    ## $ statusId        <dbl> 2, 1, 1, 1, 4, 3, 1, 24, 4, 1, 20, 22, 1, 1, 11, 1, 4,…
 
 |                                                  |          |
 |:-------------------------------------------------|:---------|
