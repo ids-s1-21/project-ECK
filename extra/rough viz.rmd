@@ -1,0 +1,51 @@
+---
+title: "Rough Viz"
+output: html_document
+---
+```{r libraries}
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(skimr)
+library(here)
+```
+
+```{r}
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+```
+
+
+```{r constructor_wins}
+f1merged %>%
+  filter(positionText == 1 & year %in% hybrid_era) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, y = constructorname)) +
+  geom_col() + 
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor")
+```
+
+
+```{r summary_stats}
+
+team_stats <- function(team) {
+
+f1merged %>%
+  filter(year %in% hybrid_era & constructorRef == (team)) %>%
+  summarise(mean_grid_pos = mean(grid),
+            mean_finish_pos = mean(position, na.rm = TRUE),
+            mean_fl_rank = mean(rank, na.rm = TRUE),
+            med_points = median(points),
+            mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))}
+            
+
+team_stats("mercedes")
+team_stats("ferrari")
+team_stats("red_bull")
+team_stats("mclaren")
+team_stats("williams")
+```
+

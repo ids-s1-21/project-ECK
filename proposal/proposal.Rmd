@@ -44,7 +44,9 @@ f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 skim(f1merged)
 ```
 
+It's perhaps worth noting that the large number of NA values in this data frame do not signify errors in the data.
 
+An NA value in the *position* column represents a driver that did not finish that race, and data on individual lap times and speeds was not available for much of F1's history.
 
 
 ## 3. Data analysis plan

@@ -61,8 +61,8 @@ Here is a skim of the *f1merged* data frame.
 
     ## ── Column specification ────────────────────────────────────────────────────────
     ## Delimiter: ","
-    ## chr  (14): racename, driverRef, surname, constructorRef, constructorname, co...
-    ## dbl  (12): raceId, year, round, driverId, constructorId, resultId, number, g...
+    ## chr   (9): racename, driverRef, surname, constructorRef, constructorname, co...
+    ## dbl  (17): raceId, year, round, driverId, constructorId, resultId, number, g...
     ## date  (1): date
 
     ## 
@@ -76,9 +76,9 @@ Here is a skim of the *f1merged* data frame.
 | Number of columns                                | 27       |
 | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |          |
 | Column type frequency:                           |          |
-| character                                        | 14       |
+| character                                        | 9        |
 | Date                                             | 1        |
-| numeric                                          | 12       |
+| numeric                                          | 17       |
 | \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |          |
 | Group variables                                  | None     |
 
@@ -88,20 +88,15 @@ Data summary
 
 | skim\_variable  | n\_missing | complete\_rate | min | max | empty | n\_unique | whitespace |
 |:----------------|-----------:|---------------:|----:|----:|------:|----------:|-----------:|
-| racename        |          0 |              1 |  16 |  29 |     0 |        48 |          0 |
-| driverRef       |          0 |              1 |   3 |  18 |     0 |       853 |          0 |
-| surname         |          0 |              1 |   3 |  23 |     0 |       794 |          0 |
-| constructorRef  |          0 |              1 |   2 |  20 |     0 |       210 |          0 |
-| constructorname |          0 |              1 |   2 |  25 |     0 |       210 |          0 |
-| constructornat  |          0 |              1 |   5 |  13 |     0 |        24 |          0 |
-| position        |          0 |              1 |   1 |   2 |     0 |        34 |          0 |
-| positionText    |          0 |              1 |   1 |   2 |     0 |        39 |          0 |
-| time            |          0 |              1 |   2 |  11 |     0 |      6523 |          0 |
-| milliseconds    |          0 |              1 |   2 |   8 |     0 |      6722 |          0 |
-| fastestLap      |          0 |              1 |   1 |   2 |     0 |        80 |          0 |
-| rank            |          0 |              1 |   1 |   2 |     0 |        26 |          0 |
-| fastestLapTime  |          0 |              1 |   2 |   8 |     0 |      6313 |          0 |
-| fastestLapSpeed |          0 |              1 |   2 |   7 |     0 |      6449 |          0 |
+| racename        |          0 |           1.00 |  16 |  29 |     0 |        48 |          0 |
+| driverRef       |          0 |           1.00 |   3 |  18 |     0 |       853 |          0 |
+| surname         |          0 |           1.00 |   3 |  23 |     0 |       794 |          0 |
+| constructorRef  |          0 |           1.00 |   2 |  20 |     0 |       210 |          0 |
+| constructorname |          0 |           1.00 |   2 |  25 |     0 |       210 |          0 |
+| constructornat  |          0 |           1.00 |   5 |  13 |     0 |        24 |          0 |
+| positionText    |          0 |           1.00 |   1 |   2 |     0 |        39 |          0 |
+| time            |      18521 |           0.27 |   4 |  11 |     0 |      6522 |          0 |
+| fastestLapTime  |      18444 |           0.27 |   7 |   8 |     0 |      6312 |          0 |
 
 **Variable type: Date**
 
@@ -111,20 +106,32 @@ Data summary
 
 **Variable type: numeric**
 
-| skim\_variable | n\_missing | complete\_rate |     mean |      sd |   p0 |     p25 |     p50 |      p75 |  p100 | hist  |
-|:---------------|-----------:|---------------:|---------:|--------:|-----:|--------:|--------:|---------:|------:|:------|
-| raceId         |          0 |              1 |   519.25 |  291.22 |    1 |  288.00 |   504.0 |   764.00 |  1067 | ▆▇▇▆▆ |
-| year           |          0 |              1 |  1989.55 |   18.97 | 1950 | 1976.00 |  1990.0 |  2006.00 |  2021 | ▃▆▇▆▇ |
-| round          |          0 |              1 |     8.28 |    4.86 |    1 |    4.00 |     8.0 |    12.00 |    21 | ▇▆▅▃▁ |
-| driverId       |          0 |              1 |   251.84 |  259.27 |    1 |   56.00 |   159.0 |   347.00 |   854 | ▇▃▂▁▂ |
-| constructorId  |          0 |              1 |    47.59 |   58.53 |    1 |    6.00 |    25.0 |    58.00 |   214 | ▇▂▁▁▁ |
-| resultId       |          0 |              1 | 12641.24 | 7298.91 |    1 | 6320.75 | 12640.5 | 18960.25 | 25285 | ▇▇▇▇▇ |
-| number         |          6 |              1 |    17.62 |   14.85 |    0 |    7.00 |    15.0 |    23.00 |   208 | ▇▁▁▁▁ |
-| grid           |          0 |              1 |    11.20 |    7.27 |    0 |    5.00 |    11.0 |    17.00 |    34 | ▇▇▇▃▁ |
-| positionOrder  |          0 |              1 |    12.93 |    7.74 |    1 |    6.00 |    12.0 |    19.00 |    39 | ▇▇▆▂▁ |
-| points         |          0 |              1 |     1.81 |    4.05 |    0 |    0.00 |     0.0 |     2.00 |    50 | ▇▁▁▁▁ |
-| laps           |          0 |              1 |    45.80 |   30.01 |    0 |   21.00 |    52.0 |    66.00 |   200 | ▅▇▁▁▁ |
-| statusId       |          0 |              1 |    17.70 |   26.09 |    1 |    1.00 |    11.0 |    14.00 |   139 | ▇▁▁▁▁ |
+| skim\_variable  | n\_missing | complete\_rate |       mean |         sd |        p0 |        p25 |        p50 |        p75 |        p100 | hist  |
+|:----------------|-----------:|---------------:|-----------:|-----------:|----------:|-----------:|-----------:|-----------:|------------:|:------|
+| raceId          |          0 |           1.00 |     519.25 |     291.22 |      1.00 |     288.00 |     504.00 |     764.00 |     1067.00 | ▆▇▇▆▆ |
+| year            |          0 |           1.00 |    1989.55 |      18.97 |   1950.00 |    1976.00 |    1990.00 |    2006.00 |     2021.00 | ▃▆▇▆▇ |
+| round           |          0 |           1.00 |       8.28 |       4.86 |      1.00 |       4.00 |       8.00 |      12.00 |       21.00 | ▇▆▅▃▁ |
+| driverId        |          0 |           1.00 |     251.84 |     259.27 |      1.00 |      56.00 |     159.00 |     347.00 |      854.00 | ▇▃▂▁▂ |
+| constructorId   |          0 |           1.00 |      47.59 |      58.53 |      1.00 |       6.00 |      25.00 |      58.00 |      214.00 | ▇▂▁▁▁ |
+| resultId        |          0 |           1.00 |   12641.24 |    7298.91 |      1.00 |    6320.75 |   12640.50 |   18960.25 |    25285.00 | ▇▇▇▇▇ |
+| number          |          6 |           1.00 |      17.62 |      14.85 |      0.00 |       7.00 |      15.00 |      23.00 |      208.00 | ▇▁▁▁▁ |
+| grid            |          0 |           1.00 |      11.20 |       7.27 |      0.00 |       5.00 |      11.00 |      17.00 |       34.00 | ▇▇▇▃▁ |
+| position        |      10768 |           0.57 |       7.91 |       4.79 |      1.00 |       4.00 |       7.00 |      11.00 |       33.00 | ▇▆▂▁▁ |
+| positionOrder   |          0 |           1.00 |      12.93 |       7.74 |      1.00 |       6.00 |      12.00 |      19.00 |       39.00 | ▇▇▆▂▁ |
+| points          |          0 |           1.00 |       1.81 |       4.05 |      0.00 |       0.00 |       0.00 |       2.00 |       50.00 | ▇▁▁▁▁ |
+| laps            |          0 |           1.00 |      45.80 |      30.01 |      0.00 |      21.00 |      52.00 |      66.00 |      200.00 | ▅▇▁▁▁ |
+| milliseconds    |      18522 |           0.27 | 6232734.40 | 1691425.64 | 207071.00 | 5410837.50 | 5812935.50 | 6432545.00 | 15090540.00 | ▁▇▃▁▁ |
+| fastestLap      |      18444 |           0.27 |      42.28 |      16.95 |      2.00 |      32.00 |      45.00 |      54.00 |       85.00 | ▂▃▇▆▁ |
+| rank            |      18249 |           0.28 |      10.45 |       6.19 |      0.00 |       5.00 |      10.00 |      16.00 |       24.00 | ▇▇▇▇▂ |
+| fastestLapSpeed |      18444 |           0.27 |     202.74 |      21.35 |     89.54 |     192.53 |     204.13 |     215.75 |      257.32 | ▁▁▂▇▂ |
+| statusId        |          0 |           1.00 |      17.70 |      26.09 |      1.00 |       1.00 |      11.00 |      14.00 |      139.00 | ▇▁▁▁▁ |
+
+It’s perhaps worth noting that the large number of NA values in this
+data frame do not signify errors in the data.
+
+An NA value in the *position* column represents a driver that did not
+finish that race, and data on individual lap times and speeds was not
+available for much of F1’s history.
 
 ## 3. Data analysis plan
 

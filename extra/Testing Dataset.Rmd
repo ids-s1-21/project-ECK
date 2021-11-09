@@ -35,26 +35,26 @@ colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
 
-```{r constructor_wins}
-f1merged %>%
-  filter(positionText == 1 & year %in% 2014:2020) %>%
-count(constructorname, sort = TRUE) %>% 
-  ggplot(aes(x = n, y = constructorname)) +
-  geom_col() + 
-  labs(title = "Race Wins by Constructor",
-       subtitle = "In the hybrid era (2014-2020)",
-       x = "Race Wins",
-      y = "Constructor")
+```{r hybrid_era}
+hybrid_era <- (2014:2020)
 ```
+
+
+
+
 
 ```{r}
-f1merged %>%
-  distinct(constructorRef)
+f1merged <- read_csv("/cloud/project/data/f1merged.csv", 
+    na = "\\N")
 
-f1merged %>%
-  distinct(constructorname)
+write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 
+f1merged_hybrid <- f1merged %>%
+  filter(year %in% hybrid_era)
+
+write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 ```
+
 
 
 
