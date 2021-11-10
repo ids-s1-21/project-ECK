@@ -35,7 +35,9 @@ colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
 
-
+```{r hybrid_era}
+hybrid_era <- (2014:2020)
+```
 
 
 

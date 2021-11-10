@@ -2,39 +2,108 @@
 title: "Rough Viz"
 output: html_document
 ---
-```{r libraries}
+```{r libraries, message=FALSE}
 library(tidyverse)
 library(readr)
 library(dplyr)
 library(skimr)
 library(here)
+library(forcats)
 ```
 
-```{r}
+```{r read_data, message=FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 ```
 
+```{r hybrid_era}
+hybrid_era <- (2014:2020)
+```
 
-```{r constructor_wins}
-f1merged %>%
-  filter(positionText == 1 & year %in% hybrid_era) %>%
+```{r mercedes_success}
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+                  
+
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
 count(constructorname, sort = TRUE) %>% 
-  ggplot(aes(x = n, y = constructorname)) +
-  geom_col() + 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
   labs(title = "Race Wins by Constructor",
        subtitle = "In the hybrid era (2014-2020)",
        x = "Race Wins",
-      y = "Constructor")
+      y = "Constructor") +
+  guides(fill = "none")
+  
+
+f1merged_hybrid %>%
+  filter(positionText %in% 1:3) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Podium Finishes by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Podiums",
+      y = "Constructor") + 
+  guides(fill = "none")
+  
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  summarise(total_points = sum(points)) %>%
+   ggplot(aes(x = total_points, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Total Championship Points by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Points",
+      y = "Constructor") + 
+  guides(fill = "none")
+
 ```
 
 
 ```{r summary_stats}
 
-team_stats <- function(team) {
+constructor_stats <- function(constructor) {
 
 f1merged %>%
-  filter(year %in% hybrid_era & constructorRef == (team)) %>%
+  filter(year %in% hybrid_era & constructorname == (constructor)) %>%
   summarise(mean_grid_pos = mean(grid),
             mean_finish_pos = mean(position, na.rm = TRUE),
             mean_fl_rank = mean(rank, na.rm = TRUE),
@@ -42,10 +111,23 @@ f1merged %>%
             mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))}
             
 
-team_stats("mercedes")
-team_stats("ferrari")
-team_stats("red_bull")
-team_stats("mclaren")
-team_stats("williams")
+constructor_stats("Mercedes")
+constructor_stats("Ferrari")
+constructor_stats("Red Bull")
+constructor_stats("McLaren")
+constructor_stats("Williams")
+```
+
+```{r quali_vs_race}
+f1merged_hybrid %>%
+  filter(!is.na(position)) %>%
+  ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)")
+
 ```
 
