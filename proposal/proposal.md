@@ -2,6 +2,15 @@ Project proposal
 ================
 ECK
 
+``` r
+library(tidyverse)
+library(broom)
+library(here)
+library(skimr)
+library(glue)
+library(forcats)
+```
+
 ## 1. Introduction
 
 We will be looking at the question **“What makes a successful Formula
@@ -50,29 +59,12 @@ the variables referenced above in the **Introduction** section.
 
 Here is a glimpse and skim of the *f1merged* data frame.
 
-    ## Rows: 25280 Columns: 27
+``` r
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr   (9): racename, driverRef, surname, constructorRef, constructorname, co...
-    ## dbl  (17): raceId, year, round, driverId, constructorId, resultId, number, g...
-    ## date  (1): date
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-    ## Rows: 2827 Columns: 27
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr   (9): racename, driverRef, surname, constructorRef, constructorname, co...
-    ## dbl  (17): raceId, year, round, driverId, constructorId, resultId, number, g...
-    ## date  (1): date
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+glimpse(f1merged)
+```
 
     ## Rows: 25,280
     ## Columns: 27
@@ -103,6 +95,10 @@ Here is a glimpse and skim of the *f1merged* data frame.
     ## $ fastestLapTime  <chr> "1:29.020", "1:28.283", "1:27.706", "1:28.712", NA, "1…
     ## $ fastestLapSpeed <dbl> 214.455, 216.245, 217.668, 215.199, NA, 212.301, 212.5…
     ## $ statusId        <dbl> 2, 1, 1, 1, 4, 3, 1, 24, 4, 1, 20, 22, 1, 1, 11, 1, 4,…
+
+``` r
+skim(f1merged)
+```
 
 |                                                  |          |
 |:-------------------------------------------------|:---------|
@@ -179,11 +175,204 @@ successful constructor of the hybrid era.
 They have won the World Constructor’s and Driver’s Championships seven
 years running.
 
-They boast an overwhelming majority of all race wins:
+They boast an overwhelming majority of all **race wins**:
+
+``` r
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") +
+  guides(fill = "none")
+```
+
 ![](proposal_files/figure-gfm/mercedes_accolades_wins-1.png)<!-- -->
 
-and pole positions (1st place in the Saturday qualifying session):
+and **pole positions** (1st place in the Saturday qualifying session):
+
+``` r
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+```
 
 ![](proposal_files/figure-gfm/mercedes_accolades_poles-1.png)<!-- -->
 
-We want to look at what factors play into this
+We want to look at what goes into this success; Is it sufficient to
+simply have the fastest car in the race? Or do other factors, such as
+reliability, pit stop times and qualifying performance make a
+significant impact?
+
+**How important is qualifying position as far as race results are
+concerned?**
+
+We want to see how closely tied starting grid position is to finishing
+position. Can a good race on a Sunday make up for a bad qualifying
+session on Saturday? Or is a solid qualifying performance vital to a
+strong race?
+
+``` r
+f1merged_hybrid %>%
+  filter(!is.na(position)) %>%
+  ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)") +
+  scale_y_reverse() +
+  scale_x_reverse()
+```
+
+![](proposal_files/figure-gfm/qualifying_vs_race-1.png)<!-- -->
+
+Here we will use the predictor variable *“grid”*,which represents
+qualifying position, and the outcome variable *“position”* , reflecting
+finishing race position in the race.
+
+A strong correlation between the two would suggest that making up places
+in the race is difficult, and qualifying is very important for success.
+A weaker link would suggest other factors such as race pace, pit stop
+times and strategies, and mechanical reliability are more important.
+
+We would expect the two to be strong correlated, the aerodynamics of
+current F1 cars create “dirty air” behind them that makes closely
+following and overtaking very difficult. As such we would expect
+qualifying position to be closely tied to finishing position.
+
+Once we have more of an answer to our question we could look at Mercedes
+in qualifying specifically, and how they compare to other teams.
+
+**How does the number of retirements per season correlate with points
+won?**
+
+We want to look at reliability, and how it relates to Formula 1 success.
+Would a team with a faster, but much less reliable car, see more success
+than one with a slower, but less retirement prone car? To what extent is
+mechanical reliability a predictor of strong results across a season?
+
+``` r
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  count(constructorname, sort = TRUE) %>%
+  summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
+  ggplot(aes(x = mean_ret_per_season, 
+             y = constructorname, 
+             fill = constructorname)) +
+  geom_col() + 
+  scale_fill_manual(values = team_colours) +
+  labs(x = "Mean Retirements Per Season",
+       y = "Constructor",
+       title = "Retirements Per Season by Constructor",
+       subtitle = "In the Hybrid Era (2014-2020)") +
+  guides(fill = "none")
+```
+
+![](proposal_files/figure-gfm/retirements_season-1.png)<!-- -->
+
+Our predictor variable for this will be *“retirements per season”*, our
+outcome variable will be *“points per season”*. A strong negative trend
+between the two would suggest that a less reliable car leads to fewer
+points scored. We would expect this to be the case, a retirement always
+scores you 0 points, but it is possible that a team can make up for a
+certain number of retirements over a season with a fast enough car.
+
+As you can see from the visualization above, Mercedes have by far the
+lowest average retirements per season in our comparison group. As such,
+if our hypothesis is correct it could explain part of their success.
+
+-   *Note - race retirements for any reason, mechanical or otherwise,
+    are not (clearly) differentiated in this data set so this is not a
+    perfect metric for reliability. If possible we will attempt to
+    separate these out in our analysis*
+
+**How do pit stop times correlate with places gained?**
+
+We will use the predictor variable of *“mean pit stop time per race”*
+and the outcome variable *“places gained per race”*.
+
+A Formula 1 pit stop is typically under 3 seconds and tiny margins
+separate the times between teams. With on track overtakes often
+difficult, a “slow” pit stop can often be the difference between gaining
+a place or losing one
+
+How does the average pit stop time correlate to places made in a race?
+
+We would expect shorter pit stop times to be linked to more positions
+gained for the reasons mentioned above.
+
+We will also look at Mercedes specifically: Does the team winning most
+of the races also have the fastest pit stops? Or is it not that simple.
+
+**Comparison Groups**
+
+Where appropriate we will use a comparison group: (Ferrari, McLaren,
+Mercedes, Red Bull and Williams) that contains Mercedes and four other
+F1 teams. These teams were chosen because they competed in F1 during the
+entire hybrid era, under the same name throughout, which makes direct
+comparison between these teams much easier.
+
+Below are some preliminary summary statistics for this group of teams,
+which we could use to compare differences in factors such as
+reliability, to points and finishing positions.
+
+``` r
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(mean_grid_pos = mean(grid),
+            mean_finish_pos = mean(position, na.rm = TRUE),
+            mean_fl_rank = mean(rank, na.rm = TRUE),
+            med_points = median(points),
+            mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+```
+
+    ## # A tibble: 5 × 6
+    ##   constructorname mean_grid_pos mean_finish_pos mean_fl_rank med_points
+    ##   <chr>                   <dbl>           <dbl>        <dbl>      <dbl>
+    ## 1 Ferrari                  5.76            5.01         5.71         12
+    ## 2 McLaren                 12.0             9.89        10.7           0
+    ## 3 Mercedes                 2.85            2.58         3.43         18
+    ## 4 Red Bull                 6.56            5.08         6.21         10
+    ## 5 Williams                12.0            11.2         11.6           0
+    ## # … with 1 more variable: mean_points <dbl>

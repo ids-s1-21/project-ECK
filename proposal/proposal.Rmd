@@ -4,11 +4,13 @@ author: "ECK"
 output: github_document
 ---
 
-```{r load-packages, message = FALSE, echo = FALSE}
+```{r load-packages, message = FALSE,}
 library(tidyverse)
 library(broom)
 library(here)
 library(skimr)
+library(glue)
+library(forcats)
 ```
 
 ## 1. Introduction
@@ -39,9 +41,10 @@ Similarly we will use the *pit_stops* data frame, with variables for race, drive
 For this project, we will be using a combination of data frames from the Formula One data set. The combined data frame *f1merged* will give us the variables referenced above in the **Introduction** section.
 
 Here is a glimpse and skim of the *f1merged* data frame.
-```{r echo = FALSE}
+```{r load_data, message = FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+
 glimpse(f1merged)
 skim(f1merged)
 ```
@@ -60,8 +63,8 @@ There's no questioning Mercedes-AMG Petronas F1 Team as the most successful cons
 
 They have won the World Constructor's and Driver's Championships seven years running.
 
-They boast an overwhelming majority of all race wins: 
-```{r mercedes_accolades_wins, echo = FALSE}
+They boast an overwhelming majority of all **race wins**: 
+```{r mercedes_accolades_wins}
 team_colours <- c("Mercedes" = "#00d2be",
                   "Red Bull" = "#0600ef",
                   "Ferrari" = "#dc0000",
@@ -76,6 +79,12 @@ team_colours <- c("Mercedes" = "#00d2be",
                   "Alfa Romeo" = "#960000",
                   "Sauber" = "#960000",
                   "Haas F1 Team" = "#787878")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
 
 f1merged_hybrid %>%
   filter(positionText == 1) %>%
@@ -92,9 +101,9 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-and pole positions (1st place in the Saturday qualifying session):
+and **pole positions** (1st place in the Saturday qualifying session):
 
-```{r mercedes_accolades_poles, echo = FALSE}
+```{r mercedes_accolades_poles}
 f1merged_hybrid %>%
   filter(grid == 1) %>%
 count(constructorname, sort = TRUE) %>% 
@@ -110,8 +119,93 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-We want to look at what goes into this success; Is it sufficient to simply have the fastest car, or do other factors like pit stop times and reliability also correlate with race wins and podiums?
+We want to look at what goes into this success; Is it sufficient to simply have the fastest car in the race? Or do other factors, such as reliability, pit stop times and qualifying performance make a significant impact?
 
-How important is qualifying position as far as race results are concerned?
+**How important is qualifying position as far as race results are concerned?**
 
-How does the number of retirements per season correlate with points won?
+We want to see how closely tied starting grid position is to finishing position. Can a good race on a Sunday make up for a bad qualifying session on Saturday? Or is a solid qualifying performance vital to a  strong race?
+
+```{r qualifying_vs_race, message = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position)) %>%
+  ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)") +
+  scale_y_reverse() +
+  scale_x_reverse()
+```
+
+Here we will use the predictor variable *"grid"*,which represents qualifying position, and the outcome variable *"position"* , reflecting finishing race position in the race.
+
+A strong correlation between the two would suggest that making up places in the race is difficult, and qualifying is very important for success. A weaker link would suggest other factors such as race pace, pit stop times and strategies, and mechanical reliability are more important. 
+
+We would expect the two to be strong correlated, the aerodynamics of current F1 cars create "dirty air" behind them that makes closely following and overtaking very difficult. As such we would expect qualifying position to be closely tied to finishing position. 
+
+Once we have more of an answer to our question we could look at Mercedes in qualifying specifically, and how they compare to other teams.
+
+
+**How does the number of retirements per season correlate with points won?**
+
+We want to look at reliability, and how it relates to Formula 1 success. Would a team with a faster, but much less reliable car, see more success than one with a slower, but less retirement prone car? To what extent is mechanical reliability a predictor of strong results across a season?
+
+```{r retirements_season}
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  count(constructorname, sort = TRUE) %>%
+  summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
+  ggplot(aes(x = mean_ret_per_season, 
+             y = constructorname, 
+             fill = constructorname)) +
+  geom_col() + 
+  scale_fill_manual(values = team_colours) +
+  labs(x = "Mean Retirements Per Season",
+       y = "Constructor",
+       title = "Retirements Per Season by Constructor",
+       subtitle = "In the Hybrid Era (2014-2020)") +
+  guides(fill = "none")
+
+```
+
+Our predictor variable for this will be *"retirements per season"*, our outcome variable will be *"points per season"*. A strong negative trend between the two would suggest that a less reliable car leads to fewer points scored. We would expect this to be the case, a retirement always scores you 0 points, but it is possible that a team can make up for a certain number of retirements over a season with a fast enough car.
+
+As you can see from the visualization above, Mercedes have by far the lowest average retirements per season in our comparison group. As such, if our hypothesis is correct it could explain part of their success.
+
+
+* *Note - race retirements for any reason, mechanical or otherwise, are not (clearly) differentiated in this data set so this is not a perfect metric for reliability. If possible we will attempt to separate these out in our analysis*
+
+**How do pit stop times correlate with places gained?**
+
+We will use the predictor variable of *"mean pit stop time per race"* and the outcome variable *"places gained per race"*. 
+
+A Formula 1 pit stop is typically under 3 seconds and tiny margins separate the times between teams. With on track overtakes often difficult, a "slow" pit stop can often be the difference between gaining a place or losing one 
+
+How does the average pit stop time correlate to places made in a race? 
+
+We would expect shorter pit stop times to be linked to more positions gained for the reasons mentioned above.
+
+We will also look at Mercedes specifically: Does the team winning most of the races also have the fastest pit stops? Or is it not that simple.
+
+**Comparison Groups**
+
+Where appropriate we will use a comparison group: (`r glue_collapse(key_teams, sep = ", ", last = " and ")`) that contains Mercedes and four other F1 teams. These teams were chosen because they competed in F1 during the entire hybrid era, under the same name throughout, which makes direct comparison between these teams much easier.
+
+Below are some preliminary summary statistics for this group of teams, which we could use to compare differences in factors such as reliability, to points and finishing positions.
+
+```{r comparison_teams}
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(mean_grid_pos = mean(grid),
+            mean_finish_pos = mean(position, na.rm = TRUE),
+            mean_fl_rank = mean(rank, na.rm = TRUE),
+            med_points = median(points),
+            mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+```
+
+
+
