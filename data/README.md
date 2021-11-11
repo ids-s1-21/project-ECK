@@ -30,6 +30,13 @@
 - `fastestLapSpeed`: Fastest lap speed (km/h) e.g. "213.874"
 - `statusId`: Foreign key link to status table
 
+## Labels used in the positionText fields:                          
+- `D` - disqualified                                             
+- `E` - excluded                                                
+- `F` - failed to qualify                                       
+- `N` - not classified                                           
+- `R` - retired                                                 
+- `W` - withdrew       
 
 ## circuits
 
@@ -164,5 +171,6 @@
 - `statusId`: Primary key
 - `status`: Finishing status e.g. "Retired"
 
+   
 
 

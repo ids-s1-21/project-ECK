@@ -4,7 +4,7 @@ author: "ECK"
 output: github_document
 ---
 
-```{r load-packages, message = FALSE}
+```{r load-packages, message = FALSE, echo = FALSE}
 library(tidyverse)
 library(broom)
 library(here)
@@ -38,9 +38,10 @@ Similarly we will use the *pit_stops* data frame, with variables for race, drive
 
 For this project, we will be using a combination of data frames from the Formula One data set. The combined data frame *f1merged* will give us the variables referenced above in the **Introduction** section.
 
-Here is a skim of the *f1merged* data frame.
+Here is a glimpse and skim of the *f1merged* data frame.
 ```{r echo = FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+glimpse(f1merged)
 skim(f1merged)
 ```
 
