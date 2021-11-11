@@ -131,3 +131,32 @@ f1merged_hybrid %>%
 
 ```
 
+
+```{r retirements}
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  count(constructorname, sort = TRUE) %>%
+  summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
+  ggplot(aes(x = mean_ret_per_season, 
+             y = constructorname, 
+             fill = constructorname)) +
+  geom_col() + 
+  scale_fill_manual(values = team_colours) +
+  labs(x = "Mean Retirements Per Season",
+       y = "Constructor",
+       title = "Retirements Per Season by Constructor",
+       subtitle = "In the Hybrid Era (2014-2020)") +
+  guides(fill = "none")
+```
+
+
+
+

@@ -62,6 +62,18 @@ Here is a glimpse and skim of the *f1merged* data frame.
     ## ℹ Use `spec()` to retrieve the full column specification for this data.
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
+    ## Rows: 2827 Columns: 27
+
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr   (9): racename, driverRef, surname, constructorRef, constructorname, co...
+    ## dbl  (17): raceId, year, round, driverId, constructorId, resultId, number, g...
+    ## date  (1): date
+
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
     ## Rows: 25,280
     ## Columns: 27
     ## $ raceId          <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
@@ -161,15 +173,17 @@ available for much of F1’s history.
 The plan for this data analysis is to explore the question  
 **“What makes a successful Formula One (F1) team?”**
 
-To investigate this, we will look at the predictor variables(‘position’
-from the qualifying dataframe, ‘duration’, ‘stop’ from the pit\_stops
-dataframe and ‘fastestLapTime’, ‘fastestLapSpeed’, ‘rank’, ‘points’, and
-‘positionText’ from the results dataframe) and the outcome variable
-(‘wins’ from the constructor\_standings dataframe) for Mercedes-AMG
-Petronas F1 Team during the hybrid era.
+There’s no questioning Mercedes-AMG Petronas F1 Team as the most
+successful constructor of the hybrid era.
 
-To do this we will compare the duration of a pit stop for the team
-throughout a season, and look at the efficiency and reliability of the
-pit crew. We will also compare the fastest lap time to other teams to
-explore the possible effect that updated engineering has had on the
-sport.
+They have won the World Constructor’s and Driver’s Championships seven
+years running.
+
+They boast an overwhelming majority of all race wins:
+![](proposal_files/figure-gfm/mercedes_accolades_wins-1.png)<!-- -->
+
+and pole positions (1st place in the Saturday qualifying session):
+
+![](proposal_files/figure-gfm/mercedes_accolades_poles-1.png)<!-- -->
+
+We want to look at what factors play into this

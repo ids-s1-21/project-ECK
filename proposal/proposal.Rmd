@@ -41,6 +41,7 @@ For this project, we will be using a combination of data frames from the Formula
 Here is a glimpse and skim of the *f1merged* data frame.
 ```{r echo = FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 glimpse(f1merged)
 skim(f1merged)
 ```
@@ -55,7 +56,62 @@ An NA value in the *position* column represents a driver that did not finish tha
 The plan for this data analysis is to explore the question   
 **"What makes a successful Formula One (F1) team?"**
 
-To investigate this, we will look at the predictor variables('position' from the qualifying dataframe, 'duration', 'stop' from the pit_stops dataframe and 'fastestLapTime', 'fastestLapSpeed', 'rank', 'points', and 'positionText' from the results dataframe) and the outcome variable ('wins' from the constructor_standings dataframe) for Mercedes-AMG Petronas F1 Team during the hybrid era.
+There's no questioning Mercedes-AMG Petronas F1 Team as the most successful constructor of the hybrid era.
 
-To do this we will compare the duration of a pit stop for the team throughout a season, and look at the efficiency and reliability of the pit crew. We will also compare the fastest lap time to other teams to explore the possible effect that updated engineering has had on the sport.
+They have won the World Constructor's and Driver's Championships seven years running.
 
+They boast an overwhelming majority of all race wins: 
+```{r mercedes_accolades_wins, echo = FALSE}
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") +
+  guides(fill = "none")
+```
+
+and pole positions (1st place in the Saturday qualifying session):
+
+```{r mercedes_accolades_poles, echo = FALSE}
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+```
+
+We want to look at what goes into this success; Is it sufficient to simply have the fastest car, or do other factors like pit stop times and reliability also correlate with race wins and podiums?
+
+How important is qualifying position as far as race results are concerned?
+
+How does the number of retirements per season correlate with points won?
