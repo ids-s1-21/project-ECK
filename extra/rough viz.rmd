@@ -159,5 +159,9 @@ f1merged_hybrid %>%
 ```
 
 
+```{r qualifying_detailed}
+
+
+```
 
 
