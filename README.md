@@ -1,6 +1,6 @@
-Project title
+What makes a successful Formula One team?
 ================
-by Team name
+by ECK
 
 ## Summary
 
