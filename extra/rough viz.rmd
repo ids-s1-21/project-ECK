@@ -9,6 +9,7 @@ library(dplyr)
 library(skimr)
 library(here)
 library(forcats)
+library(tidymodels)
 ```
 
 ```{r read_data, message=FALSE}
@@ -161,8 +162,46 @@ f1merged_hybrid %>%
 
 
 ```{r qualifying_detailed}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0) %>%
+  ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)") +
+  scale_y_reverse() +
+  scale_x_reverse()
+
+
+posi_grid_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = f1merged_hybrid)
+
+tidy(posi_grid_fit)
+
+glance(posi_grid_fit)
+```
+```{r grid_pos_0?}
+#looking at outliers
+f1merged_hybrid %>%
+  filter(grid == 0)
+```
+
+```{r}
+posi_grid_fit_aug <- augment(posi_grid_fit$fit)
+
+posi_grid_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
 
 
 ```
-
 
