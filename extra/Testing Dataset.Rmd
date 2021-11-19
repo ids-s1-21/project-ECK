@@ -48,7 +48,7 @@ f1merged <- read_csv("/cloud/project/data/f1merged.csv",
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 
 f1merged_hybrid <- f1merged %>%
-  filter(year %in% hybrid_era)
+  filter(year %in% 2014:2020)
 
 write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 ```

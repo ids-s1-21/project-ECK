@@ -84,6 +84,7 @@ count(constructorname, sort = TRUE) %>%
 f1merged_hybrid %>%
   group_by(constructorname) %>%
   summarise(total_points = sum(points)) %>%
+  filter(total_points > 5) %>%
    ggplot(aes(x = total_points, 
              y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
              fill = constructorname)) +
@@ -102,14 +103,14 @@ f1merged_hybrid %>%
 
 #constructor_stats <- function(constructor) {
 
-f1merged_hybrid %>%
-  group_by(constructorname) %>%
-  filter(constructorname %in% key_teams) %>%
-  summarise(mean_grid_pos = mean(grid),
-            mean_finish_pos = mean(position, na.rm = TRUE),
-            mean_fl_rank = mean(rank, na.rm = TRUE),
-            med_points = median(points),
-            mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+#f1merged_hybrid %>%
+ # group_by(constructorname) %>%
+  #filter(constructorname %in% key_teams) %>%
+  #summarise(mean_grid_pos = mean(grid),
+   #         mean_finish_pos = mean(position, na.rm = TRUE),
+    #        mean_fl_rank = mean(rank, na.rm = TRUE),
+     #       med_points = median(points),
+      #      mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
             
 
 #constructor_stats("Mercedes")
