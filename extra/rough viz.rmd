@@ -159,38 +159,39 @@ f1merged_hybrid %>%
        subtitle = "In the Hybrid Era (2014-2020)") +
   guides(fill = "none")
 ```
-
-
-```{r qualifying_detailed}
+```{r grid_pos_0?}
+#looking at outliers
 f1merged_hybrid %>%
-  filter(!is.na(position) & grid != 0) %>%
-  ggplot(aes(x = grid, y = position)) +
+  filter(grid == 0)
+#Seem to be a small number of irregularities we can safely remove
+```
+
+```{r qualifying_model}
+quali_grid_tidy <- f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0) 
+ 
+  
+  quali_grid_tidy %>%
+   ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
               formula = y ~ x) +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
-       subtitle = "In the hybrid era (2014-2020)") +
-  scale_y_reverse() +
-  scale_x_reverse()
-
+       subtitle = "In the hybrid era (2014-2020)") 
 
 posi_grid_fit <- linear_reg() %>%
   set_engine("lm") %>%
-  fit(position ~ grid, data = f1merged_hybrid)
+  fit(position ~ grid, data = quali_grid_tidy)
 
 tidy(posi_grid_fit)
 
 glance(posi_grid_fit)
 ```
-```{r grid_pos_0?}
-#looking at outliers
-f1merged_hybrid %>%
-  filter(grid == 0)
-```
 
-```{r}
+
+```{r fitted_vs_residuals}
 posi_grid_fit_aug <- augment(posi_grid_fit$fit)
 
 posi_grid_fit_aug %>%
@@ -203,5 +204,130 @@ posi_grid_fit_aug %>%
        title = "Predicted Values vs Residuals")
 
 
+```
+
+```{r quali_vs_grid_leaders}
+quali_grid_tidy_leaders <- quali_grid_tidy %>%
+  filter(grid <=5)
+ 
+  quali_grid_tidy_leaders %>%
+   ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") 
+
+posi_grid_fit_leaders <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_leaders)
+
+tidy(posi_grid_fit_leaders)
+
+glance(posi_grid_fit_leaders)
+
+
+posi_grid_fit_leaders_aug <- augment(posi_grid_fit_leaders$fit)
+
+posi_grid_fit_leaders_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+
+```{r quali_vs_grid_rest}
+
+quali_grid_tidy_rest <- quali_grid_tidy %>%
+  filter(grid >5)
+ 
+  quali_grid_tidy_rest %>%
+   ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") 
+
+posi_grid_fit_rest <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_rest)
+
+tidy(posi_grid_fit_rest)
+
+glance(posi_grid_fit_rest)
+
+
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+
+Models suggest a much stronger correlation between grid position and finishing position for the drivers qualifying in the top 5. 
+
+If you qualify near the front you are likely to stay there, not as strong a relationship further back in the field. 
+
+If you have one of the fastest cars and qualify near the front you are likely to leave the rest of the field behind (better pace, not as likely to be in someone's dirty air) (also less likely to get involved in any incidents/collisions, particularly at race start.) (All of these factors would be strongest if you qualified P1)
+
+Qualifying near the front of the grid is a very strong predictor of race success. But of course having the clear fastest car would also correlate very strongly with both of these.
+
+```{r mercedes_vs_the_world_poles}
+f1merged_hybrid %>%
+  mutate(mercedes_or_not = if_else
+         (constructorname == "Mercedes",
+                     true = "Mercedes",
+                    false = "Everyone Else")) %>%
+  filter(grid == 1) %>%
+count(mercedes_or_not, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(mercedes_or_not, levels = rev(levels(factor(mercedes_or_not)))),
+             fill = mercedes_or_not)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+
+
+
+
+```
+
+```{r mercedes_vs_the_world_wins}
+f1merged_hybrid %>%
+  mutate(mercedes_or_not = if_else
+         (constructorname == "Mercedes",
+                     true = "Mercedes",
+                    false = "Everyone Else")) %>%
+  filter(position == 1) %>%
+count(mercedes_or_not, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(mercedes_or_not, levels = rev(levels(factor(mercedes_or_not)))),
+             fill = mercedes_or_not)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") + 
+  guides(fill = "none")
 ```
 
