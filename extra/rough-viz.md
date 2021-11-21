@@ -411,3 +411,76 @@ count(mercedes_or_not, sort = TRUE) %>%
 ```
 
 ![](rough-viz_files/figure-gfm/mercedes_vs_the_world_wins-1.png)<!-- -->
+
+``` r
+ret_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  group_by(year, constructorname) %>%
+  count(constructorname) %>%
+  summarise(retirements = n, .groups = "drop")
+
+
+
+ret_season
+```
+
+    ## # A tibble: 35 × 3
+    ##     year constructorname retirements
+    ##    <dbl> <chr>                 <int>
+    ##  1  2014 Ferrari                   3
+    ##  2  2014 McLaren                   2
+    ##  3  2014 Mercedes                  5
+    ##  4  2014 Red Bull                  5
+    ##  5  2014 Williams                  4
+    ##  6  2015 Ferrari                   6
+    ##  7  2015 McLaren                  12
+    ##  8  2015 Mercedes                  2
+    ##  9  2015 Red Bull                  4
+    ## 10  2015 Williams                  3
+    ## # … with 25 more rows
+
+``` r
+points_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  group_by(year, constructorname) %>%
+  summarise(total_points = sum(points), .groups = "drop")
+
+points_season
+```
+
+    ## # A tibble: 35 × 3
+    ##     year constructorname total_points
+    ##    <dbl> <chr>                  <dbl>
+    ##  1  2014 Ferrari                  216
+    ##  2  2014 McLaren                  181
+    ##  3  2014 Mercedes                 701
+    ##  4  2014 Red Bull                 405
+    ##  5  2014 Williams                 320
+    ##  6  2015 Ferrari                  428
+    ##  7  2015 McLaren                   27
+    ##  8  2015 Mercedes                 703
+    ##  9  2015 Red Bull                 187
+    ## 10  2015 Williams                 257
+    ## # … with 25 more rows
+
+``` r
+rets_points_season <- inner_join(points_season, ret_season)
+```
+
+    ## Joining, by = c("year", "constructorname")
+
+``` r
+rets_points_season %>%
+  group_by(constructorname) %>%
+   summarise(mean_ret_season = sum(retirements) / (n_distinct(rets_points_season$year)),
+             mean_points_season = sum(total_points) / (n_distinct(rets_points_season$year)))
+```
+
+    ## # A tibble: 5 × 3
+    ##   constructorname mean_ret_season mean_points_season
+    ##   <chr>                     <dbl>              <dbl>
+    ## 1 Ferrari                    5.14               396.
+    ## 2 McLaren                    8                  103.
+    ## 3 Mercedes                   2.43               686.
+    ## 4 Red Bull                   6.43               369 
+    ## 5 Williams                   5                  115.
