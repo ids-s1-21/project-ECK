@@ -1,0 +1,333 @@
+---
+title: "Rough Viz"
+output: html_document
+---
+```{r libraries, message=FALSE}
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(skimr)
+library(here)
+library(forcats)
+library(tidymodels)
+```
+
+```{r read_data, message=FALSE}
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+```
+
+```{r hybrid_era}
+hybrid_era <- (2014:2020)
+```
+
+```{r mercedes_success}
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+                  
+
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") +
+  guides(fill = "none")
+  
+
+f1merged_hybrid %>%
+  filter(positionText %in% 1:3) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Podium Finishes by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Podiums",
+      y = "Constructor") + 
+  guides(fill = "none")
+  
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  summarise(total_points = sum(points)) %>%
+  filter(total_points > 5) %>%
+   ggplot(aes(x = total_points, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Total Championship Points by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Points",
+      y = "Constructor") + 
+  guides(fill = "none")
+
+```
+
+
+```{r summary_stats}
+
+#constructor_stats <- function(constructor) {
+
+#f1merged_hybrid %>%
+ # group_by(constructorname) %>%
+  #filter(constructorname %in% key_teams) %>%
+  #summarise(mean_grid_pos = mean(grid),
+   #         mean_finish_pos = mean(position, na.rm = TRUE),
+    #        mean_fl_rank = mean(rank, na.rm = TRUE),
+     #       med_points = median(points),
+      #      mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+            
+
+#constructor_stats("Mercedes")
+#constructor_stats("Ferrari")
+#constructor_stats("Red Bull")
+#constructor_stats("McLaren")
+#constructor_stats("Williams")
+```
+
+```{r quali_vs_race}
+f1merged_hybrid %>%
+  filter(!is.na(position)) %>%
+  ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)")
+
+```
+
+
+```{r retirements}
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  count(constructorname, sort = TRUE) %>%
+  summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
+  ggplot(aes(x = mean_ret_per_season, 
+             y = constructorname, 
+             fill = constructorname)) +
+  geom_col() + 
+  scale_fill_manual(values = team_colours) +
+  labs(x = "Mean Retirements Per Season",
+       y = "Constructor",
+       title = "Retirements Per Season by Constructor",
+       subtitle = "In the Hybrid Era (2014-2020)") +
+  guides(fill = "none")
+```
+```{r grid_pos_0?}
+#looking at outliers
+f1merged_hybrid %>%
+  filter(grid == 0)
+#Seem to be a small number of irregularities we can safely remove
+```
+
+```{r qualifying_model}
+quali_grid_tidy <- f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0) 
+ 
+  
+  quali_grid_tidy %>%
+   ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)") 
+
+posi_grid_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy)
+
+tidy(posi_grid_fit)
+
+glance(posi_grid_fit)
+```
+
+
+```{r fitted_vs_residuals}
+posi_grid_fit_aug <- augment(posi_grid_fit$fit)
+
+posi_grid_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+
+```
+
+```{r quali_vs_grid_leaders}
+quali_grid_tidy_leaders <- quali_grid_tidy %>%
+  filter(grid <=5)
+ 
+  quali_grid_tidy_leaders %>%
+   ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") 
+
+posi_grid_fit_leaders <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_leaders)
+
+tidy(posi_grid_fit_leaders)
+
+glance(posi_grid_fit_leaders)
+
+
+posi_grid_fit_leaders_aug <- augment(posi_grid_fit_leaders$fit)
+
+posi_grid_fit_leaders_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+
+```{r quali_vs_grid_rest}
+
+quali_grid_tidy_rest <- quali_grid_tidy %>%
+  filter(grid >5)
+ 
+  quali_grid_tidy_rest %>%
+   ggplot(aes(x = grid, y = position)) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x) +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") 
+
+posi_grid_fit_rest <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_rest)
+
+tidy(posi_grid_fit_rest)
+
+glance(posi_grid_fit_rest)
+
+
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+
+Models suggest a much stronger correlation between grid position and finishing position for the drivers qualifying in the top 5. 
+
+If you qualify near the front you are likely to stay there, not as strong a relationship further back in the field. 
+
+If you have one of the fastest cars and qualify near the front you are likely to leave the rest of the field behind (better pace, not as likely to be in someone's dirty air) (also less likely to get involved in any incidents/collisions, particularly at race start.) (All of these factors would be strongest if you qualified P1)
+
+Qualifying near the front of the grid is a very strong predictor of race success. But of course having the clear fastest car would also correlate very strongly with both of these.
+
+```{r mercedes_vs_the_world_poles}
+f1merged_hybrid %>%
+  mutate(mercedes_or_not = if_else
+         (constructorname == "Mercedes",
+                     true = "Mercedes",
+                    false = "Everyone Else")) %>%
+  filter(grid == 1) %>%
+count(mercedes_or_not, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(mercedes_or_not, levels = rev(levels(factor(mercedes_or_not)))),
+             fill = mercedes_or_not)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Pole Positions by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Pole Positions",
+      y = "Constructor") + 
+  guides(fill = "none")
+
+
+
+
+```
+
+```{r mercedes_vs_the_world_wins}
+f1merged_hybrid %>%
+  mutate(mercedes_or_not = if_else
+         (constructorname == "Mercedes",
+                     true = "Mercedes",
+                    false = "Everyone Else")) %>%
+  filter(position == 1) %>%
+count(mercedes_or_not, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(mercedes_or_not, levels = rev(levels(factor(mercedes_or_not)))),
+             fill = mercedes_or_not)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") + 
+  guides(fill = "none")
+```
+
