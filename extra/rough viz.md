@@ -1,6 +1,6 @@
 ---
 title: "Rough Viz"
-output: html_document
+output: github_document
 ---
 ```{r libraries, message=FALSE}
 library(tidyverse)
