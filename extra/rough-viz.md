@@ -111,26 +111,6 @@ f1merged_hybrid %>%
 ![](rough-viz_files/figure-gfm/mercedes_success-4.png)<!-- -->
 
 ``` r
-#constructor_stats <- function(constructor) {
-
-#f1merged_hybrid %>%
- # group_by(constructorname) %>%
-  #filter(constructorname %in% key_teams) %>%
-  #summarise(mean_grid_pos = mean(grid),
-   #         mean_finish_pos = mean(position, na.rm = TRUE),
-    #        mean_fl_rank = mean(rank, na.rm = TRUE),
-     #       med_points = median(points),
-      #      mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
-            
-
-#constructor_stats("Mercedes")
-#constructor_stats("Ferrari")
-#constructor_stats("Red Bull")
-#constructor_stats("McLaren")
-#constructor_stats("Williams")
-```
-
-``` r
 f1merged_hybrid %>%
   filter(!is.na(position)) %>%
   ggplot(aes(x = grid, y = position)) +

@@ -100,25 +100,26 @@ f1merged_hybrid %>%
 ```
 
 
-```{r summary_stats}
+```{r summary_stats, echo = FALSE, eval = FALSE}
 
-#constructor_stats <- function(constructor) {
+constructor_stats <- function(constructor) {
 
-#f1merged_hybrid %>%
- # group_by(constructorname) %>%
-  #filter(constructorname %in% key_teams) %>%
-  #summarise(mean_grid_pos = mean(grid),
-   #         mean_finish_pos = mean(position, na.rm = TRUE),
-    #        mean_fl_rank = mean(rank, na.rm = TRUE),
-     #       med_points = median(points),
-      #      mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+f1merged_hybrid %>%
+  group_by(constructorname) %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(mean_grid_pos = mean(grid),
+          mean_finish_pos = mean(position, na.rm = TRUE),
+             mean_fl_rank = mean(rank, na.rm = TRUE),
+               med_points = median(points),
+              mean_points = (sum(points))/(n_distinct(f1merged_hybrid$raceId)))
+}
             
 
-#constructor_stats("Mercedes")
-#constructor_stats("Ferrari")
-#constructor_stats("Red Bull")
-#constructor_stats("McLaren")
-#constructor_stats("Williams")
+constructor_stats("Mercedes")
+constructor_stats("Ferrari")
+constructor_stats("Red Bull")
+constructor_stats("McLaren")
+constructor_stats("Williams")
 ```
 
 ```{r quali_vs_race}
@@ -329,5 +330,40 @@ count(mercedes_or_not, sort = TRUE) %>%
        x = "Race Wins",
       y = "Constructor") + 
   guides(fill = "none")
+```
+
+
+```{r retirements_season}
+ret_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  group_by(year, constructorname) %>%
+  count(constructorname) %>%
+  summarise(retirements = n, .groups = "drop")
+
+
+
+ret_season
+```
+
+
+```{r points_season}
+points_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  group_by(year, constructorname) %>%
+  summarise(total_points = sum(points), .groups = "drop")
+
+points_season
+ 
+
+```
+
+```{r combined_rets_points}
+
+rets_points_season <- inner_join(points_season, ret_season)
+
+rets_points_season %>%
+  group_by(constructorname) %>%
+   summarise(mean_ret_season = sum(retirements) / (n_distinct(rets_points_season$year)),
+             mean_points_season = sum(total_points) / (n_distinct(rets_points_season$year)))
 ```
 
