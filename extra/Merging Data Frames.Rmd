@@ -12,7 +12,7 @@ library(here)
 ```
 
 
-```{r read_data}
+```{r read_data, warning = FALSE}
 status <- read_csv(here("data/status.csv"))
 results <- read_csv(here("data/results.csv"))
 constructors <- read_csv(here("data/constructors.csv"))
@@ -22,7 +22,7 @@ races <- read_csv(here("data/races.csv"))
 
 ```
 
-```{r join_data}
+```{r join_data, warning = FALSE}
 res_con <- inner_join(constructors %>% select(-url), 
                      results)
 colnames(res_con) [colnames(res_con) %in% c("name", "nationality") ] <- 
@@ -42,7 +42,7 @@ write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 
 
 
-```{r create_hybrid_era_version}
+```{r create_hybrid_era_version, warning = FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv", 
     na = "\\N")
 

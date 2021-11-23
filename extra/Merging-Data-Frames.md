@@ -133,8 +133,6 @@ colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
 
-    ## Warning: One or more parsing issues, see `problems()` for details
-
 ``` r
 f1merged <- read_csv("/cloud/project/data/f1merged.csv", 
     na = "\\N")
@@ -154,11 +152,7 @@ f1merged <- read_csv("/cloud/project/data/f1merged.csv",
 
 ``` r
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
-```
 
-    ## Warning: One or more parsing issues, see `problems()` for details
-
-``` r
 f1merged_hybrid <- f1merged %>%
   filter(year %in% 2014:2020)
 
