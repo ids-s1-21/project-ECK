@@ -484,3 +484,27 @@ rets_points_season %>%
     ## 3 Mercedes                   2.43               686.
     ## 4 Red Bull                   6.43               369 
     ## 5 Williams                   5                  115.
+
+``` r
+key_team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "McLaren" = "#ff8700",
+                  "Williams" = "#0082fa")
+
+rets_points_season %>%
+  ggplot(aes(x = retirements, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Retirements",
+       y = "Total Championship Points",
+       title = "Retirements vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours)
+```
+
+![](rough-viz_files/figure-gfm/rets_points_plot-1.png)<!-- -->
