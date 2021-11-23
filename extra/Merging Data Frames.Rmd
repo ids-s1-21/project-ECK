@@ -1,6 +1,6 @@
 ---
-title: "Testing Dataset"
-output: html_document
+title: "Merging Data Frames"
+output: github_document
 ---
 
 ```{r libraries}
@@ -12,13 +12,17 @@ library(here)
 ```
 
 
-```{r}
+```{r read_data}
 status <- read_csv(here("data/status.csv"))
 results <- read_csv(here("data/results.csv"))
 constructors <- read_csv(here("data/constructors.csv"))
 drivers <- read_csv(here("data/drivers.csv"))
 races <- read_csv(here("data/races.csv"))
 
+
+```
+
+```{r join_data}
 res_con <- inner_join(constructors %>% select(-url), 
                      results)
 colnames(res_con) [colnames(res_con) %in% c("name", "nationality") ] <- 
@@ -35,22 +39,17 @@ colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 ```
 
-```{r hybrid_era}
-hybrid_era <- (2014:2020)
-```
 
 
 
-
-
-```{r}
+```{r create_hybrid_era_version}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv", 
     na = "\\N")
 
 write_csv(f1merged, "/cloud/project/data/f1merged.csv")
 
 f1merged_hybrid <- f1merged %>%
-  filter(year %in% hybrid_era)
+  filter(year %in% 2014:2020)
 
 write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 ```
