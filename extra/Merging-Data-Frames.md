@@ -27,80 +27,11 @@ library(here)
 
 ``` r
 status <- read_csv(here("data/status.csv"))
-```
-
-    ## Rows: 137 Columns: 2
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (1): status
-    ## dbl (1): statusId
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 results <- read_csv(here("data/results.csv"))
-```
-
-    ## Rows: 25280 Columns: 18
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (8): position, positionText, time, milliseconds, fastestLap, rank, fast...
-    ## dbl (10): resultId, raceId, driverId, constructorId, number, grid, positionO...
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 constructors <- read_csv(here("data/constructors.csv"))
-```
-
-    ## Rows: 211 Columns: 5
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr (4): constructorRef, name, nationality, url
-    ## dbl (1): constructorId
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 drivers <- read_csv(here("data/drivers.csv"))
-```
-
-    ## Rows: 853 Columns: 9
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (7): driverRef, number, code, forename, surname, nationality, url
-    ## dbl  (1): driverId
-    ## date (1): dob
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 races <- read_csv(here("data/races.csv"))
 ```
-
-    ## Rows: 1057 Columns: 8
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (3): name, time, url
-    ## dbl  (4): raceId, year, round, circuitId
-    ## date (1): date
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
 res_con <- inner_join(constructors %>% select(-url), 
