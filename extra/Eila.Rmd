@@ -1,6 +1,6 @@
 ---
 title: "Eila's Rough Notes"
-output: html_document
+output: github_document
 ---
 
 ```{r libraries, message = FALSE}
