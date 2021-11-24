@@ -127,7 +127,9 @@ f1merged_hybrid %>%
   filter(!is.na(position)) %>%
   ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
-  geom_smooth(method = lm) +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
@@ -176,7 +178,8 @@ quali_grid_tidy <- f1merged_hybrid %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
@@ -215,7 +218,8 @@ quali_grid_tidy_leaders <- quali_grid_tidy %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
@@ -252,7 +256,8 @@ quali_grid_tidy_rest <- quali_grid_tidy %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
@@ -390,3 +395,26 @@ rets_points_season %>%
 
 ```
 
+
+```{r rets_points_model}
+rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ retirements, data = rets_points_season)
+
+tidy(rets_points_fit)
+
+glance(rets_points_fit)
+
+
+rets_points_fit_aug <- augment(rets_points_fit$fit)
+
+rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+Our model predicts a constructor with 0 retirements in a season would score 515 points in a season (Dubious, probably due to our comparison group being unintentionally weighted towards top teams). It predicts that for each additional retirement in a season, a team would score 34 fewer points.

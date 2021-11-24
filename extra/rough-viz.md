@@ -115,14 +115,14 @@ f1merged_hybrid %>%
   filter(!is.na(position)) %>%
   ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
-  geom_smooth(method = lm) +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
        subtitle = "In the hybrid era (2014-2020)")
 ```
-
-    ## `geom_smooth()` using formula 'y ~ x'
 
 ![](rough-viz_files/figure-gfm/quali_vs_race-1.png)<!-- -->
 
@@ -192,7 +192,8 @@ quali_grid_tidy <- f1merged_hybrid %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
@@ -248,7 +249,8 @@ quali_grid_tidy_leaders <- quali_grid_tidy %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
@@ -304,7 +306,8 @@ quali_grid_tidy_rest <- quali_grid_tidy %>%
    ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
   geom_smooth(method = lm,
-              formula = y ~ x) +
+              formula = y ~ x,
+              colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
@@ -508,3 +511,47 @@ rets_points_season %>%
 ```
 
 ![](rough-viz_files/figure-gfm/rets_points_plot-1.png)<!-- -->
+
+``` r
+rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ retirements, data = rets_points_season)
+
+tidy(rets_points_fit)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term        estimate std.error statistic      p.value
+    ##   <chr>          <dbl>     <dbl>     <dbl>        <dbl>
+    ## 1 (Intercept)    515.       70.2      7.34 0.0000000197
+    ## 2 retirements    -33.6      11.1     -3.03 0.00471
+
+``` r
+glance(rets_points_fit)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
+    ##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1     0.218         0.194  217.      9.19 0.00471     1  -237.  480.  484.
+    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+
+``` r
+rets_points_fit_aug <- augment(rets_points_fit$fit)
+
+rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+![](rough-viz_files/figure-gfm/rets_points_model-1.png)<!-- --> Our
+model predicts a constructor with 0 retirements in a season would score
+515 points in a season (Dubious, probably due to our comparison group
+being unintentionally weighted towards top teams). It predicts that for
+each additional retirement in a season, a team would score 34 fewer
+points.
