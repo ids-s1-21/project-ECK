@@ -106,14 +106,17 @@ f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   ggplot(aes(x = position, y = constructorname,
              fill = constructorname)) +
-  #geom_violin(alpha = 0.2) +
-  geom_boxplot(alpha = 0.3) +
+  geom_violin(alpha = 0.2) +
+  #geom_boxplot(alpha = 0.3) +
   scale_fill_manual(values = key_team_colours) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
-  labs(title = "Win Densities of F1 Car Constructors",
+  labs(title = "Finishing Position Densities of F1 Car Constructors",
        x = "Finishing Position",
        y = "") +
   theme(legend.position = "none")
 ```
-This visualisation shows us that drivers using Willams' or McLaurens tend to have less wins than other constructors, and Mercedes again shows a strong lead. This again suggests that having Mercedes as the constructor may lead to a better performance.
+This visualisation shows us that drivers using Willams' or McLaurens tend to do worse than other constructors, and Mercedes again shows a strong lead. This again suggests that having Mercedes as the constructor may lead to a better performance.
+
+
+

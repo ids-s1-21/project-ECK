@@ -156,6 +156,6 @@ f1merged_hybrid %>%
 
 ![](Eila_files/figure-gfm/constructor-vs-finishing%20position-1.png)<!-- -->
 This visualisation shows us that drivers using Willams’ or McLaurens
-tend to have less wins than other constructors, and Mercedes again shows
-a strong lead. This again suggests that having Mercedes as the
-constructor may lead to a better performance.
+tend to do worse than other constructors, and Mercedes again shows a
+strong lead. This again suggests that having Mercedes as the constructor
+may lead to a better performance.

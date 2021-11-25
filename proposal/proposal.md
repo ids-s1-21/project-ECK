@@ -254,7 +254,7 @@ f1merged_hybrid %>%
   filter(!is.na(position)) %>%
   ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
-  geom_smooth(method = lm, color = "red") +
+  geom_smooth(method = lm) +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
