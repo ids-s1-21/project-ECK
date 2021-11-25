@@ -141,12 +141,11 @@ f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   ggplot(aes(x = position, y = constructorname,
              fill = constructorname)) +
-  #geom_violin(alpha = 0.2) +
   geom_boxplot(alpha = 0.3) +
   scale_fill_manual(values = key_team_colours) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
-  labs(title = "Win Densities of F1 Car Constructors",
+  labs(title = "Finishing Position Densities of F1 Car Constructors",
        x = "Finishing Position",
        y = "") +
   theme(legend.position = "none")
