@@ -1,5 +1,6 @@
-Rough Viz
+Exploratory Data Analysis
 ================
+Callum Stewart
 
 ``` r
 library(tidyverse)
@@ -54,7 +55,7 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_success-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_success-1.png)<!-- -->
 
 ``` r
 f1merged_hybrid %>%
@@ -72,7 +73,7 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_success-2.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_success-2.png)<!-- -->
 
 ``` r
 f1merged_hybrid %>%
@@ -90,7 +91,7 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_success-3.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_success-3.png)<!-- -->
 
 ``` r
 f1merged_hybrid %>%
@@ -109,7 +110,7 @@ f1merged_hybrid %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_success-4.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_success-4.png)<!-- -->
 
 ``` r
 f1merged_hybrid %>%
@@ -125,7 +126,7 @@ f1merged_hybrid %>%
        subtitle = "In the hybrid era (2014-2020)")
 ```
 
-![](rough-viz_files/figure-gfm/quali_vs_race-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/quali_vs_race-1.png)<!-- -->
 
 ``` r
 key_teams <- c("Ferrari", 
@@ -152,7 +153,7 @@ f1merged_hybrid %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/retirements-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/retirements-1.png)<!-- -->
 
 ``` r
 #looking at outliers
@@ -201,7 +202,7 @@ quali_grid_tidy <- f1merged_hybrid %>%
        subtitle = "In the hybrid era (2014-2020)") 
 ```
 
-![](rough-viz_files/figure-gfm/qualifying_model-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/qualifying_model-1.png)<!-- -->
 
 ``` r
 posi_grid_fit <- linear_reg() %>%
@@ -240,7 +241,7 @@ posi_grid_fit_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 
-![](rough-viz_files/figure-gfm/fitted_vs_residuals-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/fitted_vs_residuals-1.png)<!-- -->
 
 ``` r
 quali_grid_tidy_leaders <- quali_grid_tidy %>%
@@ -258,7 +259,7 @@ quali_grid_tidy_leaders <- quali_grid_tidy %>%
        subtitle = "In the hybrid era (2014-2020)") 
 ```
 
-![](rough-viz_files/figure-gfm/quali_vs_grid_leaders-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/quali_vs_grid_leaders-1.png)<!-- -->
 
 ``` r
 posi_grid_fit_leaders <- linear_reg() %>%
@@ -297,7 +298,7 @@ posi_grid_fit_leaders_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 
-![](rough-viz_files/figure-gfm/quali_vs_grid_leaders-2.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/quali_vs_grid_leaders-2.png)<!-- -->
 
 ``` r
 quali_grid_tidy_rest <- quali_grid_tidy %>%
@@ -315,7 +316,7 @@ quali_grid_tidy_rest <- quali_grid_tidy %>%
        subtitle = "In the hybrid era (2014-2020)") 
 ```
 
-![](rough-viz_files/figure-gfm/quali_vs_grid_rest-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/quali_vs_grid_rest-1.png)<!-- -->
 
 ``` r
 posi_grid_fit_rest <- linear_reg() %>%
@@ -354,7 +355,7 @@ posi_grid_fit_rest_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 
-![](rough-viz_files/figure-gfm/quali_vs_grid_rest-2.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/quali_vs_grid_rest-2.png)<!-- -->
 
 Models suggest a much stronger correlation between grid position and
 finishing position for the drivers qualifying in the top 5.
@@ -392,7 +393,7 @@ count(mercedes_or_not, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_vs_the_world_poles-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_vs_the_world_poles-1.png)<!-- -->
 
 ``` r
 f1merged_hybrid %>%
@@ -414,7 +415,7 @@ count(mercedes_or_not, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-![](rough-viz_files/figure-gfm/mercedes_vs_the_world_wins-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_vs_the_world_wins-1.png)<!-- -->
 
 ``` r
 ret_season <- f1merged_hybrid %>%
@@ -511,7 +512,7 @@ rets_points_season %>%
   scale_colour_manual(values = key_team_colours)
 ```
 
-![](rough-viz_files/figure-gfm/rets_points_plot-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/rets_points_plot-1.png)<!-- -->
 
 ``` r
 rets_points_fit <- linear_reg() %>%
@@ -550,12 +551,12 @@ rets_points_fit_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 
-![](rough-viz_files/figure-gfm/rets_points_model-1.png)<!-- --> Our
-model predicts a constructor with 0 retirements in a season would score
-515 points in a season (Dubious, probably due to our comparison group
-being unintentionally weighted towards top teams). It predicts that for
-each additional retirement in a season, a team would score 34 fewer
-points.
+![](Exploratory-Data-Analysis_files/figure-gfm/rets_points_model-1.png)<!-- -->
+Our model predicts a constructor with 0 retirements in a season would
+score 515 points in a season (Dubious, probably due to our comparison
+group being unintentionally weighted towards top teams). It predicts
+that for each additional retirement in a season, a team would score 34
+fewer points.
 
 ``` r
 stops_merged %>%
@@ -576,8 +577,7 @@ stops_merged %>%
 
 ``` r
 stops_merged %>%
- filter(constructorname %in% key_teams & !is.na(milliseconds)
-        & milliseconds < 60000) %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
   ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
   geom_boxplot() +
   scale_fill_manual(values = key_team_colours) +
@@ -585,13 +585,71 @@ stops_merged %>%
   guides(fill = "none") +
   labs(x = "Pit Stop Time (Seconds)",
        y = "Constructor",
-       title = "Pit Stop Times by Constructor")
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
 ```
 
-![](rough-viz_files/figure-gfm/stops_points-1.png)<!-- --> - Note: pit
-stop times exceeding one minute have been excluded from this
-visualization as outlying data points that make it far less readable.
-All data points are included in the summary statistics above.
+![](Exploratory-Data-Analysis_files/figure-gfm/stops_points-1.png)<!-- -->
+
+``` r
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+```
+
+![](Exploratory-Data-Analysis_files/figure-gfm/stops_points-2.png)<!-- -->
+
+``` r
+#very suspicious outlying times
+ stops_merged %>%
+filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+   arrange(desc(milliseconds)) %>%
+   relocate(year, racename, driverId, duration, milliseconds)
+```
+
+    ## # A tibble: 2,491 × 30
+    ##     year racename         driverId duration milliseconds raceId round date      
+    ##    <dbl> <chr>               <dbl> <chr>           <dbl>  <dbl> <dbl> <date>    
+    ##  1  2016 Brazilian Grand…       20 33:30.6…      2010637    967    20 2016-11-13
+    ##  2  2016 Brazilian Grand…        1 33:30.3…      2010361    967    20 2016-11-13
+    ##  3  2016 Brazilian Grand…       18 33:30.0…      2010062    967    20 2016-11-13
+    ##  4  2016 Brazilian Grand…        3 33:29.7…      2009747    967    20 2016-11-13
+    ##  5  2016 Brazilian Grand…      830 33:29.6…      2009643    967    20 2016-11-13
+    ##  6  2016 Brazilian Grand…       13 33:29.6…      2009630    967    20 2016-11-13
+    ##  7  2016 Brazilian Grand…        4 33:28.7…      2008789    967    20 2016-11-13
+    ##  8  2016 Brazilian Grand…      817 33:28.6…      2008600    967    20 2016-11-13
+    ##  9  2016 Brazilian Grand…      822 33:28.5…      2008595    967    20 2016-11-13
+    ## 10  2017 Azerbaijan Gran…        8 26:23.8…      1583848    976     8 2017-06-25
+    ## # … with 2,481 more rows, and 22 more variables: driverRef <chr>,
+    ## #   surname <chr>, constructorId <dbl>, constructorRef <chr>,
+    ## #   constructorname <chr>, constructornat <chr>, resultId <dbl>, number <dbl>,
+    ## #   grid <dbl>, position <dbl>, positionText <chr>, positionOrder <dbl>,
+    ## #   points <dbl>, laps <dbl>, fastestLap <dbl>, rank <dbl>,
+    ## #   fastestLapTime <chr>, fastestLapSpeed <dbl>, statusId <dbl>, stop <dbl>,
+    ## #   lap <dbl>, time <time>
+
+-   Note: Due to what is likely an error in data collection, a small
+    number of red flagged (suspended for safety reasons) sessions have
+    been recorded as pit stops.
+
+-   According to the data above the 2016 Brazilian Grand Prix saw 9
+    concurrent **33 minute** pit stops. In reality the race was red
+    flagged after a driver crashed on the pit straight and there was a
+    roughly 35 minute delay before it resumed.
+
+-   The clearly erroneous pit stops are all over 15 minutes in duration,
+    after which there is a large jump to the first genuine long stop at
+    1:49 in length. As such it makes sense to remove any pit stops over
+    15 minutes duration from our analysis
 
 ``` r
 f1merged_hybrid %>% 
@@ -608,3 +666,22 @@ f1merged_hybrid %>%
     ##   <chr>             <int>      <dbl>
     ## 1 Other Driver Wins    65       47.1
     ## 2 Pole Sitter Wins     73       52.9
+
+``` r
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
+              true = "Pole Sitter Podium",
+             false = "Pole Sitter Off Podium")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+```
+
+    ## # A tibble: 2 × 3
+    ##   pole_win                   n percentage
+    ##   <chr>                  <int>      <dbl>
+    ## 1 Pole Sitter Off Podium    24       17.4
+    ## 2 Pole Sitter Podium       114       82.6
+
+The driver who qualifies in 1st place goes on to win the race \~53% of
+the time, and finishes on the podium \~83% of the time.

@@ -1,5 +1,6 @@
 ---
-title: "Rough Viz"
+title: "Exploratory Data Analysis"
+author: "Callum Stewart"
 output: github_document
 ---
 ```{r libraries, message=FALSE}
@@ -431,8 +432,7 @@ stops_merged %>%
 
 ```{r stops_points}
 stops_merged %>%
- filter(constructorname %in% key_teams & !is.na(milliseconds)
-        & milliseconds < 60000) %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
   ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
   geom_boxplot() +
   scale_fill_manual(values = key_team_colours) +
@@ -440,11 +440,36 @@ stops_merged %>%
   guides(fill = "none") +
   labs(x = "Pit Stop Time (Seconds)",
        y = "Constructor",
-       title = "Pit Stop Times by Constructor")
-  
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
 
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+
+
+#very suspicious outlying times
+ stops_merged %>%
+filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+   arrange(desc(milliseconds)) %>%
+   relocate(year, racename, driverId, duration, milliseconds)
+ 
 ```
- - Note: pit stop times exceeding one minute have been excluded from this visualization as outlying data points that make it far less readable. All data points are included in the summary statistics above.
+ - Note: Due to what is likely an error in data collection, a small number of red flagged (suspended for safety reasons) sessions have been recorded as pit stops. 
+
+ - According to the data above the 2016 Brazilian Grand Prix saw 9 concurrent **33 minute** pit stops. In reality the race was red flagged after a driver crashed on the pit straight and there was a roughly 35 minute delay before it resumed.
+
+ - The clearly erroneous pit stops are all over 15 minutes in duration, after which there is a large jump to the first genuine long stop at 1:49 in length. 
+ As such it makes sense to remove any pit stops over 15 minutes duration from our analysis
  
 ```{r pole_win_percent}
 f1merged_hybrid %>% 
@@ -454,8 +479,19 @@ f1merged_hybrid %>%
              false = "Other Driver Wins")) %>%
   count(pole_win) %>%
   mutate(percentage = (n / sum(n)) * 100)
+
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
+              true = "Pole Sitter Podium",
+             false = "Pole Sitter Off Podium")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
   
   
 ```
+ The driver who qualifies in 1st place goes on to win the race ~53% of the time, and finishes on the podium ~83% of the time.
+ 
+
  
  
