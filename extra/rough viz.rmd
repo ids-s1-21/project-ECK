@@ -418,3 +418,11 @@ rets_points_fit_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 Our model predicts a constructor with 0 retirements in a season would score 515 points in a season (Dubious, probably due to our comparison group being unintentionally weighted towards top teams). It predicts that for each additional retirement in a season, a team would score 34 fewer points.
+
+
+```{r mean_pit_stops}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(mean_stop = mean())
+```
+
