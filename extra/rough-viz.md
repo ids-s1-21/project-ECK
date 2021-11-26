@@ -591,4 +591,20 @@ stops_merged %>%
 ![](rough-viz_files/figure-gfm/stops_points-1.png)<!-- --> - Note: pit
 stop times exceeding one minute have been excluded from this
 visualization as outlying data points that make it far less readable.
-All of the data points are included in the summary statistics above
+All data points are included in the summary statistics above.
+
+``` r
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position == 1,
+              true = "Pole Sitter Wins",
+             false = "Other Driver Wins")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+```
+
+    ## # A tibble: 2 × 3
+    ##   pole_win              n percentage
+    ##   <chr>             <int>      <dbl>
+    ## 1 Other Driver Wins    65       47.1
+    ## 2 Pole Sitter Wins     73       52.9
