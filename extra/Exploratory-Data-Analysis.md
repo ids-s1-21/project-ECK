@@ -418,6 +418,41 @@ count(mercedes_or_not, sort = TRUE) %>%
 ![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_vs_the_world_wins-1.png)<!-- -->
 
 ``` r
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position == 1,
+              true = "Pole Sitter Wins",
+             false = "Other Driver Wins")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+```
+
+    ## # A tibble: 2 × 3
+    ##   pole_win              n percentage
+    ##   <chr>             <int>      <dbl>
+    ## 1 Other Driver Wins    65       47.1
+    ## 2 Pole Sitter Wins     73       52.9
+
+``` r
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
+              true = "Pole Sitter Podium",
+             false = "Pole Sitter Off Podium")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+```
+
+    ## # A tibble: 2 × 3
+    ##   pole_win                   n percentage
+    ##   <chr>                  <int>      <dbl>
+    ## 1 Pole Sitter Off Podium    24       17.4
+    ## 2 Pole Sitter Podium       114       82.6
+
+The driver who qualifies in 1st place goes on to win the race \~53% of
+the time, and finishes on the podium \~83% of the time.
+
+``` r
 ret_season <- f1merged_hybrid %>%
   filter(constructorname %in% key_teams & positionText == "R") %>%
   group_by(year, constructorname) %>%
@@ -650,38 +685,3 @@ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
     after which there is a large jump to the first genuine long stop at
     1:49 in length. As such it makes sense to remove any pit stops over
     15 minutes duration from our analysis
-
-``` r
-f1merged_hybrid %>% 
-  filter(grid == 1) %>%
- mutate(pole_win = if_else(!is.na(position) & position == 1,
-              true = "Pole Sitter Wins",
-             false = "Other Driver Wins")) %>%
-  count(pole_win) %>%
-  mutate(percentage = (n / sum(n)) * 100)
-```
-
-    ## # A tibble: 2 × 3
-    ##   pole_win              n percentage
-    ##   <chr>             <int>      <dbl>
-    ## 1 Other Driver Wins    65       47.1
-    ## 2 Pole Sitter Wins     73       52.9
-
-``` r
-f1merged_hybrid %>% 
-  filter(grid == 1) %>%
- mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
-              true = "Pole Sitter Podium",
-             false = "Pole Sitter Off Podium")) %>%
-  count(pole_win) %>%
-  mutate(percentage = (n / sum(n)) * 100)
-```
-
-    ## # A tibble: 2 × 3
-    ##   pole_win                   n percentage
-    ##   <chr>                  <int>      <dbl>
-    ## 1 Pole Sitter Off Podium    24       17.4
-    ## 2 Pole Sitter Podium       114       82.6
-
-The driver who qualifies in 1st place goes on to win the race \~53% of
-the time, and finishes on the podium \~83% of the time.

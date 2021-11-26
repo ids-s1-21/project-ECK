@@ -338,7 +338,27 @@ count(mercedes_or_not, sort = TRUE) %>%
       y = "Constructor") + 
   guides(fill = "none")
 ```
+```{r pole_win_percent}
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position == 1,
+              true = "Pole Sitter Wins",
+             false = "Other Driver Wins")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
 
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
+              true = "Pole Sitter Podium",
+             false = "Pole Sitter Off Podium")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+  
+  
+```
+ The driver who qualifies in 1st place goes on to win the race ~53% of the time, and finishes on the podium ~83% of the time.
+ 
 
 ```{r retirements_season}
 ret_season <- f1merged_hybrid %>%
@@ -471,27 +491,7 @@ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
  - The clearly erroneous pit stops are all over 15 minutes in duration, after which there is a large jump to the first genuine long stop at 1:49 in length. 
  As such it makes sense to remove any pit stops over 15 minutes duration from our analysis
  
-```{r pole_win_percent}
-f1merged_hybrid %>% 
-  filter(grid == 1) %>%
- mutate(pole_win = if_else(!is.na(position) & position == 1,
-              true = "Pole Sitter Wins",
-             false = "Other Driver Wins")) %>%
-  count(pole_win) %>%
-  mutate(percentage = (n / sum(n)) * 100)
 
-f1merged_hybrid %>% 
-  filter(grid == 1) %>%
- mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
-              true = "Pole Sitter Podium",
-             false = "Pole Sitter Off Podium")) %>%
-  count(pole_win) %>%
-  mutate(percentage = (n / sum(n)) * 100)
-  
-  
-```
- The driver who qualifies in 1st place goes on to win the race ~53% of the time, and finishes on the podium ~83% of the time.
- 
 
  
  
