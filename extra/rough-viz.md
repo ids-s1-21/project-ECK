@@ -14,6 +14,7 @@ library(tidymodels)
 ``` r
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+stops_merged <- read_csv("/cloud/project/data/stops_merged.csv")
 ```
 
 ``` r
@@ -555,3 +556,39 @@ model predicts a constructor with 0 retirements in a season would score
 being unintentionally weighted towards top teams). It predicts that for
 each additional retirement in a season, a team would score 34 fewer
 points.
+
+``` r
+stops_merged %>%
+  filter(constructorname %in% key_teams) %>%
+  group_by(constructorname) %>%
+  summarise(mean_stop = mean(milliseconds),
+            median_stop = median(milliseconds))
+```
+
+    ## # A tibble: 5 × 3
+    ##   constructorname mean_stop median_stop
+    ##   <chr>               <dbl>       <dbl>
+    ## 1 Ferrari            65484.      23739 
+    ## 2 McLaren            69721.      24005 
+    ## 3 Mercedes           77048.      23484.
+    ## 4 Red Bull           68314.      23480.
+    ## 5 Williams           69668.      23945
+
+``` r
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 60000) %>%
+  ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor")
+```
+
+![](rough-viz_files/figure-gfm/stops_points-1.png)<!-- --> - Note: pit
+stop times exceeding one minute have been excluded from this
+visualization as outlying data points that make it far less readable.
+All of the data points are included in the summary statistics above

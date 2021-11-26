@@ -92,35 +92,12 @@ write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 
 ``` r
 stops <- read_csv(here("data/pit_stops.csv")) 
-```
 
-    ## Rows: 8577 Columns: 7
-
-    ## ── Column specification ────────────────────────────────────────────────────────
-    ## Delimiter: ","
-    ## chr  (1): duration
-    ## dbl  (5): raceId, driverId, stop, lap, milliseconds
-    ## time (1): time
-
-    ## 
-    ## ℹ Use `spec()` to retrieve the full column specification for this data.
-    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-``` r
 stops_drivers <- inner_join(drivers %>% select(driverId, driverRef, surname),
                            stops)
-```
-
-    ## Joining, by = "driverId"
-
-``` r
 stops_merged <- inner_join(f1merged %>% select(-time, -milliseconds),
                            stops_drivers) %>%
   filter(year %in% 2014:2020)
-```
 
-    ## Joining, by = c("raceId", "driverId", "driverRef", "surname")
-
-``` r
 write_csv(stops_merged, "/cloud/project/data/stops_merged.csv")
 ```

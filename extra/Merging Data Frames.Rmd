@@ -55,7 +55,7 @@ write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 ```
 
 
-```{r merged_stops}
+```{r merged_stops, message = FALSE}
 stops <- read_csv(here("data/pit_stops.csv")) 
 
 stops_drivers <- inner_join(drivers %>% select(driverId, driverRef, surname),
