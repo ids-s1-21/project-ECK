@@ -26,7 +26,7 @@ one obvious candidate.
 Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
 championships 7 years running, with a near unprecedented level of
 dominance. We looked at Mercedes specifically, as well as a comparison
-group containing 4 other teams; Ferrari, McLaren, Red Bull and Williams.
+group containing 4 other teams: Ferrari, McLaren, Red Bull and Williams.
 These comparison teams were chosen because they had all competed in F1
 across the entire period we looked at, so we could easily compare them
 to Mercedes directly.
@@ -39,7 +39,7 @@ drivers* and *constructors* and focused only on entries in the hybrid
 era (2014-2020 excluding the 2021 season which is ongoing at the time of
 this analysis). This resulting data set was called *f1merged_hybrid*.
 
-Our bar chart shows Mercedes has an impressive amount of wins when
+Our bar chart shows Mercedes has an impressive number of wins when
 compared to the other key teams. But why is this?
 
 Could this simply be due to Mercedes being outright faster than their

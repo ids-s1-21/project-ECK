@@ -64,11 +64,11 @@ count(constructorname, sort = TRUE) %>%
   guides(fill = "none")
 ```
 
-Mercedes-AMG Petronas F1 team have won the Drivers' and Constructors' championships 7 years running, with a near unprecedented level of dominance. We looked at Mercedes specifically, as well as a comparison group containing 4 other teams; Ferrari, McLaren, Red Bull and Williams. These comparison teams were chosen because they had all competed in F1 across the entire period we looked at, so we could easily compare them to Mercedes directly.
+Mercedes-AMG Petronas F1 team have won the Drivers' and Constructors' championships 7 years running, with a near unprecedented level of dominance. We looked at Mercedes specifically, as well as a comparison group containing 4 other teams: Ferrari, McLaren, Red Bull and Williams. These comparison teams were chosen because they had all competed in F1 across the entire period we looked at, so we could easily compare them to Mercedes directly.
 
 To answer the question "What makes a successful Formula One team?", we wanted to analyse how several predictor variables from our data set impacted a team's performance. Since our data is actually a combination of multiple data sets, we combined the data sets *results, races, drivers* and *constructors* and focused only on entries in the hybrid era (2014-2020 excluding the 2021 season which is ongoing at the time of this analysis). This resulting data set was called *f1merged_hybrid*.
 
-Our bar chart shows Mercedes has an impressive amount of wins when compared to the other key teams. But why is this?
+Our bar chart shows Mercedes has an impressive number of wins when compared to the other key teams. But why is this?
 
 Could this simply be due to Mercedes being outright faster than their competitors? We investigated the average lap time of each key team and found that Mercedes has only a slight advantage in median lap time over the likes of Ferrari and Red Bull. Is this small advantage in race pace a significant enough difference to explain the massive discrepancy in wins and pole positions? (1st place in qualifying) Looking purely at median lap time, it wouldn't be unreasonable to expect Ferrari and Red Bull to have similarly successful records over the same period.
 
