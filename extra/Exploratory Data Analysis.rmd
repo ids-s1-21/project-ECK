@@ -1,5 +1,6 @@
 ---
-title: "Rough Viz"
+title: "Exploratory Data Analysis"
+author: "Callum Stewart"
 output: github_document
 ---
 ```{r libraries, message=FALSE}
@@ -15,6 +16,7 @@ library(tidymodels)
 ```{r read_data, message=FALSE}
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+stops_merged <- read_csv("/cloud/project/data/stops_merged.csv")
 ```
 
 ```{r hybrid_era}
@@ -152,7 +154,7 @@ f1merged_hybrid %>%
   count(constructorname, sort = TRUE) %>%
   summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
   ggplot(aes(x = mean_ret_per_season, 
-             y = constructorname, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
              fill = constructorname)) +
   geom_col() + 
   scale_fill_manual(values = team_colours) +
@@ -336,7 +338,27 @@ count(mercedes_or_not, sort = TRUE) %>%
       y = "Constructor") + 
   guides(fill = "none")
 ```
+```{r pole_win_percent}
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position == 1,
+              true = "Pole Sitter Wins",
+             false = "Other Driver Wins")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
 
+f1merged_hybrid %>% 
+  filter(grid == 1) %>%
+ mutate(pole_win = if_else(!is.na(position) & position %in% 1:3,
+              true = "Pole Sitter Podium",
+             false = "Pole Sitter Off Podium")) %>%
+  count(pole_win) %>%
+  mutate(percentage = (n / sum(n)) * 100)
+  
+  
+```
+ The driver who qualifies in 1st place goes on to win the race ~53% of the time, and finishes on the podium ~83% of the time.
+ 
 
 ```{r retirements_season}
 ret_season <- f1merged_hybrid %>%
@@ -418,3 +440,193 @@ rets_points_fit_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 Our model predicts a constructor with 0 retirements in a season would score 515 points in a season (Dubious, probably due to our comparison group being unintentionally weighted towards top teams). It predicts that for each additional retirement in a season, a team would score 34 fewer points.
+
+The R^2 value suggests 21.8% of the variability in points per season can be explained by the number of retirements in a season.
+
+The predicted value vs. residuals plot doesn't show a clear pattern and appears to be a reasonably random scatter. As such a linear model is likely a good fit for our data.
+
+
+```{r mean_pit_stops}
+stops_merged %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  group_by(constructorname) %>%
+  summarise(mean_stop = mean(milliseconds),
+            median_stop = median(milliseconds))
+```
+
+```{r stops_points}
+#skewed version
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+  ggplot(aes(x = milliseconds, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+
+# red flag stops removed
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  ggplot(aes(x = milliseconds,
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+
+
+#very suspicious outlying times
+ stops_merged %>%
+filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+   arrange(desc(milliseconds)) %>%
+   relocate(year, racename, driverId, duration, milliseconds)
+ 
+```
+ - Note: Due to what is likely an error in data collection, a small number of red flagged (suspended for safety reasons) sessions have been recorded as pit stops. 
+
+ - According to the data above the 2016 Brazilian Grand Prix saw 9 concurrent **33 minute** pit stops. In reality the race was red flagged after a driver crashed on the pit straight and there was a roughly 35 minute delay before it resumed.
+
+ - The clearly erroneous pit stops are all over 15 minutes in duration, after which there is a large jump to the first genuine long stop at 1:49 in length. 
+ As such it makes sense to remove any pit stops over 15 minutes duration from our analysis
+ 
+```{r med_stops_season}
+stops_season <- stops_merged %>%
+  group_by(year, constructorname) %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  summarise(median_stoptime = median(milliseconds))
+
+stops_points_season <- inner_join(points_season, stops_season)
+
+stops_points_season
+
+```
+
+```{r plot_points_stops_season}
+stops_points_season %>%
+  ggplot(aes(x = median_stoptime, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Median Pit Stop Time (Seconds)",
+       y = "Total Championship Points",
+       title = "Pit Stop Time vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001))
+  
+```
+
+```{r model_points_stops_season}
+stops_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime, data = stops_points_season)
+
+tidy(stops_points_fit)
+
+glance(stops_points_fit)
+
+
+stops_points_fit_aug <- augment(stops_points_fit$fit)
+
+stops_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+Our model suggests that a team with a median stop time of 0 milliseconds would be expected to score 5759 points on average. In practice neither of those things are possible.
+
+Our model suggests that all else held equal, for each 1 millisecond increase in a team's median stop time, they would be expected to score 0.2299 fewer points across a season.
+
+The R^2 value of our model suggests that 19.6% of the variability in points per season can be explained by median stop time.
+
+The plot of predicted values vs residuals is a random scatter with no pattern, suggesting that a linear model would be a good fit in this case.
+
+```{r}
+stops_rets_points <- inner_join(rets_points_season, stops_points_season)
+
+stops_rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
+
+tidy(stops_rets_points_fit)
+
+glance(stops_rets_points_fit)
+
+
+stops_rets_points_fit_aug <- augment(stops_rets_points_fit$fit)
+
+stops_rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+The combined model predicts that a team with 0 retirements in a season and a median stop time of 0 milliseconds would be expected to score 6202 points, which doesn't make any sense here.
+
+Our model suggests that all else held equal, for each 1 millisecond increase in a team's median stop time, they would be expected to score 0.24 fewer points across a season.
+
+Our model predicts that for each additional retirement in a season, a team would be expected to score 35 points fewer on average.
+
+The combined model has an adjusted R^2 of 39.7, which suggests 38.7% of the variability in total points per season can be explained by median stop time *and* number of retirements.
+
+The predicted values vs residuals plot again shows a random scatter, so a linear model is a good fit for this data.
+
+```{r median_quali_season}
+quali_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & !is.na(grid)) %>%
+  group_by(year, constructorname) %>%
+  summarise(median_grid = median(grid))
+
+final_model <- inner_join(quali_season, stops_rets_points)
+
+final_model_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_grid+ median_stoptime + retirements,
+      data = final_model)
+
+tidy(final_model_fit)
+
+glance(final_model_fit)
+
+
+final_model_fit_aug <- augment(final_model_fit$fit)
+
+final_model_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+Here I've added a further predictor variable to the model, median qualifying position per season.
+
+This model has a higher adjusted R^2 (84.7%) than the previous 2 predictor variable model, but the plot of predicted values vs residuals seems to show a v shaped pattern and as such a linear model may not be suitable here.

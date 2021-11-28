@@ -89,3 +89,15 @@ f1merged_hybrid <- f1merged %>%
 
 write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
 ```
+
+``` r
+stops <- read_csv(here("data/pit_stops.csv")) 
+
+stops_drivers <- inner_join(drivers %>% select(driverId, driverRef, surname),
+                           stops)
+stops_merged <- inner_join(f1merged %>% select(-time, -milliseconds),
+                           stops_drivers) %>%
+  filter(year %in% 2014:2020)
+
+write_csv(stops_merged, "/cloud/project/data/stops_merged.csv")
+```
