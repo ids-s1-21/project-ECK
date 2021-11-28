@@ -142,7 +142,7 @@ f1merged_hybrid %>%
   count(constructorname, sort = TRUE) %>%
   summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
   ggplot(aes(x = mean_ret_per_season, 
-             y = constructorname, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
              fill = constructorname)) +
   geom_col() + 
   scale_fill_manual(values = team_colours) +
@@ -593,9 +593,17 @@ group being unintentionally weighted towards top teams). It predicts
 that for each additional retirement in a season, a team would score 34
 fewer points.
 
+The R^2 value suggests 21.8% of the variability in points per season can
+be explained by the number of retirements in a season.
+
+The predicted value vs. residuals plot doesn’t show a clear pattern and
+appears to be a reasonably random scatter. As such a linear model is
+likely a good fit for our data.
+
 ``` r
 stops_merged %>%
-  filter(constructorname %in% key_teams) %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
   group_by(constructorname) %>%
   summarise(mean_stop = mean(milliseconds),
             median_stop = median(milliseconds))
@@ -604,16 +612,19 @@ stops_merged %>%
     ## # A tibble: 5 × 3
     ##   constructorname mean_stop median_stop
     ##   <chr>               <dbl>       <dbl>
-    ## 1 Ferrari            65484.      23739 
-    ## 2 McLaren            69721.      24005 
-    ## 3 Mercedes           77048.      23484.
-    ## 4 Red Bull           68314.      23480.
-    ## 5 Williams           69668.      23945
+    ## 1 Ferrari            24552.      23638.
+    ## 2 McLaren            24960.      23798.
+    ## 3 Mercedes           24004.      23348.
+    ## 4 Red Bull           24500.      23371 
+    ## 5 Williams           24859.      23860
 
 ``` r
+#skewed version
 stops_merged %>%
  filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
-  ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
+  ggplot(aes(x = milliseconds, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
   geom_boxplot() +
   scale_fill_manual(values = key_team_colours) +
   scale_x_continuous(labels = label_number(scale = 0.001)) +
@@ -627,10 +638,13 @@ stops_merged %>%
 ![](Exploratory-Data-Analysis_files/figure-gfm/stops_points-1.png)<!-- -->
 
 ``` r
+# red flag stops removed
 stops_merged %>%
  filter(constructorname %in% key_teams & !is.na(milliseconds)
         & milliseconds < 9*10^5) %>%
-  ggplot(aes(x = milliseconds, y = constructorname, fill = constructorname)) +
+  ggplot(aes(x = milliseconds,
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
   geom_boxplot() +
   scale_fill_manual(values = key_team_colours) +
   scale_x_continuous(labels = label_number(scale = 0.001)) +
@@ -685,3 +699,237 @@ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
     after which there is a large jump to the first genuine long stop at
     1:49 in length. As such it makes sense to remove any pit stops over
     15 minutes duration from our analysis
+
+``` r
+stops_season <- stops_merged %>%
+  group_by(year, constructorname) %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  summarise(median_stoptime = median(milliseconds))
+```
+
+    ## `summarise()` has grouped output by 'year'. You can override using the `.groups` argument.
+
+``` r
+stops_points_season <- inner_join(points_season, stops_season)
+```
+
+    ## Joining, by = c("year", "constructorname")
+
+``` r
+stops_points_season
+```
+
+    ## # A tibble: 35 × 4
+    ##     year constructorname total_points median_stoptime
+    ##    <dbl> <chr>                  <dbl>           <dbl>
+    ##  1  2014 Ferrari                  216          23928.
+    ##  2  2014 McLaren                  181          23804 
+    ##  3  2014 Mercedes                 701          23886.
+    ##  4  2014 Red Bull                 405          23443 
+    ##  5  2014 Williams                 320          24420.
+    ##  6  2015 Ferrari                  428          24158 
+    ##  7  2015 McLaren                   27          23806.
+    ##  8  2015 Mercedes                 703          23165 
+    ##  9  2015 Red Bull                 187          23997 
+    ## 10  2015 Williams                 257          24412 
+    ## # … with 25 more rows
+
+``` r
+stops_points_season %>%
+  ggplot(aes(x = median_stoptime, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Median Pit Stop Time (Seconds)",
+       y = "Total Championship Points",
+       title = "Pit Stop Time vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001))
+```
+
+![](Exploratory-Data-Analysis_files/figure-gfm/plot_points_stops_season-1.png)<!-- -->
+
+``` r
+stops_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime, data = stops_points_season)
+
+tidy(stops_points_fit)
+```
+
+    ## # A tibble: 2 × 5
+    ##   term            estimate std.error statistic p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)     5759.    1912.          3.01 0.00495
+    ## 2 median_stoptime   -0.230    0.0810     -2.84 0.00770
+
+``` r
+glance(stops_points_fit)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
+    ##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1     0.196         0.172  220.      8.06 0.00770     1  -237.  481.  485.
+    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+
+``` r
+stops_points_fit_aug <- augment(stops_points_fit$fit)
+
+stops_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+![](Exploratory-Data-Analysis_files/figure-gfm/model_points_stops_season-1.png)<!-- -->
+Our model suggests that a team with a median stop time of 0 milliseconds
+would be expected to score 5759 points on average. In practice neither
+of those things are possible.
+
+Our model suggests that all else held equal, for each 1 millisecond
+increase in a team’s median stop time, they would be expected to score
+0.2299 fewer points across a season.
+
+The R^2 value of our model suggests that 19.6% of the variability in
+points per season can be explained by median stop time.
+
+The plot of predicted values vs residuals is a random scatter with no
+pattern, suggesting that a linear model would be a good fit in this
+case.
+
+``` r
+stops_rets_points <- inner_join(rets_points_season, stops_points_season)
+```
+
+    ## Joining, by = c("year", "constructorname", "total_points")
+
+``` r
+stops_rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
+
+tidy(stops_rets_points_fit)
+```
+
+    ## # A tibble: 3 × 5
+    ##   term            estimate std.error statistic  p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)     6202.    1636.          3.79 0.000627
+    ## 2 median_stoptime   -0.241    0.0692     -3.48 0.00148 
+    ## 3 retirements      -35.0      9.60       -3.65 0.000928
+
+``` r
+glance(stops_rets_points_fit)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+    ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1     0.432         0.397  187.      12.2 0.000116     2  -231.  471.  477.
+    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+
+``` r
+stops_rets_points_fit_aug <- augment(stops_rets_points_fit$fit)
+
+stops_rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+![](Exploratory-Data-Analysis_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+The combined model predicts that a team with 0 retirements in a season
+and a median stop time of 0 milliseconds would be expected to score 6202
+points, which doesn’t make any sense here.
+
+Our model suggests that all else held equal, for each 1 millisecond
+increase in a team’s median stop time, they would be expected to score
+0.24 fewer points across a season.
+
+Our model predicts that for each additional retirement in a season, a
+team would be expected to score 35 points fewer on average.
+
+The combined model has an adjusted R^2 of 39.7, which suggests 38.7% of
+the variability in total points per season can be explained by median
+stop time *and* number of retirements.
+
+The predicted values vs residuals plot again shows a random scatter, so
+a linear model is a good fit for this data.
+
+``` r
+quali_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & !is.na(grid)) %>%
+  group_by(year, constructorname) %>%
+  summarise(median_grid = median(grid))
+```
+
+    ## `summarise()` has grouped output by 'year'. You can override using the `.groups` argument.
+
+``` r
+final_model <- inner_join(quali_season, stops_rets_points)
+```
+
+    ## Joining, by = c("year", "constructorname")
+
+``` r
+final_model_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_grid+ median_stoptime + retirements,
+      data = final_model)
+
+tidy(final_model_fit)
+```
+
+    ## # A tibble: 4 × 5
+    ##   term            estimate std.error statistic  p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)     3371.     875.          3.85 5.47e- 4
+    ## 2 median_grid      -37.1      3.81       -9.74 5.98e-11
+    ## 3 median_stoptime   -0.115    0.0372     -3.10 4.14e- 3
+    ## 4 retirements       -9.72     5.49       -1.77 8.67e- 2
+
+``` r
+glance(final_model_fit)
+```
+
+    ## # A tibble: 1 × 12
+    ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+    ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
+    ## 1     0.860         0.847  94.5      63.6 2.41e-13     3  -207.  423.  431.
+    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+
+``` r
+final_model_fit_aug <- augment(final_model_fit$fit)
+
+final_model_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+![](Exploratory-Data-Analysis_files/figure-gfm/median_quali_season-1.png)<!-- -->
+Here I’ve added a further predictor variable to the model, median
+qualifying position per season.
+
+This model has a higher adjusted R^2 (84.7%) than the previous 2
+predictor variable model, but the plot of predicted values vs residuals
+seems to show a v shaped pattern and as such a linear model may not be
+suitable here.

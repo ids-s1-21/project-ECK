@@ -159,7 +159,7 @@ f1merged_hybrid %>%
   count(constructorname, sort = TRUE) %>%
   summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
   ggplot(aes(x = mean_ret_per_season, 
-             y = constructorname, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
              fill = constructorname)) +
   geom_col() + 
   scale_fill_manual(values = team_colours) +
