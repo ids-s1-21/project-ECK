@@ -4,34 +4,37 @@ by ECK
 
 ## Summary
 
-Our project is to see what can help a Formula One driver perform better?
+Our project is to investigate what makes a good Formula One driver?
 Specifically, we are looking at the Mercedes-AMG Petronas team in the
-hybrid era (2014-2020) and investigate possible reasons for their
+hybrid era (2014-2020) and searching for possible reasons for their
 success.
 
 To answer the question “What makes a successful Formula One team?”, we
-want to see what data we have could impact a drivers performance. Since
-our data is actually a combination of multiple datasets, we combined the
-datasets *results, races, drivers* and *constructors* and focused only
-on entries in the hybrid era (2014-present excluding 2021 since the 2021
-races are ongoing at the time of this analysis). This resulting dataset
-was called *f1merged_hybrid*.
+want to see what variables in the data could impact a drivers
+performance. Since our data is actually a combination of multiple
+datasets, we combined the datasets *results, races, drivers* and
+*constructors* and focused only on entries in the hybrid era (excluding
+2021 since the 2021 races are ongoing at the time of this analysis).
+This resulting dataset was named *f1merged_hybrid*.
 
 Firstly, we wanted to investigate the performance of the Mercedes team.
 We looked at the total number of wins of five key teams - AlphaTauri,
-Ferrari, Mercedes, Racing Point and Red Bull. Our bar chart shows
-Mercedes has an impressive amount of wins when compared to the other key
-teams. But why is this?
+Ferrari, Mercedes, Racing Point and Red Bull.
+
+![](README_files/figure-gfm/wins-bar-chart-1.png)<!-- -->
+
+Our bar chart shows Mercedes has an impressive amount of wins when
+compared to the other key teams. But why is this?
 
 We thought it could possibly be due to Mercedes having more drivers
 leading to a misleading result. However, the merged dataset we are
 working with has the same amount of drivers for each key team.
 
 Could this be due to Mercedes being faster than the other constructors?
-We investigated the median speeds of each key team, and found that
-although Mercedes has a slightly lower mean lap time than the other
-teams, it isn’t a significant enough difference to explain their massive
-amount of wins.
+We investigated the average lap time of each key team and found that
+Mercedes has a slightly lower median lap time than the other teams.
+However, this isn’t a significant enough difference to explain their
+massive amount of wins.
 
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read

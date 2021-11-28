@@ -4,17 +4,71 @@ author: by ECK
 output: github_document
 ---
 
+```{r, libraries-and-data, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(broom)
+library(here)
+library(skimr)
+library(glue)
+library(forcats)
+
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+```
+
+
 ## Summary
 
-Our project is to see what can help a Formula One driver perform better? Specifically, we are looking at the Mercedes-AMG Petronas team in the hybrid era (2014-2020) and investigate possible reasons for their success.
+Our project is to investigate what makes a good Formula One driver? Specifically, we are looking at the Mercedes-AMG Petronas team in the hybrid era (2014-2020) and searching for possible reasons for their success.
 
-To answer the question "What makes a successful Formula One team?", we want to see what data we have could impact a drivers performance. Since our data is actually a combination of multiple datasets, we combined the datasets *results, races, drivers* and *constructors* and focused only on entries in the hybrid era (2014-present excluding 2021 since the 2021 races are ongoing at the time of this analysis). This resulting dataset was called *f1merged_hybrid*.
+To answer the question "What makes a successful Formula One team?", we want to see what variables in the data could impact a drivers performance. Since our data is actually a combination of multiple datasets, we combined the datasets *results, races, drivers* and *constructors* and focused only on entries in the hybrid era (excluding 2021 since the 2021 races are ongoing at the time of this analysis). This resulting dataset was named *f1merged_hybrid*.
 
-Firstly, we wanted to investigate the performance of the Mercedes team. We looked at the total number of wins of five key teams - AlphaTauri, Ferrari, Mercedes, Racing Point and Red Bull. Our bar chart shows Mercedes has an impressive amount of wins when compared to the other key teams. But why is this?
+Firstly, we wanted to investigate the performance of the Mercedes team. We looked at the total number of wins of five key teams - AlphaTauri, Ferrari, Mercedes, Racing Point and Red Bull. 
+
+```{r, wins-bar-chart, echo = FALSE}
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") +
+  guides(fill = "none")
+```
+
+Our bar chart shows Mercedes has an impressive amount of wins when compared to the other key teams. But why is this?
 
 We thought it could possibly be due to Mercedes having more drivers leading to a misleading result. However, the merged dataset we are working with has the same amount of drivers for each key team. 
 
-Could this be due to Mercedes being faster than the other constructors? We investigated the median speeds of each key team, and found that although Mercedes has a slightly lower mean lap time than the other teams, it isn't a significant enough difference to explain their massive amount of wins.
+Could this be due to Mercedes being faster than the other constructors? We investigated the average lap time of each key team and found that Mercedes has a slightly lower median lap time than the other teams. However, this isn't a significant enough difference to explain their massive amount of wins - if it were, Ferrari and Red Bull would be close to Mercedes amount of wins.
+
+
 
 
 
