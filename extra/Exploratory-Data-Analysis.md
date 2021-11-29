@@ -13,9 +13,9 @@ library(tidymodels)
 ```
 
 ``` r
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
-stops_merged <- read_csv("/cloud/project/data/stops_merged.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 ```
 
 ``` r
@@ -394,6 +394,40 @@ count(mercedes_or_not, sort = TRUE) %>%
 ```
 
 ![](Exploratory-Data-Analysis_files/figure-gfm/mercedes_vs_the_world_poles-1.png)<!-- -->
+
+``` r
+f1merged_hybrid %>%
+  filter(position == 1) %>%
+  count(constructorname) %>%
+  rename(race_wins = n) %>%
+  mutate(percent = (race_wins / sum(race_wins)) * 100)
+```
+
+    ## # A tibble: 5 × 3
+    ##   constructorname race_wins percent
+    ##   <chr>               <int>   <dbl>
+    ## 1 AlphaTauri              1   0.725
+    ## 2 Ferrari                17  12.3  
+    ## 3 Mercedes              102  73.9  
+    ## 4 Racing Point            1   0.725
+    ## 5 Red Bull               17  12.3
+
+``` r
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100)
+```
+
+    ## # A tibble: 5 × 3
+    ##   constructorname pole_positions percent
+    ##   <chr>                    <int>   <dbl>
+    ## 1 Ferrari                     21  15.2  
+    ## 2 Mercedes                   109  79.0  
+    ## 3 Racing Point                 1   0.725
+    ## 4 Red Bull                     6   4.35 
+    ## 5 Williams                     1   0.725
 
 ``` r
 f1merged_hybrid %>%

@@ -61,11 +61,11 @@ f1merged <- inner_join(races %>% select(raceId, year, round, name, date),
 ``` r
 colnames(f1merged) [colnames(f1merged) == "name"] <- "racename"
 
-write_csv(f1merged, "/cloud/project/data/f1merged.csv")
+write_csv(f1merged, here("data/f1merged.csv"))
 ```
 
 ``` r
-f1merged <- read_csv("/cloud/project/data/f1merged.csv", 
+f1merged <- read_csv(here("data/f1merged.csv"), 
     na = "\\N")
 ```
 
@@ -82,12 +82,12 @@ f1merged <- read_csv("/cloud/project/data/f1merged.csv",
     ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 ``` r
-write_csv(f1merged, "/cloud/project/data/f1merged.csv")
+write_csv(f1merged, here("data/f1merged.csv"))
 
 f1merged_hybrid <- f1merged %>%
   filter(year %in% 2014:2020)
 
-write_csv(f1merged_hybrid, "/cloud/project/data/f1merged_hybrid.csv")
+write_csv(f1merged_hybrid, here("data/f1merged_hybrid.csv"))
 ```
 
 ``` r
@@ -99,5 +99,5 @@ stops_merged <- inner_join(f1merged %>% select(-time, -milliseconds),
                            stops_drivers) %>%
   filter(year %in% 2014:2020)
 
-write_csv(stops_merged, "/cloud/project/data/stops_merged.csv")
+write_csv(stops_merged, here("data/stops_merged.csv"))
 ```
