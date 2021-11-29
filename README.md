@@ -28,13 +28,16 @@ compared to the other key teams. But why is this?
 
 We thought it could possibly be due to Mercedes having more drivers
 leading to a misleading result. However, the merged dataset we are
-working with has the same amount of drivers for each key team.
+working with has the same amount of drivers for each key team - each
+constructor has 276 entries.
 
 Could this be due to Mercedes being faster than the other constructors?
 We investigated the average lap time of each key team and found that
-Mercedes has a slightly lower median lap time than the other teams.
-However, this isn’t a significant enough difference to explain their
-massive amount of wins.
+Mercedes has a slightly lower median lap time than the other teams by a
+few seconds. However, this isn’t a significant enough difference to
+explain their massive amount of wins - if it were, Ferrari and Red Bull
+would have a similar amount of wins to Mercedes due to having similar
+median lap times.
 
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read

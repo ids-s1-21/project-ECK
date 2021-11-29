@@ -14,6 +14,18 @@ library(forcats)
 
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+
+key_team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "AlphaTauri" = "grey")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
 ```
 
 
@@ -26,47 +38,30 @@ To answer the question "What makes a successful Formula One team?", we want to s
 Firstly, we wanted to investigate the performance of the Mercedes team. We looked at the total number of wins of five key teams - AlphaTauri, Ferrari, Mercedes, Racing Point and Red Bull. 
 
 ```{r, wins-bar-chart, echo = FALSE}
-team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "Racing Point" = "#F596C8",
-                  "Force India" = "#f596c8",
-                  "AlphaTauri" = "#ffffff",
-                  "McLaren" = "#ff8700",
-                  "Renault" = "#fff500",
-                  "Williams" = "#0082fa",
-                  "Toro Rosso" = "#469BFF",
-                  "Lotus F1" = "#000000",
-                  "Alfa Romeo" = "#960000",
-                  "Sauber" = "#960000",
-                  "Haas F1 Team" = "#787878")
-
-key_teams <- c("Ferrari", 
-               "McLaren",
-               "Mercedes",
-               "Red Bull",
-               "Williams")
 
 f1merged_hybrid %>%
   filter(positionText == 1) %>%
 count(constructorname, sort = TRUE) %>% 
-  ggplot(aes(x = n, 
-             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+  ggplot(aes(x = "",
+             y = n,
              fill = constructorname)) +
-  geom_col(aes()) + 
- scale_fill_manual(values = team_colours) +
+  geom_bar(stat = "identity") + 
+  coord_polar('y', start = 0) +
+  scale_fill_manual(values = key_team_colours) +
   labs(title = "Race Wins by Constructor",
        subtitle = "In the hybrid era (2014-2020)",
-       x = "Race Wins",
-      y = "Constructor") +
-  guides(fill = "none")
+       fill = "Constructor") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x  = element_blank()) +
+  theme_void()
 ```
 
 Our bar chart shows Mercedes has an impressive amount of wins when compared to the other key teams. But why is this?
 
-We thought it could possibly be due to Mercedes having more drivers leading to a misleading result. However, the merged dataset we are working with has the same amount of drivers for each key team. 
+We thought it could possibly be due to Mercedes having more drivers leading to a misleading result. However, the merged dataset we are working with has the same amount of drivers for each key team - each constructor has 276 entries.
 
-Could this be due to Mercedes being faster than the other constructors? We investigated the average lap time of each key team and found that Mercedes has a slightly lower median lap time than the other teams. However, this isn't a significant enough difference to explain their massive amount of wins - if it were, Ferrari and Red Bull would be close to Mercedes amount of wins.
+Could this be due to Mercedes being faster than the other constructors? We investigated the average lap time of each key team and found that Mercedes has a slightly lower median lap time than the other teams by a few seconds. However, this isn't a significant enough difference to explain their massive amount of wins - if it were, Ferrari and Red Bull would have a similar amount of wins to Mercedes due to having similar median lap times.
 
 
 

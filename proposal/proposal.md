@@ -254,7 +254,7 @@ f1merged_hybrid %>%
   filter(!is.na(position)) %>%
   ggplot(aes(x = grid, y = position)) +
   geom_jitter() +
-  geom_smooth(method = lm) +
+  geom_smooth(method = lm, colour = "red") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
@@ -297,7 +297,7 @@ f1merged_hybrid %>%
   count(constructorname, sort = TRUE) %>%
   summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
   ggplot(aes(x = mean_ret_per_season, 
-             y = constructorname, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
              fill = constructorname)) +
   geom_col() + 
   scale_fill_manual(values = team_colours) +
