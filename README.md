@@ -35,7 +35,7 @@ Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
 championships 7 years running, with a near unprecedented level of
 dominance. We looked at Mercedes specifically, as well as a comparison
 group containing 4 other teams that competed against them during this
-same timeframe.
+same time frame.
 
 Could the answer to our question simply be that Mercedes are outright
 faster than their competitors? We investigated the average lap time of
@@ -47,6 +47,8 @@ qualifying) Looking purely at median lap time, it wouldn’t be
 unreasonable to expect Ferrari and Red Bull to have similarly successful
 records over the same period.
 
+**Qualifying:**
+
 Do tiny margins in terms of speed make a significant difference in F1?
 We investigated whether those fractions of a second could be the
 determining factor by plotting average lap time against finishing
@@ -54,7 +56,18 @@ position and plotting a line of best fit. Our visualisation found very
 little correlation between a driver’s average lap time during a race and
 their finishing position (shown by an almost flat regression line).
 Thus, Mercedes’ overwhelming number of race wins is unlikely to be
-explained be a slight advantage in race pace.
+explained be a slight advantage pace *during the race*.
+
+So what difference *does* a small advantage in speed make? We would
+expect tiny advantages in pace to be most significant during the
+qualifying sessions that set the starting grid for the race. Qualifying
+positions are decided based purely on the fastest lap time each driver
+can set during a given period of time, and are often separated by only
+fractions of a second. As such we plotted qualifying position against
+finishing position hypothesizing that a close correlation of the two
+would suggest a strong qualifying session is vital for success in the
+race. Further, we fit a linear regression model to predict finishing
+position from starting grid position.
 
 Is it possible that one particularly skilled Mercedes racer just happens
 to get first place with the other Mercedes performing worse? This would
@@ -68,7 +81,7 @@ finishing position of around 10 (and a much wider distribution,
 suggesting a less consistent finishing position).
 
 There doesn’t seem to be a solid reason for Mercedes to have such a
-large volume of wins (that we can see in the dataset) - they have a
+large volume of wins (that we can see in the data set) - they have a
 slightly higher speed, they tend to be in the top 5 for any race, and
 yet there isn’t any clear reason for this. One possible explanation is
 that skilled drivers tend to drive Mercedes (whether that is a
