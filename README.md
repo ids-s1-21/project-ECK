@@ -57,8 +57,27 @@ median lap time, it wouldn’t be unreasonable to expect Ferrari and Red
 Bull to have similarly successful records over the same period.
 
 Do tiny margins in terms of speed make a significant difference in F1?
-And what factors other than outright speed might play into a winning
-season?
+We investigated into this to see if these few seconds could be a
+determining factor by plotting the average lap time by that racer’s
+finishing position and plotting a line of best fit. Our visualisation
+found that there is virtually no correlation between a driver’s average
+lap time and their finishing position (shown by an almost flat
+regression line). Thus, the reason for Mercedes overwhelming amount of
+wins is unlikely to be because of their slightly higher average speed.
+
+Is it possible that one skilled Mercedes racer just happens to get first
+place with the other Mercedes performing worse? This would show a large
+amount of Mercedes wins even though they would perform worse as a group.
+We analysed this by plotting the finishing positions of each key
+constructor. However, it shows that the vast majority of Mercedes racers
+will finish in the top 5 with a median finishing position of around 2.
+Red Bull and Ferrari both have a median finishing position of around 4,
+and Williams and McLauren having a median finishing position of around
+10 (and a much more spread distribution, suggesting a less predictable
+finishing position).
+
+———————-What improves performance in general? Not mercedes \* Qualifying
+position vs finishing position scattergraph
 
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read

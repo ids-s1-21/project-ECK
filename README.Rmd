@@ -15,11 +15,11 @@ library(forcats)
 f1merged <- read_csv("/cloud/project/data/f1merged.csv")
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 
-key_team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "Racing Point" = "#F596C8",
-                  "AlphaTauri" = "grey")
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
 
 key_teams <- c("Ferrari", 
                "McLaren",
@@ -49,7 +49,7 @@ count(constructorname, sort = TRUE) %>%
              fill = constructorname)) +
   geom_bar(stat = "identity") + 
   coord_polar('y', start = 0) +
-  scale_fill_manual(values = key_team_colours) +
+  scale_fill_manual(values = key_team_colours_wins) +
   labs(title = "Race Wins by Constructor",
        subtitle = "In the hybrid era (2014-2020)",
        fill = "Constructor") +
