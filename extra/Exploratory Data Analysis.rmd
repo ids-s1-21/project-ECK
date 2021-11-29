@@ -318,6 +318,20 @@ count(mercedes_or_not, sort = TRUE) %>%
 
 
 ```
+```{r mercedes_vs_the_world_stats} 
+f1merged_hybrid %>%
+  filter(position == 1) %>%
+  count(constructorname) %>%
+  rename(race_wins = n) %>%
+  mutate(percent = (race_wins / sum(race_wins)) * 100)
+
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100)
+
+```
 
 ```{r mercedes_vs_the_world_wins}
 f1merged_hybrid %>%

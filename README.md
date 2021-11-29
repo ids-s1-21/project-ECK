@@ -4,32 +4,40 @@ by ECK
 
 ## Summary
 
-Our project is to investigate what makes a good Formula One driver?
-Specifically, we are looking at the Mercedes-AMG Petronas team in the
-hybrid era (2014-2020) and searching for possible reasons for their
-success.
+Formula One, or F1, is the highest class of single-seater racing and one
+of the most prestigious racing series around the world.
 
-To answer the question “What makes a successful Formula One team?”, we
-want to see what variables in the data could impact a drivers
-performance. Since our data is actually a combination of multiple
-datasets, we combined the datasets *results, races, drivers* and
-*constructors* and focused only on entries in the hybrid era (excluding
-2021 since the 2021 races are ongoing at the time of this analysis).
-This resulting dataset was named *f1merged_hybrid*.
+Each season around 10 constructors (also referred to as “teams”) build a
+car to strict regulations and race them at more than 20 circuits across
+the globe. A constructor fields two drivers and earns points towards two
+separate championships; one each for the driver and constructor who
+score the most points over a season.
 
-Firstly, we wanted to investigate the performance of the Mercedes team.
-We looked at the total number of wins of five key teams - AlphaTauri,
-Ferrari, Mercedes, Racing Point and Red Bull.
+With our project we wanted to investigate the factors that make a
+successful F1 team. Is outright speed the only metric that matters? Or
+do small gains made in pit stop times or reliability make all the
+difference?
+
+In picking out a successful Formula One team from recent years there is
+one obvious candidate.
 
 ![](README_files/figure-gfm/wins-bar-chart-1.png)<!-- -->
 
-Our bar chart shows Mercedes has an impressive amount of wins when
-compared to the other key teams. But why is this?
+Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
+championships 7 years running, with a near unprecedented level of
+dominance. We looked at Mercedes specifically, as well as a comparison
+group containing 4 other teams: Ferrari, McLaren, Red Bull and Williams.
+These comparison teams were chosen because they had all competed in F1
+across the entire period we looked at, so we could easily compare them
+to Mercedes directly.
 
-We thought it could possibly be due to Mercedes having more drivers
-leading to a misleading result. However, the merged dataset we are
-working with has the same amount of drivers for each key team - each
-constructor has 276 entries.
+To answer the question “What makes a successful Formula One team?”, we
+wanted to analyse how several predictor variables from our data set
+impacted a team’s performance. Since our data is actually a combination
+of multiple data sets, we combined the data sets *results, races,
+drivers* and *constructors* and focused only on entries in the hybrid
+era (2014-2020 excluding the 2021 season which is ongoing at the time of
+this analysis). This resulting data set was called *f1merged_hybrid*.
 
 Could this be due to Mercedes being faster than the other constructors?
 We investigated the average lap time of each key team and found that
@@ -38,6 +46,19 @@ few seconds. However, this isn’t a significant enough difference to
 explain their massive amount of wins - if it were, Ferrari and Red Bull
 would have a similar amount of wins to Mercedes due to having similar
 median lap times.
+
+Could this simply be due to Mercedes being outright faster than their
+competitors? We investigated the average lap time of each key team and
+found that Mercedes has only a slight advantage in median lap time over
+the likes of Ferrari and Red Bull. Is this small advantage in race pace
+a significant enough difference to explain the massive discrepancy in
+wins and pole positions? (1st place in qualifying) Looking purely at
+median lap time, it wouldn’t be unreasonable to expect Ferrari and Red
+Bull to have similarly successful records over the same period.
+
+Do tiny margins in terms of speed make a significant difference in F1?
+And what factors other than outright speed might play into a winning
+season?
 
 Write-up of your project and findings go here. Think of this as the text
 of your presentation. The length should be roughly 5 minutes when read
