@@ -39,14 +39,6 @@ drivers* and *constructors* and focused only on entries in the hybrid
 era (2014-2020 excluding the 2021 season which is ongoing at the time of
 this analysis). This resulting data set was called *f1merged_hybrid*.
 
-Could this be due to Mercedes being faster than the other constructors?
-We investigated the average lap time of each key team and found that
-Mercedes has a slightly lower median lap time than the other teams by a
-few seconds. However, this isn’t a significant enough difference to
-explain their massive amount of wins - if it were, Ferrari and Red Bull
-would have a similar amount of wins to Mercedes due to having similar
-median lap times.
-
 Could this simply be due to Mercedes being outright faster than their
 competitors? We investigated the average lap time of each key team and
 found that Mercedes has only a slight advantage in median lap time over
@@ -76,26 +68,15 @@ and Williams and McLauren having a median finishing position of around
 10 (and a much more spread distribution, suggesting a less predictable
 finishing position).
 
+There doesn’t seem to be a solid reason for Mercedes to have such a
+large volume of wins (that we can see in the dataset) - they have a
+slightly higher speed, they tend to be in the top 5 for any race, and
+yet there isn’t any clear reason for this. One possible explaination is
+that skilled drivers tend to drive Mercedes (whether that is a
+correlation or causation).
+
 ———————-What improves performance in general? Not mercedes \* Qualifying
 position vs finishing position scattergraph
-
-Write-up of your project and findings go here. Think of this as the text
-of your presentation. The length should be roughly 5 minutes when read
-out loud. Although pacing varies, a 5-minute speech is roughly 750
-words. To use the word count addin, select the text you want to count
-the words of (probably this is the Summary section of this document, go
-to Addins, and select the `Word count` addin). This addin counts words
-using two different algorithms, but the results should be similar and as
-long as you’re in the ballpark of 750 words, you’re good! The addin will
-ignore code chunks and only count the words in prose.
-
-You can also load your data here and present any analysis results /
-plots, but I strongly urge you to keep that to a minimum (maybe only the
-most important graphic, if you have one you can choose). And make sure
-to hide your code with `echo = FALSE` unless the point you are trying to
-make is about the code itself. Your results with proper output and
-graphics go in your presentation, this space is for a brief summary of
-your project.
 
 ## Presentation
 

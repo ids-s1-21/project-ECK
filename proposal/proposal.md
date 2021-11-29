@@ -251,10 +251,10 @@ strong race?
 
 ``` r
 f1merged_hybrid %>%
-  filter(!is.na(position)) %>%
+  filter(!is.na(position) & grid != 0) %>%
   ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
   geom_jitter(alpha = 0.6) +
-  geom_smooth(method = lm, colour = "black") +
+  geom_smooth(method = lm, colour = "black", formula = y ~ x) +
   theme_classic() +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
