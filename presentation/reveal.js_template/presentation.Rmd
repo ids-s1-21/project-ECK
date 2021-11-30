@@ -1,6 +1,5 @@
 ---
 title: "What makes a successful Formula One team?"
-subtitle: <font size='6'>Presentation subtitle (if any)</font>
 author: <font size='8'>ECK <br> Eila Tether, Callum Stewart & Kai Morgan</font>
 institute: <font size='10'>University of Edinburgh</font>
 date: <font size = '6'>`r Sys.Date()`</font>
@@ -28,7 +27,7 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 ```
 
-## A statement of the overall goal / research question {data-background-image="img/confetti.jpg"}
+## To begin or analysis, we must first start with who is the best F1 team? {data-background-image="img/confetti.jpg"}
 
 # Section title
 

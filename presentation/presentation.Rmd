@@ -25,13 +25,84 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
-# Load your data here
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
 
 ```
 
-## A statement of the overall goal / research question {data-background-image="img/confetti.jpg"}
+## To begin we must first prove that Mercedes-AMG Petronas F1 Team are the best in the current hybrid era (2014-2020)
 
-# Section title
+# Mercedes Success
+```{r hybrid_era, echo = FALSE}
+hybrid_era <- (2014:2020)
+```
+
+```{r Mercedes success, echo = FALSE}
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+                  
+
+
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = n, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+             fill = constructorname)) +
+  geom_col(aes()) + 
+ scale_fill_manual(values = team_colours) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       x = "Race Wins",
+      y = "Constructor") +
+  guides(fill = "none")
+```
+
+## Do Faster Cars Have More Wins, Not Just Mercedes?
+
+```{r datasets-and-variables, message = FALSE, echo=FALSE}
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+key_team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "McLaren" = "#ff8700",
+                  "Williams" = "#0082fa")
+```
+
+```{r constructor-speeds, echo=FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  drop_na() %>%
+  summarise(constructorname,
+            "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5)) %>%
+  group_by(constructorname) %>%
+  ggplot(aes(x = avg_lap_time_min, y = constructorname, 
+             fill = constructorname)) +
+  geom_boxplot(alpha = 0.7, width = 0.5) +
+  scale_x_reverse() +
+  coord_cartesian(xlim = c(2.5,1)) +
+  scale_fill_manual(values = key_team_colours) +
+  theme(legend.position = "none") +
+  labs(title = "Average Lap Time of Formula 1 Racers",
+       x = "Lap Time (Minutes)",
+       y = "Constructor")
+```
 
 # Hello World
 
