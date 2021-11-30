@@ -1,44 +1,6 @@
 Visualisations Used in Presentation
 ================
 
-``` r
-library(tidyverse)
-library(readr)
-library(dplyr)
-library(skimr)
-library(here)
-
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
-
-key_teams <- c("Ferrari", 
-               "McLaren",
-               "Mercedes",
-               "Red Bull",
-               "Williams")
-
-key_team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "Racing Point" = "#F596C8",
-                  "Force India" = "#f596c8",
-                  "AlphaTauri" = "#ffffff",
-                  "McLaren" = "#ff8700",
-                  "Renault" = "#fff500",
-                  "Williams" = "#0082fa",
-                  "Toro Rosso" = "#469BFF",
-                  "Lotus F1" = "#000000",
-                  "Alfa Romeo" = "#960000",
-                  "Sauber" = "#960000",
-                  "Haas F1 Team" = "#787878")
-
-key_team_colours_wins <- c("AlphaTauri" = "grey",
-                           "Ferrari" = "#dc0000",
-                           "Mercedes" = "#00d2be",
-                           "Racing Point" = "#F596C8",
-                           "Red Bull" = "#0600ef")
-```
-
 ## Dataset
 
 ### Wins Pie Chart
@@ -50,3 +12,59 @@ key_team_colours_wins <- c("AlphaTauri" = "grey",
     ## Warning: Removed 199 rows containing non-finite values (stat_boxplot).
 
 ![](PlotBank_files/figure-gfm/finishing-position-by-constructor-1.png)<!-- -->
+
+## Speed
+
+### Constructor’s Average Speeds
+
+![](PlotBank_files/figure-gfm/constructor-average-speeds-1.png)<!-- -->
+
+### Average Lap Time vs Finishing Position
+
+![](PlotBank_files/figure-gfm/lap-time-vs-finishing-position-1.png)<!-- -->
+
+## Qualifying
+
+### Qualifying Position vs Finishing Position
+
+![](PlotBank_files/figure-gfm/qualifying-vs-finishing-1.png)<!-- -->
+
+## Qualifying vs Finishing - Top 5
+
+![](PlotBank_files/figure-gfm/qualifying-vs-finishing-top-5-1.png)<!-- -->
+
+### Qualifying vs Finishing - Rest
+
+``` r
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid > 5) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "black") +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
+           color = "#00d2be") +
+  annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
+           color = "azure4")
+```
+
+![](PlotBank_files/figure-gfm/qualifying-vs-finishing-rest-1.png)<!-- -->
+
+### Summary Statistics
+
+**Put these here (I can’t find the code for this part)**
+
+## Reliability
+
+### Retirements vs Points
+
+    ## Joining, by = c("year", "constructorname")
+
+![](PlotBank_files/figure-gfm/retirements-vs-points-1.png)<!-- -->

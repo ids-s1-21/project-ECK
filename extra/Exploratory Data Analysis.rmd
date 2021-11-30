@@ -285,6 +285,8 @@ posi_grid_fit_rest_aug %>%
        y = "Residuals",
        title = "Predicted Values vs Residuals")
 
+
+
 ```
 
 Models suggest a much stronger correlation between grid position and finishing position for the drivers qualifying in the top 5. 

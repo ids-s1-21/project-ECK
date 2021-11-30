@@ -3,7 +3,7 @@ title: "Visualisations Used in Presentation"
 output: github_document
 ---
 
-```{r libraries-and-data , message = FALSE}
+```{r libraries-and-data , message = FALSE, echo = FALSE}
 library(tidyverse)
 library(readr)
 library(dplyr)
@@ -83,12 +83,22 @@ f1merged_hybrid %>%
   scale_fill_manual(values = key_team_colours) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
-  labs(title = "Finishing Position Densities of F1 Car Constructors",
+  labs(title = "Finishing Position of F1 Car Constructors",
        x = "Finishing Position",
-       y = "") +
+       y = "",
+       subtitle = "In the hybrid era (2014-2020)") +
   theme(legend.position = "none",
         axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
+        axis.ticks.y = element_blank(),
+        
+        #Creates road line effect
+        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
+  
+  #Finish Lines
+  geom_vline(xintercept = 0, color = "black", size = 3) +
+  geom_vline(xintercept = 0, color = "white", size = 3, linetype = "dashed") +
+  
+  #Constructor Labels
   annotate(geom = "label", x = 18, y = "Williams",  label = "Williams", 
            color = "#0082fa", size = 4) +
   annotate(geom = "label", x = 8, y = "Red Bull",  label = "Red Bull", 
@@ -101,4 +111,170 @@ f1merged_hybrid %>%
            color = "#dc0000", size = 4)
 ```
 
+## Speed
+
+### Constructor's Average Speeds
+```{r constructor-average-speeds, echo = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  drop_na() %>%
+  summarise(constructorname,
+            "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5)) %>%
+  group_by(constructorname) %>%
+  ggplot(aes(x = avg_lap_time_min, y = constructorname, 
+             fill = constructorname)) +
+  geom_boxplot(alpha = 0.6, width = 0.7) +
+  scale_x_reverse() +
+  coord_cartesian(xlim = c(2.5,1)) +
+  scale_fill_manual(values = key_team_colours) +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        
+        #Creates road line effect
+        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
+  
+  labs(title = "Average Lap Time of Formula 1 Racers",
+       x = "Lap Time (Minutes)",
+       y = "Constructor",
+       subtitle = "In the hybrid era (2014-2020)") +
+  
+  #Finish Line
+  geom_vline(xintercept = 1, color = "black", size = 3) +
+  geom_vline(xintercept = 1, color = "white", size = 3, linetype = "dashed") +
+  
+  #Constructor Labels
+  annotate(geom = "label", x = 1.25, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
+```
+
+### Average Lap Time vs Finishing Position
+
+```{r lap-time-vs-finishing-position, echo = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(constructorname, 
+            "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5),
+            position) %>%
+  drop_na() %>%
+  ggplot(aes(x = avg_lap_time_min, y = position)) +
+  scale_x_reverse() +
+  scale_y_reverse() +
+  geom_jitter(alpha = 0.5, color = "azure4") +
+  geom_smooth(method = lm, formula = y ~ x, color = "black") +
+  theme_minimal() +
+  labs(title = "Effect of Speed on Finishing Position",
+       x = "Average Lap Time (minutes)",
+       y = "Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)")
+```
+
+## Qualifying
+
+### Qualifying Position vs Finishing Position
+```{r qualifying-vs-finishing, echo = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter(alpha = 0.6) +
+  geom_smooth(method = lm, colour = "black", formula = y ~ x) +
+  theme_classic() +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)",
+       color = "Constructor") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  theme(legend.position = "none") +
+  scale_y_reverse() +
+  scale_x_reverse() +
+  annotate(geom = "label", x = 7, y = 0, label = "Mercedes",
+           color = "#00d2be", size = 4, alpha = 0.6) +
+  annotate(geom = "label", x = 17, y = 1, label = "Other", 
+           color = "azure4", size = 4)
+```
+
+## Qualifying vs Finishing - Top 5
+```{r qualifying-vs-finishing-top-5, echo = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0 & grid <= 5) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "black") +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  annotate(geom = "label", x = 1, y = 18, label = "Mercedes", color = "#00d2be") +
+  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4")
+```
+
+### Qualifying vs Finishing - Rest
+```{r qualifying-vs-finishing-rest}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid > 5) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "black") +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
+           color = "#00d2be") +
+  annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
+           color = "azure4")
+```
+
+### Summary Statistics
+
+**Put these here (I can't find the code for this part)**
+
+
+## Reliability
+
+### Retirements vs Points 
+```{r retirements-vs-points, echo = FALSE}
+
+ret_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  group_by(year, constructorname) %>%
+  count(constructorname) %>%
+  summarise(retirements = n, .groups = "drop")
+
+points_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  group_by(year, constructorname) %>%
+  summarise(total_points = sum(points), .groups = "drop")
+
+inner_join(points_season, ret_season)%>%
+  ggplot(aes(x = retirements, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Retirements",
+       y = "Total Championship Points",
+       title = "Retirements vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours)
+```
 
