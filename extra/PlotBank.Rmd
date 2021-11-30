@@ -9,9 +9,12 @@ library(readr)
 library(dplyr)
 library(skimr)
 library(here)
+library(forcats)
+library(tidymodels)
 
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 
 key_teams <- c("Ferrari", 
                "McLaren",
@@ -19,14 +22,32 @@ key_teams <- c("Ferrari",
                "Red Bull",
                "Williams")
 
+team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
 
-key_team_colours <- c("AlphaTauri" = "grey",
-                      "Ferrari" = "#dc0000",
-                      "Mercedes" = "#00d2be",
-                      "Racing Point" = "#F596C8",
-                      "Red Bull" = "#0600ef",
-                      "Williams" = "#0082fa",
-                      "McLaren" = "#ff8700")
+key_team_colours <- c("Ferrari" = "#dc0000",
+                       "McLaren" = "#ff8700",
+                       "Mercedes" = "#00d2be",
+                       "Red Bull" = "#0600ef",
+                       "Williams" = "#0082fa")
+
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
 
 key_team_colours_darker <- c("Williams" = "#0065C3",
                            "Ferrari" = "#A20000",
@@ -68,7 +89,7 @@ count(constructorname, sort = TRUE) %>%
 ```
 
 ### Finishing Position by Constructor Distribution
-```{r finishing-position-by-constructor, echo = FALSE}
+```{r finishing-position-by-constructor, echo = FALSE, warning = FALSE}
 f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   ggplot(aes(x = position, y = constructorname,
@@ -136,10 +157,6 @@ f1merged_hybrid %>%
        x = "Lap Time (Minutes)",
        y = "Constructor",
        subtitle = "In the hybrid era (2014-2020)") +
-  
-  #Finish Line
-  geom_vline(xintercept = 1, color = "black", size = 3) +
-  geom_vline(xintercept = 1, color = "white", size = 3, linetype = "dashed") +
   
   #Constructor Labels
   annotate(geom = "label", x = 1.25, y = "Williams",  label = "Williams", 
@@ -216,7 +233,9 @@ f1merged_hybrid %>%
   theme(legend.position = "none") +
   scale_color_manual(values = c("azure4","#00d2be")) +
   annotate(geom = "label", x = 1, y = 18, label = "Mercedes", color = "#00d2be") +
-  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4")
+  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
 ```
 
 ### Qualifying vs Finishing - Rest
@@ -237,18 +256,33 @@ f1merged_hybrid %>%
   annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
            color = "#00d2be") +
   annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
-           color = "azure4")
+           color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
 ```
 
 ### Summary Statistics
 
-**Put these here (I can't find the code for this part)**
+```{r poles_wins_summary_statistics, echo = FALSE} 
+f1merged_hybrid %>%
+  filter(position == 1) %>%
+  count(constructorname) %>%
+  rename(race_wins = n) %>%
+  mutate(percent = (race_wins / sum(race_wins)) * 100)
+
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100)
+
+```
 
 
 ## Reliability
 
 ### Retirements vs Points 
-```{r retirements-vs-points, echo = FALSE}
+```{r retirements-vs-points, echo = FALSE, message = FALSE}
 
 ret_season <- f1merged_hybrid %>%
   filter(constructorname %in% key_teams & positionText == "R") %>%
@@ -276,5 +310,47 @@ inner_join(points_season, ret_season)%>%
   scale_colour_manual(values = key_team_colours) +
   theme_classic()
   
+```
+
+## Pit Stops
+
+### Pit Stop Time vs Points per Season - skewed 
+
+```{r pit-stop-time-vs-points-per-season-skewed, echo = FALSE}
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+  ggplot(aes(x = milliseconds, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
+  geom_violin() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+```
+
+### Pit Stop Time vs Points per Season - red flags removed
+
+```{r pit-stop-time-vs-points-per-season-red-flags-removed, echo = FALSE}
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  ggplot(aes(x = milliseconds,
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
+  geom_violin() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  coord_cartesian(xlim = c(5000, 60000)) +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
 ```
 

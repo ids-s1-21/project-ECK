@@ -9,8 +9,6 @@ Visualisations Used in Presentation
 
 ### Finishing Position by Constructor Distribution
 
-    ## Warning: Removed 199 rows containing non-finite values (stat_boxplot).
-
 ![](PlotBank_files/figure-gfm/finishing-position-by-constructor-1.png)<!-- -->
 
 ## Speed
@@ -52,19 +50,45 @@ f1merged_hybrid %>%
   annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
            color = "#00d2be") +
   annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
-           color = "azure4")
+           color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
 ```
 
 ![](PlotBank_files/figure-gfm/qualifying-vs-finishing-rest-1.png)<!-- -->
 
 ### Summary Statistics
 
-**Put these here (I can’t find the code for this part)**
+    ## # A tibble: 5 × 3
+    ##   constructorname race_wins percent
+    ##   <chr>               <int>   <dbl>
+    ## 1 AlphaTauri              1   0.725
+    ## 2 Ferrari                17  12.3  
+    ## 3 Mercedes              102  73.9  
+    ## 4 Racing Point            1   0.725
+    ## 5 Red Bull               17  12.3
+
+    ## # A tibble: 5 × 3
+    ##   constructorname pole_positions percent
+    ##   <chr>                    <int>   <dbl>
+    ## 1 Ferrari                     21  15.2  
+    ## 2 Mercedes                   109  79.0  
+    ## 3 Racing Point                 1   0.725
+    ## 4 Red Bull                     6   4.35 
+    ## 5 Williams                     1   0.725
 
 ## Reliability
 
 ### Retirements vs Points
 
-    ## Joining, by = c("year", "constructorname")
-
 ![](PlotBank_files/figure-gfm/retirements-vs-points-1.png)<!-- -->
+
+## Pit Stops
+
+### Pit Stop Time vs Points per Season - skewed
+
+![](PlotBank_files/figure-gfm/pit-stop-time-vs-points-per-season-skewed-1.png)<!-- -->
+
+### Pit Stop Time vs Points per Season - red flags removed
+
+![](PlotBank_files/figure-gfm/pit-stop-time-vs-points-per-season-red-flags-removed-1.png)<!-- -->
