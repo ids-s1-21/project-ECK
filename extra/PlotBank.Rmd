@@ -283,7 +283,7 @@ f1merged_hybrid %>%
 ## Reliability
 
 ### Retirements vs Points 
-```{r retirements-vs-points, echo = FALSE}
+```{r retirements-vs-points, echo = FALSE, message = FALSE}
 
 ret_season <- f1merged_hybrid %>%
   filter(constructorname %in% key_teams & positionText == "R") %>%

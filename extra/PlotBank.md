@@ -81,6 +81,4 @@ f1merged_hybrid %>%
 
 ### Retirements vs Points
 
-    ## Joining, by = c("year", "constructorname")
-
 ![](PlotBank_files/figure-gfm/retirements-vs-points-1.png)<!-- -->
