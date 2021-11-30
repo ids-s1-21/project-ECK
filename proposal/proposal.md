@@ -60,8 +60,8 @@ the variables referenced above in the **Introduction** section.
 Here is a glimpse and skim of the *f1merged* data frame.
 
 ``` r
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
 
 glimpse(f1merged)
 ```
