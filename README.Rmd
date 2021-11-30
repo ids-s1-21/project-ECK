@@ -83,7 +83,7 @@ We can see this isn't just one good Mercedes driver - plotting the constructors 
 
 
 #### Speed
-Could the answer to our question simply be that Mercedes are outright faster than their competitors? We investigated the average lap time of each key team and found that Mercedes has only a slight advantage in median lap time over the likes of Ferrari and Red Bull. If speed was the deciding factor in races, Ferrari and Red Bull would be near the success of Mercedes. 
+Could the answer to our question simply be that Mercedes are outright faster than their competitors? We investigated the average lap time of each key team and found that Mercedes has only a slight advantage in median lap time over the likes of Ferrari and Red Bull. If speed was the deciding factor in races, we would expect Ferrari and Red Bull to have comparable levels of success to Mercedes. 
 
 Does this tiny speed advantage make a significant difference in Formula One?
 We investigated this by plotting average lap time against finishing position. We found little correlation between a driver's average speed and their finishing position (shown by an almost flat regression line). Thus, Mercedes' success is unlikely to be explained by a slightly higher speed *during the race*.
@@ -92,7 +92,7 @@ We investigated this by plotting average lap time against finishing position. We
 #### Qualifying
 So what difference *does* a small advantage in speed make? We would expect tiny advantages in pace to be most significant during the qualifying sessions that set the starting grid for the race, decided purely on the fastest lap time each driver can set in a qualifying race.
 
-After plotting qualifying position against finishing position, our model showed a strong correlation between the two, suggesting a good qualifying session is necessary to perform well. However, the plot seemed to show particularly heavy clustering near the front of the field. To investigate this, we split the data for drivers qualifying in the top 5 from the rest of the field, and modeled each separately.
+After plotting qualifying position against finishing position, our model showed a strong correlation between the two, suggesting a good qualifying session is necessary to perform well. However, the plot seemed to show particularly heavy clustering near the front of the field. To investigate this, we split the data for drivers qualifying in the top 5 from the rest of the field and modelled each separately.
 
 As suspected, there was a stronger relationship between qualifying position and finishing position for the drivers qualifying in the top 5. In other words, if a driver qualifies near the front, they are likely to stay there. This could be due to less opportunity for collisions (particularly at the start) and possibly less time stuck behind another racer.
 
@@ -100,7 +100,7 @@ Summary statistics show that Mercedes took pole position more than 78% of the ti
 
 
 #### Reliability
-We identified mechanical reliability as a possible predictor of success. We plotted and modeled retirements per season* against points per season for each of our key teams and found a strong linear relationship between the two, if  a little skewed by the teams in our comparison group. Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish.
+We identified mechanical reliability as a possible predictor of success. We plotted and modelled retirements per season* against points per season for each of our key teams and found a strong linear relationship between the two, if  a little skewed by the teams in our comparison group. Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish.
 
 
 #### Pit Stops
@@ -113,11 +113,11 @@ We combined our two models predicting total points per season - this combined mo
 #### Conclusion
 Our analysis allows us to go some way towards answering our question - "What makes a successful F1 team?"
 
-Speed is certainly important - to see strong results, a team needs a car capable of qualifying consistently near the front of the grid. However, for a team to achieve the impressive results that Mercedes has had in the hybrid era, they need more than just a fast car - fast and consistent pit stops as well as the best reliability on the grid have helped Mercedes go from a good team to one of the all time greats.
+Speed is certainly important - to see strong results, a team needs a car capable of qualifying consistently near the front of the grid. However, for a team to achieve the impressive results that Mercedes has had in the hybrid era, they need more than just a fast car - fast and consistent pit stops as well as the best reliability on the grid have helped Mercedes go from a good team to one of the all-time greats.
 
 
 #### Limitations
-We were not able to separate mechanical retirements from other retirements in our analysis, so used retirements for any reason as an imperfect proxy.
+*We were not able to separate mechanical retirements from other retirements in our analysis, so used retirements for any reason as an imperfect proxy.
 
 As comparing driver skill between teams is extremely difficult and comparing between teammates would not help to answer our question, we have not included individual driver skill in our analysis.
 
@@ -130,13 +130,13 @@ Our presentation can be found [here](presentation/presentation.html).
 
 The data we have used in this project is from the Ergast Developer API, which has collected its data from the official race classifications released by the FIA (Formula One's governing body).
 
-Ergast, A 2009, *Ergast Delevoper API*, data zip file,
+Ergast, A 2009, *Ergast Developer API*, data zip file,
 The Ergast Developer API,
 retrieved 22nd October 2021, <http://ergast.com/mrd/>
 
 ## References
 
-Ergast, A 2009, *Ergast Delevoper API*, data zip file,
+Ergast, A 2009, *Ergast Developer API*, data zip file,
 The Ergast Developer API,
 retrieved 22nd October 2021, <http://ergast.com/mrd/>
 
