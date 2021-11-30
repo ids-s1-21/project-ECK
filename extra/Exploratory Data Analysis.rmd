@@ -579,7 +579,7 @@ The R^2 value of our model suggests that 19.6% of the variability in points per 
 
 The plot of predicted values vs residuals is a random scatter with no pattern, suggesting that a linear model would be a good fit in this case.
 
-```{r}
+```{r stops_rets_points_model, message = FALSE}
 stops_rets_points <- inner_join(rets_points_season, stops_points_season)
 
 stops_rets_points_fit <- linear_reg() %>%

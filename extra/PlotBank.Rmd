@@ -9,9 +9,12 @@ library(readr)
 library(dplyr)
 library(skimr)
 library(here)
+library(forcats)
+library(tidymodels)
 
 f1merged <- read_csv(here("data/f1merged.csv"))
 f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 
 key_teams <- c("Ferrari", 
                "McLaren",
@@ -239,8 +242,36 @@ f1merged_hybrid %>%
   scale_y_reverse()
 ```
 
+```{r quali_top5_model, echo = FALSE}
+quali_grid_tidy_leaders <- f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0 & grid <= 5)
+
+posi_grid_fit_leaders <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_leaders)
+
+tidy(posi_grid_fit_leaders)
+
+glance(posi_grid_fit_leaders)
+
+
+posi_grid_fit_leaders_aug <- augment(posi_grid_fit_leaders$fit)
+
+posi_grid_fit_leaders_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+
+
+
 ### Qualifying vs Finishing - Rest
-```{r qualifying-vs-finishing-rest}
+```{r qualifying-vs-finishing-rest, echo = FALSE}
 f1merged_hybrid %>%
   filter(!is.na(position) & grid > 5) %>%
   ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
@@ -250,7 +281,7 @@ f1merged_hybrid %>%
               colour = "black") +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
-       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
        subtitle = "In the hybrid era (2014-2020)") +
   theme(legend.position = "none") +
   scale_color_manual(values = c("azure4","#00d2be")) +
@@ -261,6 +292,33 @@ f1merged_hybrid %>%
   scale_x_reverse() +
   scale_y_reverse()
 ```
+```{r quali_grid_model_rest, echo = FALSE}
+quali_grid_tidy_rest <- f1merged_hybrid %>%
+ filter(!is.na(position) & grid > 5)
+
+posi_grid_fit_rest <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_rest)
+
+tidy(posi_grid_fit_rest)
+
+glance(posi_grid_fit_rest)
+
+
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+
+
 
 ### Summary Statistics
 
@@ -296,7 +354,9 @@ points_season <- f1merged_hybrid %>%
   group_by(year, constructorname) %>%
   summarise(total_points = sum(points), .groups = "drop")
 
-inner_join(points_season, ret_season)%>%
+rets_points_season <- inner_join(points_season, ret_season)
+
+ rets_points_season %>%
   ggplot(aes(x = retirements, y = total_points, colour = constructorname)) +
   geom_point(size = 2.5) + 
   geom_smooth(method = "lm",
@@ -311,3 +371,60 @@ inner_join(points_season, ret_season)%>%
   scale_colour_manual(values = key_team_colours)
 ```
 
+## Pit Stops
+
+```{r stops_points_season, echo = FALSE, message = FALSE}
+stops_season <- stops_merged %>%
+  group_by(year, constructorname) %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  summarise(median_stoptime = median(milliseconds))
+
+stops_points_season <- inner_join(points_season, stops_season)
+
+
+stops_points_season %>%
+  ggplot(aes(x = median_stoptime, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Median Pit Stop Time (Seconds)",
+       y = "Total Championship Points",
+       title = "Pit Stop Time vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001))
+```
+
+
+
+
+## Combined Model
+
+```{r stops_rets_points_model, echo = FALSE,  message = FALSE}
+stops_rets_points <- inner_join(rets_points_season, stops_points_season)
+
+stops_rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
+
+tidy(stops_rets_points_fit)
+
+glance(stops_rets_points_fit)
+
+
+stops_rets_points_fit_aug <- augment(stops_rets_points_fit$fit)
+
+stops_rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
