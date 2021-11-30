@@ -10,8 +10,8 @@ library(dplyr)
 library(skimr)
 library(here)
 
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
 
 key_teams <- c("Ferrari", 
                "McLaren",
@@ -19,7 +19,7 @@ key_teams <- c("Ferrari",
                "Red Bull",
                "Williams")
 
-key_team_colours <- c("Mercedes" = "#00d2be",
+team_colours <- c("Mercedes" = "#00d2be",
                   "Red Bull" = "#0600ef",
                   "Ferrari" = "#dc0000",
                   "Racing Point" = "#F596C8",
@@ -33,6 +33,12 @@ key_team_colours <- c("Mercedes" = "#00d2be",
                   "Alfa Romeo" = "#960000",
                   "Sauber" = "#960000",
                   "Haas F1 Team" = "#787878")
+
+key_team_colours <- c("Ferrari" = "#dc0000",
+                       "McLaren" = "#ff8700",
+                       "Mercedes" = "#00d2be",
+                       "Red Bull" = "#0600ef",
+                       "Williams" = "#0082fa")
 
 key_team_colours_wins <- c("AlphaTauri" = "grey",
                            "Ferrari" = "#dc0000",
@@ -74,7 +80,7 @@ count(constructorname, sort = TRUE) %>%
 ```
 
 ### Finishing Position by Constructor Distribution
-```{r finishing-position-by-constructor, echo = FALSE}
+```{r finishing-position-by-constructor, echo = FALSE, warning = FALSE}
 f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   ggplot(aes(x = position, y = constructorname,
@@ -218,7 +224,9 @@ f1merged_hybrid %>%
   theme(legend.position = "none") +
   scale_color_manual(values = c("azure4","#00d2be")) +
   annotate(geom = "label", x = 1, y = 18, label = "Mercedes", color = "#00d2be") +
-  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4")
+  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
 ```
 
 ### Qualifying vs Finishing - Rest
@@ -239,12 +247,27 @@ f1merged_hybrid %>%
   annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
            color = "#00d2be") +
   annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
-           color = "azure4")
+           color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
 ```
 
 ### Summary Statistics
 
-**Put these here (I can't find the code for this part)**
+```{r poles_wins_summary_statistics, echo = FALSE} 
+f1merged_hybrid %>%
+  filter(position == 1) %>%
+  count(constructorname) %>%
+  rename(race_wins = n) %>%
+  mutate(percent = (race_wins / sum(race_wins)) * 100)
+
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100)
+
+```
 
 
 ## Reliability
