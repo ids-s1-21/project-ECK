@@ -158,3 +158,18 @@ This visualisation shows us that drivers using Willams’ or McLaurens
 tend to do worse than other constructors, and Mercedes again shows a
 strong lead. This again suggests that having Mercedes as the constructor
 may lead to a better performance.
+
+``` r
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) 
+```
+
+    ## # A tibble: 5 × 2
+    ##   constructorname     n
+    ##   <chr>           <int>
+    ## 1 Mercedes          102
+    ## 2 Ferrari            17
+    ## 3 Red Bull           17
+    ## 4 AlphaTauri          1
+    ## 5 Racing Point        1
