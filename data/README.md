@@ -30,6 +30,42 @@
 - `fastestLapSpeed`: Fastest lap speed (km/h) e.g. "213.874"
 - `statusId`: Foreign key link to status table
 
+## f1merged_hybrid
+A version of the f1merged data frame filtered to only include years in the hybrid era (2014-2020, the currently ongoing season is excluded). All variables are otherwise the same.
+
+## stops_merged
+
+- `raceId`: Foreign key link to races table
+- `year`: Foreign key link to seasons table     
+- `round`: Round number
+- `racename`: Race name
+- `date`: Race date e.g. "1950-05-13"
+- `driverId`: Foreign key link to drivers table    
+- `driverRef`: Unique driver identifier
+- `surname`: Driver surname
+- `constructorId`: Foreign key link to constructors table
+- `constructorRef`: Unique constructor identifier
+- `constructorname`: Constructor name
+- `constructornat`: Constructor Nationality
+- `resultId`: Foreign key link to results table
+- `number`: Driver number 
+- `grid`: Starting grid position
+- `position`: Official classification, if applicable
+- `positionText`: Driver position string e.g. "1" or "R"
+- `positionOrder`: Driver position for ordering purposes
+- `points`: Driver points for race
+- `laps`: Number of completed laps
+- `fastestLap`: Lap number of fastest lap
+- `rank`: Fastest lap rank, compared to other drivers
+- `fastestLapTime`: Fastest lap time e.g. "1:27.453"
+- `fastestLapSpeed`: Fastest lap speed (km/h) e.g. "213.874"
+- `statusId`: Foreign key link to status table
+- `stop`: Stop number 
+- `lap`: Lap number
+- `time`: Time of stop e.g. "13:52:25"     
+- `duration`: Duration of stop e.g. "21.783" 
+- `milliseconds`: Duration of stop in milliseconds 
+
 ## Labels used in the positionText fields:                          
 - `D` - disqualified                                             
 - `E` - excluded                                                

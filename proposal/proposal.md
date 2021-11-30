@@ -251,16 +251,22 @@ strong race?
 
 ``` r
 f1merged_hybrid %>%
-  filter(!is.na(position)) %>%
-  ggplot(aes(x = grid, y = position)) +
-  geom_jitter() +
-  geom_smooth(method = lm) +
+  filter(!is.na(position) & grid != 0) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter(alpha = 0.6) +
+  geom_smooth(method = lm, colour = "black", formula = y ~ x) +
+  theme_classic() +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position",
-       subtitle = "In the hybrid era (2014-2020)") +
+       subtitle = "In the hybrid era (2014-2020)",
+       color = "Constructor") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  theme(legend.position = "none") +
   scale_y_reverse() +
-  scale_x_reverse()
+  scale_x_reverse() +
+  annotate(geom = "label", x = 5, y = 0, label = "Mercedes", color = "#00d2be") +
+  annotate(geom = "label", x = 15, y = 5, label = "Other", color = "azure4")
 ```
 
 ![](proposal_files/figure-gfm/qualifying_vs_race-1.png)<!-- -->
@@ -297,7 +303,7 @@ f1merged_hybrid %>%
   count(constructorname, sort = TRUE) %>%
   summarise(mean_ret_per_season = n/(n_distinct(f1merged_hybrid$year))) %>%
   ggplot(aes(x = mean_ret_per_season, 
-             y = constructorname, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
              fill = constructorname)) +
   geom_col() + 
   scale_fill_manual(values = team_colours) +

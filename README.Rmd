@@ -4,36 +4,123 @@ author: by ECK
 output: github_document
 ---
 
+```{r, libraries-and-data, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(broom)
+library(here)
+library(skimr)
+library(glue)
+library(forcats)
+library(wordcountaddin)
+
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+```
+
+
 ## Summary
 
-Our project is to see what can help a Formula One driver perform better? Specifically, we are looking at the Mercedes-AMG Petronas team in the hybrid era (2014-2020) and investigate possible reasons for their success.
+Formula One is the highest class of single-seater racing and one of the most prestigious racing series around the world. 
 
-To answer the question "What makes a successful Formula One team?", we want to see what data we have could impact a drivers performance. Since our data is actually a combination of multiple datasets, we combined the datasets *results, races, drivers* and *constructors* and focused only on entries in the hybrid era (2014-present excluding 2021 since the 2021 races are ongoing at the time of this analysis). This resulting dataset was called *f1merged_hybrid*.
+Each season constructors (also referred to as "teams") build cars to strict regulations and race them at more than 20 circuits across the globe. A team fields two drivers and earns points towards two separate championships; one each for the driver and constructor who score the most points over a season.
 
-Firstly, we wanted to investigate the performance of the Mercedes team. We looked at the total number of wins of five key teams - AlphaTauri, Ferrari, Mercedes, Racing Point and Red Bull. Our bar chart shows Mercedes has an impressive amount of wins when compared to the other key teams. But why is this?
+With our project we wanted to investigate the factors that make a successful F1 team. Is outright speed the only metric that matters? Or do small gains made in pit stop times or reliability make all the difference?
 
-We thought it could possibly be due to Mercedes having more drivers leading to a misleading result. However, the merged dataset we are working with has the same amount of drivers for each key team. 
+In our analysis we combined the data sets *results, races, drivers* and *constructors* and focused only on entries in the hybrid era (2014-2020 excluding the 2021 season which was ongoing at the time of our analysis). This resulting data set was called *f1merged_hybrid*.
 
-Could this be due to Mercedes being faster than the other constructors? We investigated the median speeds of each key team, and found that although Mercedes has a slightly lower mean lap time than the other teams, it isn't a significant enough difference to explain their massive amount of wins.
+In picking out a successful Formula One team from recent years there is one obvious candidate.
 
+```{r, wins-bar-chart, echo = FALSE}
 
-
-Write-up of your project and findings go here. 
-Think of this as the text of your presentation. 
-The length should be roughly 5 minutes when read out loud.
-Although pacing varies, a 5-minute speech is roughly 750 words. 
-To use the word count addin, select the text you want to count the words of (probably this is the 
-Summary section of this document, go to Addins, and select the `Word count` addin).
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 750 words, you're good! 
-The addin will ignore code chunks and only count the words in prose.
-
-You can also load your data here and present any analysis results / plots, but I strongly urge you to keep that to a minimum (maybe only the most important graphic, if you have one you can choose). 
-And make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself.
-Your results with proper output and graphics go in your presentation, this space is for a brief summary of your project.
-
-```{r load-data, echo = FALSE}
-# load data here, if you like
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = "",
+             y = n,
+             fill = constructorname)) +
+  geom_bar(stat = "identity") + 
+  coord_polar('y', start = 0) +
+  scale_fill_manual(values = key_team_colours_wins) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       fill = "Constructor") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x  = element_blank()) +
+  theme_void()
 ```
+
+Mercedes-AMG Petronas F1 team have won the Drivers' and Constructors' championships 7 years running, with a near unprecedented level of dominance. We looked at Mercedes specifically, as well as a comparison group containing 4 other teams that competed against them during the same era.
+
+**Lap Times:**
+
+Could the answer to our question simply be that Mercedes are outright faster than their competitors? We investigated the average lap time of each key team and found that Mercedes has only a slight advantage in mean lap time over the likes of Ferrari and Red Bull. Is this small advantage in race pace a significant enough difference to explain the massive discrepancy in race victories? Looking purely at average lap time, it wouldn't be unreasonable to expect Ferrari and Red Bull to have similarly successful records over the same period. 
+
+We investigated whether slightly quicker lap times could be the determining factor by plotting average lap time against finishing position and fitting a linear regression model. Our visualisation found very little correlation between a driver's average lap time during a race and their finishing position (shown by an almost flat regression line). Thus, Mercedes' overwhelming number of race wins is unlikely to be explained purely be a slight advantage in pace *during the race*.
+
+**Qualifying:**
+
+So where *would* we expect a small advantage in speed to make the biggest impact? Likely during the qualifying sessions that set the starting grid for the race. Starting race positions are decided based on the fastest lap time each driver can set during a dedicated qualifying session and are often separated by only fractions of a second. 
+
+As such we plotted qualifying position against finishing position and fit a linear model to predict one from the other. We hypothesized that a close correlation of the two would suggest a strong starting position is vital for success in the race. 
+Our initial model showed a strong correlation between the two, as expected, but the plot seemed to show particularly heavy clustering near the front of the field. To investigate this, we split the data for drivers qualifying in the top 5 from the rest of the field and modelled each separately.
+
+As we suspected from our plot there was a stronger relationship between qualifying position and finishing position for the drivers qualifying in the top 5. If a driver qualifies near the front, they are likely to stay there. There are many possible explanations for this; better pace, lesser likelihood of being involved in any collisions (particularly at the race start), likely less time spent closely following another car (something that modern F1 aerodynamics make very difficult).
+
+Summary statistics show that Mercedes took pole position (1st place in qualifying) more than 78% of the time in the hybrid era. Our qualifying model would predict them to have many wins based on this alone, but what other factors might be at play here to take a team from strong results to near unprecedented dominance?
+
+**Reliability**
+
+We identified mechanical reliability as another possible predictor of success, any race in which a driver doesn't finish is worth 0 points after all. We plotted and modelled retirements per season against points per season for each of our key teams and found a strong linear relationship between the two, if  a little skewed by the teams in our comparison group (Our intercept assumes a team with 0 retirements would score 515 points in a season, this is plausible for the top teams but not for teams in the middle of the field or further back). Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish.
+
+
+
+**Pit Stops**
+
+Similarly, we hypothesized that a team with quicker average pit stop times would score more points over a season. The timings of when a team chooses to pit a driver are very tight, and a slow stop can often be the difference between gaining or losing a place on track. Again, plotting and modelling this (and after removing data errors) we found a strong linear relationship between median pit stop time and points scored per season. As above our intercept doesn't make sense in practice and our slope seems skewed by the teams in our comparison group but it predicts a team would score 230 fewer points in a season for each second they add to their median stop time.
+
+
+As we now had two separate models predicting total points per season, we wanted to combine them into a single model to try and explain more of the variation in points scored per season. Our combined model had an adjusted R^2 value of 0.397, suggesting that around 40% of the variability in points per season can be explained by our model using median pit stop time and retirements per season as predictors. We tried to improve our model further by adding median qualifying position as a third predictor variable - this did increase the adjusted R^2, but also introduced a pattern in the predicted vs residuals plot that suggested a linear model was not suitable.
+
+
+
+**Conclusion**
+
+Our analysis allows us to go some way towards answering our question - "What makes a successful F1 team?"
+
+Certainly, speed is necessary, to see strong results a team needs a car capable of qualifying consistently near the front of the grid. But for a team to achieve the consistently impressive results that Mercedes has had in the hybrid era they need to excel in every area. Fast and consistent pit stops as well as the best reliability on the grid have also played a significant part in Mercedes' unprecedented run of success.
+
+
+**Limitations**
+
+We were not able to separate mechanical retirements from other retirements in our analysis, so used retirements for any reason as an imperfect proxy.
+
+As comparing driver skill between teams is extremely difficult and comparing between teammates would not help to answer our question, we have not included individual driver skill in our analysis.
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+
 
 ## Presentation
 
