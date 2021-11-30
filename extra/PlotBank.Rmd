@@ -19,26 +19,14 @@ key_teams <- c("Ferrari",
                "Red Bull",
                "Williams")
 
-key_team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "Racing Point" = "#F596C8",
-                  "Force India" = "#f596c8",
-                  "AlphaTauri" = "#ffffff",
-                  "McLaren" = "#ff8700",
-                  "Renault" = "#fff500",
-                  "Williams" = "#0082fa",
-                  "Toro Rosso" = "#469BFF",
-                  "Lotus F1" = "#000000",
-                  "Alfa Romeo" = "#960000",
-                  "Sauber" = "#960000",
-                  "Haas F1 Team" = "#787878")
 
-key_team_colours_wins <- c("AlphaTauri" = "grey",
-                           "Ferrari" = "#dc0000",
-                           "Mercedes" = "#00d2be",
-                           "Racing Point" = "#F596C8",
-                           "Red Bull" = "#0600ef")
+key_team_colours <- c("AlphaTauri" = "grey",
+                      "Ferrari" = "#dc0000",
+                      "Mercedes" = "#00d2be",
+                      "Racing Point" = "#F596C8",
+                      "Red Bull" = "#0600ef",
+                      "Williams" = "#0082fa",
+                      "McLaren" = "#ff8700")
 
 key_team_colours_darker <- c("Williams" = "#0065C3",
                            "Ferrari" = "#A20000",
@@ -59,7 +47,7 @@ count(constructorname, sort = TRUE) %>%
              fill = constructorname)) +
   geom_bar(stat = "identity") + 
   coord_polar('y', start = 0) +
-  scale_fill_manual(values = key_team_colours_wins) +
+  scale_fill_manual(values = key_team_colours) +
   labs(title = "Race Wins by Constructor",
        subtitle = "In the hybrid era (2014-2020)",
        fill = "Constructor") +
@@ -285,6 +273,8 @@ inner_join(points_season, ret_season)%>%
        title = "Retirements vs Total Points",
        subtitle = "Per Season",
        colour = "Constructor") +
-  scale_colour_manual(values = key_team_colours)
+  scale_colour_manual(values = key_team_colours) +
+  theme_classic()
+  
 ```
 
