@@ -56,8 +56,8 @@ Could the answer to our question simply be that Mercedes are outright
 faster than their competitors? We investigated the average lap time of
 each key team and found that Mercedes has only a slight advantage in
 median lap time over the likes of Ferrari and Red Bull. If speed was the
-deciding factor in races, Ferrari and Red Bull would be near the success
-of Mercedes.
+deciding factor in races, we would expect Ferrari and Red Bull to have
+comparable levels of success to Mercedes.
 
 Does this tiny speed advantage make a significant difference in Formula
 One? We investigated this by plotting average lap time against finishing
@@ -78,7 +78,7 @@ showed a strong correlation between the two, suggesting a good
 qualifying session is necessary to perform well. However, the plot
 seemed to show particularly heavy clustering near the front of the
 field. To investigate this, we split the data for drivers qualifying in
-the top 5 from the rest of the field, and modeled each separately.
+the top 5 from the rest of the field and modelled each separately.
 
 As suspected, there was a stronger relationship between qualifying
 position and finishing position for the drivers qualifying in the top 5.
@@ -95,7 +95,7 @@ lines up with our previous findings.
 #### Reliability
 
 We identified mechanical reliability as a possible predictor of success.
-We plotted and modeled retirements per season\* against points per
+We plotted and modelled retirements per season\* against points per
 season for each of our key teams and found a strong linear relationship
 between the two, if a little skewed by the teams in our comparison
 group. Teams with fewer retirements in a season would be expected to
@@ -127,11 +127,11 @@ capable of qualifying consistently near the front of the grid. However,
 for a team to achieve the impressive results that Mercedes has had in
 the hybrid era, they need more than just a fast car - fast and
 consistent pit stops as well as the best reliability on the grid have
-helped Mercedes go from a good team to one of the all time greats.
+helped Mercedes go from a good team to one of the all-time greats.
 
 #### Limitations
 
-We were not able to separate mechanical retirements from other
+\*We were not able to separate mechanical retirements from other
 retirements in our analysis, so used retirements for any reason as an
 imperfect proxy.
 
@@ -149,10 +149,10 @@ The data we have used in this project is from the Ergast Developer API,
 which has collected its data from the official race classifications
 released by the FIA (Formula One’s governing body).
 
-Ergast, A 2009, *Ergast Delevoper API*, data zip file, The Ergast
+Ergast, A 2009, *Ergast Developer API*, data zip file, The Ergast
 Developer API, retrieved 22nd October 2021, <http://ergast.com/mrd/>
 
 ## References
 
-Ergast, A 2009, *Ergast Delevoper API*, data zip file, The Ergast
+Ergast, A 2009, *Ergast Developer API*, data zip file, The Ergast
 Developer API, retrieved 22nd October 2021, <http://ergast.com/mrd/>
