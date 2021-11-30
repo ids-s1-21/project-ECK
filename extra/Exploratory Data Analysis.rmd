@@ -14,9 +14,9 @@ library(tidymodels)
 ```
 
 ```{r read_data, message=FALSE}
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
-stops_merged <- read_csv("/cloud/project/data/stops_merged.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 ```
 
 ```{r hybrid_era}

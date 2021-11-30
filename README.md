@@ -4,32 +4,20 @@ by ECK
 
 ## Summary
 
+### Introduction:
+
 Formula One, or F1, is the highest class of single-seater racing and one
-of the most prestigious racing series around the world.
+of the most prestigious racing series around the world. Each season,
+around 10 constructors (also referred to as “teams”) build a car to
+strict regulations and race them at more than 20 circuits across the
+globe. A constructor fields two drivers and earns points towards two
+separate championships; one for the driver and one for the constructor
+who score the most points over a season. With our project we wanted to
+investigate the factors that make a successful F1 team. Is outright
+speed the only metric that matters? Or do small gains made in pit stop
+times or reliability make all the difference?
 
-Each season around 10 constructors (also referred to as “teams”) build a
-car to strict regulations and race them at more than 20 circuits across
-the globe. A constructor fields two drivers and earns points towards two
-separate championships; one each for the driver and constructor who
-score the most points over a season.
-
-With our project we wanted to investigate the factors that make a
-successful F1 team. Is outright speed the only metric that matters? Or
-do small gains made in pit stop times or reliability make all the
-difference?
-
-In picking out a successful Formula One team from recent years there is
-one obvious candidate.
-
-![](README_files/figure-gfm/wins-bar-chart-1.png)<!-- -->
-
-Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
-championships 7 years running, with a near unprecedented level of
-dominance. We looked at Mercedes specifically, as well as a comparison
-group containing 4 other teams: Ferrari, McLaren, Red Bull and Williams.
-These comparison teams were chosen because they had all competed in F1
-across the entire period we looked at, so we could easily compare them
-to Mercedes directly.
+### Dataset:
 
 To answer the question “What makes a successful Formula One team?”, we
 wanted to analyse how several predictor variables from our data set
@@ -37,50 +25,61 @@ impacted a team’s performance. Since our data is actually a combination
 of multiple data sets, we combined the data sets *results, races,
 drivers* and *constructors* and focused only on entries in the hybrid
 era (2014-2020 excluding the 2021 season which is ongoing at the time of
-this analysis). This resulting data set was called *f1merged_hybrid*.
+this analysis). This resulting data set was called *f1merged_hybrid*. In
+picking out a successful Formula One team from recent years there is one
+obvious candidate.
 
-Could this simply be due to Mercedes being outright faster than their
-competitors? We investigated the average lap time of each key team and
-found that Mercedes has only a slight advantage in median lap time over
-the likes of Ferrari and Red Bull. Is this small advantage in race pace
-a significant enough difference to explain the massive discrepancy in
-wins and pole positions? (1st place in qualifying) Looking purely at
-median lap time, it wouldn’t be unreasonable to expect Ferrari and Red
-Bull to have similarly successful records over the same period.
+![](README_files/figure-gfm/wins-bar-chart-1.png)<!-- -->
 
-Do tiny margins in terms of speed make a significant difference in F1?
-We investigated into this to see if these few seconds could be a
-determining factor by plotting the average lap time by that racer’s
-finishing position and plotting a line of best fit. Our visualisation
-found that there is virtually no correlation between a driver’s average
-lap time and their finishing position (shown by an almost flat
-regression line). Thus, the reason for Mercedes overwhelming amount of
-wins is unlikely to be because of their slightly higher average speed.
+Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
+championships 7 years running, with a near unprecedented level of
+dominance. We looked at Mercedes specifically, as well as a comparison
+group containing 4 other teams that competed against them during this
+same time frame.
 
-Is it possible that one skilled Mercedes racer just happens to get first
-place with the other Mercedes performing worse? This would show a large
-amount of Mercedes wins even though they would perform worse as a group.
-We analysed this by plotting the finishing positions of each key
-constructor. However, it shows that the vast majority of Mercedes racers
-will finish in the top 5 with a median finishing position of around 2.
-Red Bull and Ferrari both have a median finishing position of around 4,
-and Williams and McLauren having a median finishing position of around
-10 (and a much more spread distribution, suggesting a less predictable
-finishing position).
+### Speed:
 
-There doesn’t seem to be a solid reason for Mercedes to have such a
-large volume of wins (that we can see from the dataset) - they have a
-slightly higher speed, they tend to be in the top 5 for any race, and
-yet there isn’t any clear reason for this. One possible explanation is
-that skilled drivers tend to drive Mercedes (whether that is a
-correlation or causation). A skilled Formula One driver would probably
-realise that the better you do in the qualifying races, the better pole
-position in the next race and thus the better you will do in the next
-race. Plotting this, we can see a clear relationship between qualifying
-position and the race finishing position. We can also see that Mercedes
-racers tend to do well in the qualifying races, and then do well in the
-race afterwards (even doing slightly better than expected in the second
-race).
+Could the answer to our question simply be that Mercedes are outright
+faster than their competitors? We investigated the average lap time of
+each key team and found that Mercedes has only a slight advantage in
+median lap time over the likes of Ferrari and Red Bull. Looking purely
+at median lap time, we would expect Ferrari and Red Bull to have
+similarly successful records to Mercedes over the same period, but we
+know this isn’t true. Do tiny margins in terms of speed make a
+significant difference in Formula One? We investigated whether those
+fractions of a second could be the determining factor by plotting
+average lap time against finishing position and plotting a line of best
+fit. Our visualisation found very little correlation between a driver’s
+average lap time during a race and their finishing position (shown by an
+almost flat regression line). Thus, Mercedes’ overwhelming number of
+race wins is unlikely to be explained by a slightly higher pace *during
+the race*.
+
+### Qualifying:
+
+So what difference *does* a small advantage in speed make? We would
+expect tiny advantages in pace to be most significant during the
+qualifying sessions that set the starting grid for the race. Qualifying
+positions are decided based purely on the fastest lap time each driver
+can set during a given period of time, and are often separated by only
+fractions of a second. As such we plotted qualifying position against
+finishing position hypothesizing that a close correlation of the two
+would suggest a strong qualifying session is vital for success in the
+race. Further, we fit a linear regression model to predict finishing
+position from starting grid position.
+
+### Lucky Wins:
+
+Is it possible that one particularly skilled Mercedes racer just happens
+to get first place with the other Mercedes performing worse? This would
+show a large number of Mercedes wins even though they would perform
+worse overall as a team. We analysed this by plotting the finishing
+positions of each key constructor. However, it shows that the vast
+majority of Mercedes racers will finish in the top 5 with a median
+finishing position of around 2. Red Bull and Ferrari both have a median
+finishing position of around 4, and Williams and McLaren having a median
+finishing position of around 10 (and a much wider distribution,
+suggesting a less consistent finishing position).
 
 ## Presentation
 

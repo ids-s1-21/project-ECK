@@ -10,7 +10,7 @@ library(here)
 ```
 
 ``` r
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
 
 key_teams <- c("Ferrari", 
                "McLaren",
