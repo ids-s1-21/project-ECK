@@ -1,4 +1,4 @@
-What makes a successful Formula One team?
+What Makes a Successful Formula One Team?
 ================
 by ECK
 
@@ -37,7 +37,7 @@ called *f1merged_hybrid*.
 In picking out a successful Formula One team from recent years there is
 one obvious candidate.
 
-![](README_files/figure-gfm/wins-bar-chart-1.png)<!-- -->
+![](README_files/figure-gfm/wins-pie-chart-1.png)<!-- -->
 
 Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
 championships 7 years running, with a near unprecedented level of

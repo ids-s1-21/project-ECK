@@ -1,0 +1,104 @@
+---
+title: "Visualisations Used in Presentation"
+output: github_document
+---
+
+```{r libraries-and-data , message = FALSE}
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(skimr)
+library(here)
+
+f1merged <- read_csv("/cloud/project/data/f1merged.csv")
+f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
+
+key_team_colours <- c("Mercedes" = "#00d2be",
+                  "Red Bull" = "#0600ef",
+                  "Ferrari" = "#dc0000",
+                  "Racing Point" = "#F596C8",
+                  "Force India" = "#f596c8",
+                  "AlphaTauri" = "#ffffff",
+                  "McLaren" = "#ff8700",
+                  "Renault" = "#fff500",
+                  "Williams" = "#0082fa",
+                  "Toro Rosso" = "#469BFF",
+                  "Lotus F1" = "#000000",
+                  "Alfa Romeo" = "#960000",
+                  "Sauber" = "#960000",
+                  "Haas F1 Team" = "#787878")
+
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
+```
+
+## Dataset
+
+### Wins Pie Chart
+```{r race-wins-by-constructor, echo = FALSE}
+f1merged_hybrid %>%
+  filter(positionText == 1) %>%
+count(constructorname, sort = TRUE) %>% 
+  ggplot(aes(x = "",
+             y = n,
+             fill = constructorname)) +
+  geom_bar(stat = "identity") + 
+  coord_polar('y', start = 0) +
+  scale_fill_manual(values = key_team_colours_wins) +
+  labs(title = "Race Wins by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       fill = "Constructor") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x  = element_blank()) +
+  theme_void() +
+  annotate(geom = "text", x = "", y = 68,  label = "74%", 
+           color = "white", size = 12, fontface = "bold") +     #Mercedes
+  annotate(geom = "text", x = "", y = 18,  label = "<1%",  
+           color = "white", size = 3.5, fontface = "bold") +    #Racing Point
+  annotate(geom = "text", x = "", y = 11.5,  label = "12%", 
+           color = "white", size = 5, fontface = "bold") +      #Red Bull
+  annotate(geom = "text", x = "", y = 126, label = "12%", 
+           color = "white", size = 5, fontface = "bold") +      #Ferrari
+  annotate(geom = "text", x = "", y = 138,   label = "<1%",  
+           color = "white", size = 3.5, fontface = "bold")      #Alpha Tauri
+```
+
+### Finishing Position by Constructor Distribution
+```{r finishing-position-by-constructor, echo = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  ggplot(aes(x = position, y = constructorname,
+             fill = constructorname)) +
+  geom_boxplot(alpha = 0.6) +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_reverse() +
+  scale_y_discrete(position = "right") +
+  labs(title = "Finishing Position Densities of F1 Car Constructors",
+       x = "Finishing Position",
+       y = "") +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  annotate(geom = "label", x = 18, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 8, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 4.5, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 3.5) +
+  annotate(geom = "label", x = 15, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 8, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
+```
+
+

@@ -1,5 +1,5 @@
 ---
-title: "What makes a successful Formula One team?"
+title: "What Makes a Successful Formula One Team?"
 author: by ECK
 output: github_document
 ---
@@ -47,7 +47,7 @@ To answer this question, we wanted to analyse how several predictor variables fr
   
 In picking out a successful Formula One team from recent years there is one obvious candidate.
 
-```{r, wins-bar-chart, echo = FALSE}
+```{r, wins-pie-chart, echo = FALSE}
 
 f1merged_hybrid %>%
   filter(positionText == 1) %>%
