@@ -171,6 +171,13 @@ We were not able to separate mechanical retirements from other
 retirements in our analysis, so used retirements for any reason as a
 proxy.
 
+As comparing driver skill between teams is extremely difficult
+(separating the car from the driver is almost impossible) and comparing
+between teammates would not help to answer our question, we have not
+included individual driver skill in our analysis. Driver skill
+definitely plays some part in a team’s success, but including it would
+go beyond the scope of this project.
+
 ------------------------------------------------------------------------
 
 ## Presentation
