@@ -19,6 +19,11 @@ We wanted to investigate the factors that make a successful F1 team - is
 speed the only metric that matters? Or do small gains made in pit stop
 times or reliability make all the difference?
 
+In our analysis we combined the data sets *results, races, drivers* and
+*constructors* and focused only on entries in the hybrid era (2014-2020
+excluding the 2021 season which was ongoing at the time of this
+analysis). This resulting data set was called *f1merged_hybrid*.
+
 #### Dataset
 
 To answer this question, we wanted to analyse how several predictor
@@ -37,8 +42,8 @@ one obvious candidate.
 Mercedes-AMG Petronas F1 team have won the Drivers’ and Constructors’
 championships 7 years running, with a near unprecedented level of
 dominance. We looked at Mercedes specifically, as well as a comparison
-group containing 4 other teams that competed against them during this
-same time frame.
+group containing 4 other teams that competed against them during the
+same era.
 
 We can see this isn’t just one good Mercedes driver - plotting the
 constructors against their finishing positions, we can see that Mercedes
@@ -96,10 +101,6 @@ between the two, if a little skewed by the teams in our comparison
 group. Teams with fewer retirements in a season would be expected to
 score far more points than those who frequently failed to finish.
 
-\**Retirements per season used here as an imperfect proxy for mechanical
-reliability, types of retirement are not easily differentiated in our
-data set.*
-
 #### Pit Stops
 
 Similarly, we hypothesized that a team with quicker average pit stop
@@ -121,7 +122,7 @@ this model.
 Our analysis allows us to go some way towards answering our question -
 “What makes a successful F1 team?”
 
-Speed is certainly important - to see strong results a team needs a car
+Speed is certainly important - to see strong results, a team needs a car
 capable of qualifying consistently near the front of the grid. However,
 for a team to achieve the impressive results that Mercedes has had in
 the hybrid era, they need more than just a fast car - fast and
@@ -131,15 +132,12 @@ helped Mercedes go from a good team to one of the all time greats.
 #### Limitations
 
 We were not able to separate mechanical retirements from other
-retirements in our analysis, so used retirements for any reason as a
-proxy.
+retirements in our analysis, so used retirements for any reason as an
+imperfect proxy.
 
-As comparing driver skill between teams is extremely difficult
-(separating the car from the driver is almost impossible) and comparing
-between teammates would not help to answer our question, we have not
-included individual driver skill in our analysis. Driver skill
-definitely plays some part in a team’s success, but including it would
-go beyond the scope of this project.
+As comparing driver skill between teams is extremely difficult and
+comparing between teammates would not help to answer our question, we
+have not included individual driver skill in our analysis.
 
 ## Presentation
 
