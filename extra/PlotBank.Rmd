@@ -45,6 +45,12 @@ key_team_colours_wins <- c("AlphaTauri" = "grey",
                            "Mercedes" = "#00d2be",
                            "Racing Point" = "#F596C8",
                            "Red Bull" = "#0600ef")
+
+key_team_colours_darker <- c("Williams" = "#0065C3",
+                           "Ferrari" = "#A20000",
+                           "Mercedes" = "#00A595",
+                           "Red Bull" = "#040090",
+                           "McLaren" = "#BF6500")
 ```
 
 ## Dataset
@@ -84,9 +90,11 @@ count(constructorname, sort = TRUE) %>%
 f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   ggplot(aes(x = position, y = constructorname,
-             fill = constructorname)) +
+             fill = constructorname,
+             color = constructorname)) +
   geom_boxplot(alpha = 0.6) +
   scale_fill_manual(values = key_team_colours) +
+  scale_color_manual(values = key_team_colours_darker) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
   labs(title = "Finishing Position of F1 Car Constructors",
@@ -128,11 +136,13 @@ f1merged_hybrid %>%
             "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5)) %>%
   group_by(constructorname) %>%
   ggplot(aes(x = avg_lap_time_min, y = constructorname, 
-             fill = constructorname)) +
+             fill = constructorname,
+             color = constructorname)) +
   geom_boxplot(alpha = 0.6, width = 0.7) +
   scale_x_reverse() +
   coord_cartesian(xlim = c(2.5,1)) +
   scale_fill_manual(values = key_team_colours) +
+  scale_color_manual(values = key_team_colours_darker) +
   theme(legend.position = "none",
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
