@@ -69,12 +69,8 @@ Do tiny margins in terms of speed make a significant difference in F1? We invest
 
 Is it possible that one skilled Mercedes racer just happens to get first place with the other Mercedes performing worse? This would show a large amount of Mercedes wins even though they would perform worse as a group. We analysed this by plotting the finishing positions of each key constructor. However, it shows that the vast majority of Mercedes racers will finish in the top 5 with a median finishing position of around 2. Red Bull and Ferrari both have a median finishing position of around 4, and Williams and McLauren having a median finishing position of around 10 (and a much more spread distribution, suggesting a less predictable finishing position).
 
-There doesn't seem to be a solid reason for Mercedes to have such a large volume of wins (that we can see in the dataset) - they have a slightly higher speed, they tend to be in the top 5 for any race, and yet there isn't any clear reason for this. One possible explaination is that skilled drivers tend to drive Mercedes (whether that is a correlation or causation).
+There doesn't seem to be a solid reason for Mercedes to have such a large volume of wins (that we can see from the dataset) - they have a slightly higher speed, they tend to be in the top 5 for any race, and yet there isn't any clear reason for this. One possible explanation is that skilled drivers tend to drive Mercedes (whether that is a correlation or causation). A skilled Formula One driver would probably realise that the better you do in the qualifying races, the better pole position in the next race and thus the better you will do in the next race. Plotting this, we can see a clear relationship between qualifying position and the race finishing position. We can also see that Mercedes racers tend to do well in the qualifying races, and then do well in the race afterwards (even doing slightly better than expected in the second race).
 
-
-
-----------------------What improves performance in general? Not mercedes
-* Qualifying position vs finishing position scattergraph
 
 
 
