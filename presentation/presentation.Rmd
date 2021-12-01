@@ -275,7 +275,7 @@ f1merged_hybrid %>%
 
 ## Does This Tiny Speed Advantage Make a Difference?
 
----
+. . .
 
 ```{r lap-time-vs-finishing-position, echo = FALSE}
 f1merged_hybrid %>%
@@ -298,4 +298,12 @@ f1merged_hybrid %>%
 
 . . .
 
-In short, no.
+In short, not really.
+
+
+
+# {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
+
+<div>
+  <div style="float: center;font size='10';color:white;">When is this speed difference most important?</div>
+</div>
