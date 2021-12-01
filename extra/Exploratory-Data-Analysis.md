@@ -10,6 +10,7 @@ library(skimr)
 library(here)
 library(forcats)
 library(tidymodels)
+library(corrr)
 ```
 
 ``` r
@@ -843,11 +844,7 @@ case.
 
 ``` r
 stops_rets_points <- inner_join(rets_points_season, stops_points_season)
-```
 
-    ## Joining, by = c("year", "constructorname", "total_points")
-
-``` r
 stops_rets_points_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
@@ -885,7 +882,7 @@ stops_rets_points_fit_aug %>%
        title = "Predicted Values vs Residuals")
 ```
 
-![](Exploratory-Data-Analysis_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](Exploratory-Data-Analysis_files/figure-gfm/stops_rets_points_model-1.png)<!-- -->
 The combined model predicts that a team with 0 retirements in a season
 and a median stop time of 0 milliseconds would be expected to score 6202
 points, which doesn’t make any sense here.
@@ -967,3 +964,29 @@ This model has a higher adjusted R^2 (84.7%) than the previous 2
 predictor variable model, but the plot of predicted values vs residuals
 seems to show a v shaped pattern and as such a linear model may not be
 suitable here.
+
+``` r
+stops_points_cor <- stops_points_season %>%
+  select(total_points, median_stoptime) %>%
+  correlate()
+stops_points_cor
+```
+
+    ## # A tibble: 2 × 3
+    ##   term            total_points median_stoptime
+    ##   <chr>                  <dbl>           <dbl>
+    ## 1 total_points          NA              -0.443
+    ## 2 median_stoptime       -0.443          NA
+
+``` r
+rets_points_cor <- rets_points_season %>%
+  select(total_points, retirements) %>%
+  correlate()
+rets_points_cor
+```
+
+    ## # A tibble: 2 × 3
+    ##   term         total_points retirements
+    ##   <chr>               <dbl>       <dbl>
+    ## 1 total_points       NA          -0.467
+    ## 2 retirements        -0.467      NA

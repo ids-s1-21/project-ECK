@@ -11,6 +11,7 @@ library(skimr)
 library(here)
 library(forcats)
 library(tidymodels)
+library(corrr)
 ```
 
 ```{r read_data, message=FALSE}
@@ -646,3 +647,20 @@ final_model_fit_aug %>%
 Here I've added a further predictor variable to the model, median qualifying position per season.
 
 This model has a higher adjusted R^2 (84.7%) than the previous 2 predictor variable model, but the plot of predicted values vs residuals seems to show a v shaped pattern and as such a linear model may not be suitable here.
+
+
+```{r checking correlations, warnings = FALSE, message = FALSE}
+
+stops_points_cor <- stops_points_season %>%
+  select(total_points, median_stoptime) %>%
+  correlate()
+stops_points_cor
+
+
+rets_points_cor <- rets_points_season %>%
+  select(total_points, retirements) %>%
+  correlate()
+rets_points_cor
+
+```
+
