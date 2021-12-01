@@ -42,8 +42,8 @@ For this project, we will be using a combination of data frames from the Formula
 
 Here is a glimpse and skim of the *f1merged* data frame.
 ```{r load_data, message = FALSE}
-f1merged <- read_csv("/cloud/project/data/f1merged.csv")
-f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged <- read_csv(here("data/f1merged.csv"))
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
 
 glimpse(f1merged)
 skim(f1merged)
