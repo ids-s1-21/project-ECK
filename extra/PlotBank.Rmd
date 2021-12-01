@@ -459,6 +459,8 @@ stops_points_season %>%
        colour = "Constructor") +
   scale_colour_manual(values = key_team_colours) +
   scale_x_continuous(labels = label_number(scale = 0.001))
+
+
 ```
 
 ### Combined Model 
