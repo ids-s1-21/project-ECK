@@ -1,8 +1,8 @@
 ---
-title: "What makes a successful Formula One team?"
+title: "What Makes a Successful Formula One Team?"
 subtitle: <font size='6'>An analysis of Mercedes-AMG Petronas F1 Team in the turbo hybrid era</font>
-author: <font size='8'>ECK <br>Eila Tether, Callum Stewart & Kai Morgan</font>
-institute: <font size='10'>University of Edinburgh</font>
+author: <font size='6'>ECK <br>Eila Tether, Callum Stewart & Kai Morgan</font>
+institute: <font size='7'>University of Edinburgh</font>
 date: <font size = '6'>`r Sys.Date()`</font>
 output:
   revealjs::revealjs_presentation:
@@ -11,9 +11,14 @@ output:
 
 ```{r load-packages, include = FALSE}
 # Add any additional packages you need to this chunk
-library(rmarkdown)
 library(tidyverse)
+library(readr)
+library(dplyr)
+library(skimr)
+library(here)
+library(forcats)
 library(tidymodels)
+library(rmarkdown)
 library(palmerpenguins)
 library(knitr)
 library(revealjs)
@@ -25,18 +30,18 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
+#Datasets
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 
-```
+#Lists and Colours
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
 
-## To begin we must first prove that Mercedes-AMG Petronas F1 Team are the best in the current hybrid era (2014-2020)
-
-# Mercedes Success
-```{r hybrid_era, echo = FALSE}
-hybrid_era <- (2014:2020)
-```
-
-```{r Mercedes success, echo = FALSE}
 team_colours <- c("Mercedes" = "#00d2be",
                   "Red Bull" = "#0600ef",
                   "Ferrari" = "#dc0000",
@@ -51,58 +56,88 @@ team_colours <- c("Mercedes" = "#00d2be",
                   "Alfa Romeo" = "#960000",
                   "Sauber" = "#960000",
                   "Haas F1 Team" = "#787878")
-                  
 
+key_team_colours <- c("Ferrari" = "#dc0000",
+                       "McLaren" = "#ff8700",
+                       "Mercedes" = "#00d2be",
+                       "Red Bull" = "#0600ef",
+                       "Williams" = "#0082fa")
 
-f1merged_hybrid %>%
-  filter(positionText == 1) %>%
-count(constructorname, sort = TRUE) %>% 
-  ggplot(aes(x = n, 
-             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
-             fill = constructorname)) +
-  geom_col(aes()) + 
- scale_fill_manual(values = team_colours) +
-  labs(title = "Race Wins by Constructor",
-       subtitle = "In the hybrid era (2014-2020)",
-       x = "Race Wins",
-      y = "Constructor") +
-  guides(fill = "none")
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
+
+key_team_colours_darker <- c("Williams" = "#0065C3",
+                           "Ferrari" = "#A20000",
+                           "Mercedes" = "#00A595",
+                           "Red Bull" = "#040090",
+                           "McLaren" = "#BF6500")
 ```
 
-## Do Faster Cars Have More Wins, Not Just Mercedes?
 
-```{r datasets-and-variables, message = FALSE, echo=FALSE}
-key_teams <- c("Ferrari", 
-               "McLaren",
-               "Mercedes",
-               "Red Bull",
-               "Williams")
 
-key_team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "McLaren" = "#ff8700",
-                  "Williams" = "#0082fa")
+
+```{r f1-logo, echo = FALSE, out.width = "20%", fig.align = "left"}
+include_graphics("https://www.channelnews.com.au/wp-content/uploads/2021/02/F1-3d.jpg")
 ```
 
-```{r constructor-speeds, echo=FALSE}
-f1merged_hybrid %>%
-  filter(constructorname %in% key_teams) %>%
-  drop_na() %>%
-  summarise(constructorname,
-            "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5)) %>%
-  group_by(constructorname) %>%
-  ggplot(aes(x = avg_lap_time_min, y = constructorname, 
-             fill = constructorname)) +
-  geom_boxplot(alpha = 0.7, width = 0.5) +
-  scale_x_reverse() +
-  coord_cartesian(xlim = c(2.5,1)) +
-  scale_fill_manual(values = key_team_colours) +
-  theme(legend.position = "none") +
-  labs(title = "Average Lap Time of Formula 1 Racers",
-       x = "Lap Time (Minutes)",
-       y = "Constructor")
+Formula One is the highest class of single-seater racing in the world.
+
+. . .
+
+The racers compete in over 20 circuits across the globe.
+
+```{r track-map, echo = FALSE, out.width = "40%", fig.align = "center"}
+include_graphics("https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Tuscany_Circuit.png.transform/9col/image.png")
 ```
+
+----
+
+<font size='3'>We wanted to investigate one question:</font>
+
+. . . 
+
+```{r trophy, echo = FALSE, out.width = "20%", fig.align = "center"}
+include_graphics("https://i.etsystatic.com/17857814/r/il/fbd9a1/1578738958/il_fullxfull.1578738958_fg6q.jpg")
+```
+
+<font size = '7'>**What makes a good Formula One team?**</font>
+
+. . .
+
+```{r speed-of-car, echo = FALSE, out.width = "30%", fig.align = "left"}
+include_graphics("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqbxZWzxCekl8tiaHKxToaUSyCVJu05QaIfw&usqp=CAU")
+```
+
+. . .
+
+```{r make-of-car, echo = FALSE, out.width = "30%", fig.align = "right"}
+include_graphics("https://www.kindpng.com/picc/m/166-1662070_mechanic-clipart-black-and-white-hd-png-download.png")
+```
+
+
+
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Hello World
 
@@ -196,9 +231,7 @@ ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, co
 ```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
 # see how I changed out.width and fig.width from defaults
 # to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
+
 ```
 ::::
 :::
@@ -215,9 +248,7 @@ ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
 ```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
 # see how I changed out.width and fig.width from defaults
 # to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
+
 ```
 ::::
 :::
@@ -227,7 +258,7 @@ ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
 If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
 
 ```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
+
 ```
 
 # Images
