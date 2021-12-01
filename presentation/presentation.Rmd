@@ -80,7 +80,7 @@ key_team_colours_darker <- c("Williams" = "#0065C3",
 
 
 ```{r f1-logo, echo = FALSE, out.width = "20%", fig.align = "left"}
-include_graphics("https://www.channelnews.com.au/wp-content/uploads/2021/02/F1-3d.jpg")
+include_graphics("https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-0.png")
 ```
 
 Formula One is the highest class of single-seater racing in the world.
@@ -90,7 +90,7 @@ Formula One is the highest class of single-seater racing in the world.
 The racers compete in over 20 circuits across the globe.
 
 ```{r track-map, echo = FALSE, out.width = "40%", fig.align = "center"}
-include_graphics("https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Tuscany_Circuit.png.transform/9col/image.png")
+include_graphics("https://us.123rf.com/450wm/magicleaf/magicleaf1809/magicleaf180909627/108799095-vector-illustration-of-car-and-rally-icon-collection-of-car-and-race-stock-vector-illustration-.jpg?ver=6")
 ```
 
 ----
@@ -99,22 +99,11 @@ include_graphics("https://www.formula1.com/content/dam/fom-website/2018-redesign
 
 . . . 
 
-```{r trophy, echo = FALSE, out.width = "20%", fig.align = "center"}
-include_graphics("https://i.etsystatic.com/17857814/r/il/fbd9a1/1578738958/il_fullxfull.1578738958_fg6q.jpg")
-```
 
 <font size='7'>**What makes a good Formula One team?**</font>
 
-. . .
-
-```{r speed-of-car, echo = FALSE, out.width = "50%", fig.align = "left"}
-include_graphics("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqbxZWzxCekl8tiaHKxToaUSyCVJu05QaIfw&usqp=CAU")
-```
-
-. . .
-
-```{r make-of-car, echo = FALSE, out.width = "50%", fig.align = "right"}
-include_graphics("https://www.kindpng.com/picc/m/166-1662070_mechanic-clipart-black-and-white-hd-png-download.png")
+```{r speed-of-car, echo = FALSE, out.width = "50%", fig.align = "centre"}
+include_graphics("https://us.123rf.com/450wm/magicleaf/magicleaf1809/magicleaf180909627/108799095-vector-illustration-of-car-and-rally-icon-collection-of-car-and-race-stock-vector-illustration-.jpg?ver=6")
 ```
 
 
@@ -167,7 +156,7 @@ count(constructorname, sort = TRUE) %>%
            color = "white", size = 3.5, fontface = "bold")      #Alpha Tauri
 ```
 
-# Do Mercedes Just Get Lucky Wins?
+# Could a single driver be the reason for Mercedes' Success?
 
 . . .
 
@@ -176,7 +165,7 @@ include_graphics("https://thumbs.dreamstime.com/b/vector-formula-racing-car-reac
 ```
 
 <div>
-  <div style="float: right; width: 60%;font size='5';">Is it possible that one good Mercedes driver finishes first whilst the others don't perform as well?</div>
+  <div style="float: right; width: 60%;font size='5';">Is it possible that one skilled Mercedes driver consistently finishes first whilst the others don't perform as well?</div>
 </div>
 
 ---
@@ -192,7 +181,7 @@ f1merged_hybrid %>%
   scale_color_manual(values = key_team_colours_darker) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
-  labs(title = "Finishing Position of F1 Car Constructors",
+  labs(title = "Finishing Position by Constructor",
        x = "Finishing Position",
        y = "",
        subtitle = "In the hybrid era (2014-2020)") +
@@ -254,8 +243,8 @@ f1merged_hybrid %>%
         #Creates road line effect
         panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
   
-  labs(title = "Average Lap Time of Formula 1 Racers",
-       x = "Lap Time (Minutes)",
+  labs(title = "Average Lap Time Per Race by Constructor",
+       x = "Mean Lap Time (Minutes)",
        y = "Constructor",
        subtitle = "In the hybrid era (2014-2020)") +
   
@@ -273,7 +262,7 @@ f1merged_hybrid %>%
 ```
 
 
-## Does This Tiny Speed Advantage Make a Difference?
+## Does a Tiny Speed Advantage Make a Difference during the Race?
 
 . . .
 
@@ -290,8 +279,8 @@ f1merged_hybrid %>%
   geom_jitter(alpha = 0.5, color = "azure4") +
   geom_smooth(method = lm, formula = y ~ x, color = "black") +
   theme_minimal() +
-  labs(title = "Effect of Speed on Finishing Position",
-       x = "Average Lap Time (minutes)",
+  labs(title = "Effect of Lap Time on Finishing Position",
+       x = "Mean Lap Time (minutes)",
        y = "Finishing Position",
        subtitle = "In the hybrid era (2014-2020)")
 ```
@@ -302,8 +291,109 @@ In short, not really.
 
 
 
-# {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
+## {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
 
-<div>
-  <div style="float: center;font size='10';color:white;">When is this speed difference most important?</div>
-</div>
+<font style="font size='12'; color:white;">
+
+**When is this speed difference most important?**
+
+</font>
+
+. . .
+
+<font style="font size='10';color:white;">
+We would expect this slight advantage in speed to matter most in the **qualifying races**
+since this determines the starting position of the actual race.
+</font>
+
+
+. . .
+
+
+<font style="font size='10'; color:white;">
+Qualifying races are purely a measure of a racer's **speed**
+</font>
+
+
+## 
+
+<font size='5'>
+Does qualifying position have an impact on the finishing position? 
+</font>
+
+. . . 
+
+```{r qualifying-vs-finishing, echo = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter(alpha = 0.6) +
+  geom_smooth(method = lm, colour = "black", formula = y ~ x) +
+  theme_classic() +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)",
+       color = "Constructor") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  theme(legend.position = "none") +
+  scale_y_reverse() +
+  scale_x_reverse() +
+  annotate(geom = "label", x = 7, y = 0, label = "Mercedes",
+           color = "#00d2be", size = 4, alpha = 0.6) +
+  annotate(geom = "label", x = 17, y = 1, label = "Other", 
+           color = "azure4", size = 4)
+```
+
+. . .
+
+<font size='5'>
+There is a pretty big cluster at the top 5 positions.
+</font>
+
+
+##
+
+```{r qualifying-vs-finishing-top-5, echo = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0 & grid <= 5) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "black") +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  annotate(geom = "label", x = 1, y = 18, label = "Mercedes", color = "#00d2be") +
+  annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
+```
+
+## 
+
+```{r qualifying-vs-finishing-rest, echo = FALSE}
+f1merged_hybrid %>%
+  filter(!is.na(position) & grid > 5) %>%
+  ggplot(aes(x = grid, y = position, color = constructorname == "Mercedes")) +
+  geom_jitter() +
+  geom_smooth(method = lm,
+              formula = y ~ x,
+              colour = "black") +
+  labs(x = "Qualifying Position",
+       y = "Race Finishing Position",
+       title = "Qualifying Position vs. Finishing Position (Without Top 5 Qualifiers)",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("azure4","#00d2be")) +
+  annotate(geom = "label", x = 7.5, y = 21, label = "Mercedes", 
+           color = "#00d2be") +
+  annotate(geom = "label", x = 7.1, y = 19.4, label = "Other", 
+           color = "azure4") +
+  scale_x_reverse() +
+  scale_y_reverse()
+```
