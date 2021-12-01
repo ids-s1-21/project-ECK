@@ -1,8 +1,8 @@
 ---
-title: "What makes a successful Formula One team?"
+title: "What Makes a Successful Formula One Team?"
 subtitle: <font size='6'>An analysis of Mercedes-AMG Petronas F1 Team in the turbo hybrid era</font>
-author: <font size='8'>ECK <br>Eila Tether, Callum Stewart & Kai Morgan</font>
-institute: <font size='10'>University of Edinburgh</font>
+author: <font size='6'>ECK <br>Eila Tether, Callum Stewart & Kai Morgan</font>
+institute: <font size='7'>University of Edinburgh</font>
 date: <font size = '6'>`r Sys.Date()`</font>
 output:
   revealjs::revealjs_presentation:
@@ -11,9 +11,14 @@ output:
 
 ```{r load-packages, include = FALSE}
 # Add any additional packages you need to this chunk
-library(rmarkdown)
 library(tidyverse)
+library(readr)
+library(dplyr)
+library(skimr)
+library(here)
+library(forcats)
 library(tidymodels)
+library(rmarkdown)
 library(palmerpenguins)
 library(knitr)
 library(revealjs)
@@ -25,18 +30,18 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```
 
 ```{r load-data, include=FALSE}
+#Datasets
 f1merged_hybrid <- read_csv("/cloud/project/data/f1merged_hybrid.csv")
+f1merged_hybrid <- read_csv(here("data/f1merged_hybrid.csv"))
+stops_merged <- read_csv(here("data/stops_merged.csv"))
 
-```
+#Lists and Colours
+key_teams <- c("Ferrari", 
+               "McLaren",
+               "Mercedes",
+               "Red Bull",
+               "Williams")
 
-## To begin we must first prove that Mercedes-AMG Petronas F1 Team are the best in the current hybrid era (2014-2020)
-
-# Mercedes Success
-```{r hybrid_era, echo = FALSE}
-hybrid_era <- (2014:2020)
-```
-
-```{r Mercedes success, echo = FALSE}
 team_colours <- c("Mercedes" = "#00d2be",
                   "Red Bull" = "#0600ef",
                   "Ferrari" = "#dc0000",
@@ -51,41 +56,178 @@ team_colours <- c("Mercedes" = "#00d2be",
                   "Alfa Romeo" = "#960000",
                   "Sauber" = "#960000",
                   "Haas F1 Team" = "#787878")
-                  
+
+key_team_colours <- c("Ferrari" = "#dc0000",
+                       "McLaren" = "#ff8700",
+                       "Mercedes" = "#00d2be",
+                       "Red Bull" = "#0600ef",
+                       "Williams" = "#0082fa")
+
+key_team_colours_wins <- c("AlphaTauri" = "grey",
+                           "Ferrari" = "#dc0000",
+                           "Mercedes" = "#00d2be",
+                           "Racing Point" = "#F596C8",
+                           "Red Bull" = "#0600ef")
+
+key_team_colours_darker <- c("Williams" = "#0065C3",
+                           "Ferrari" = "#A20000",
+                           "Mercedes" = "#00A595",
+                           "Red Bull" = "#040090",
+                           "McLaren" = "#BF6500")
+```
 
 
+
+
+```{r f1-logo, echo = FALSE, out.width = "20%", fig.align = "left"}
+include_graphics("https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-0.png")
+```
+
+Formula One is the highest class of single-seater racing in the world.
+
+. . .
+
+The racers compete in over 20 circuits across the globe.
+
+```{r track-map, echo = FALSE, out.width = "40%", fig.align = "center"}
+include_graphics("https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Tuscany_Circuit.png.transform/9col/image.png")
+```
+
+----
+
+<font size='5'>We wanted to investigate one question:</font>
+
+. . . 
+
+
+<font size='7'>**What makes a good Formula One team?**</font>
+
+. . .
+
+```{r speed-of-car, echo = FALSE, out.width = "50%", fig.align = "centre"}
+include_graphics("https://islandinthenet.com/wp-content/uploads/2019/02/M182625-1200x800.jpg")
+```
+
+. . .
+
+
+
+
+# Dataset
+
+<font size='5'>Our dataset comes from combining multiple datasets from the **Ergast Developer API** and focusing only on entries in 2014-2020. The resulting dataframe was named
+*f1merged_hybrid*</font>
+
+. . .
+
+```{r glimpse-f1merged-hybrid, echo = FALSE, out.width = "100%"}
+f1merged_hybrid %>% 
+  select(raceId, driverRef, constructorname, position, 
+         laps, milliseconds) %>%
+  head(8) %>% kable(format = "html")
+```
+
+----
+
+<font size='6'>Specifically, we wanted to investigate the Mercedes-AMG Petronas team's success in the hybrid era. The reason for our choice:</font>
+
+. . .
+
+```{r race-wins-by-constructor, echo = FALSE}
 f1merged_hybrid %>%
   filter(positionText == 1) %>%
 count(constructorname, sort = TRUE) %>% 
-  ggplot(aes(x = n, 
-             y = factor(constructorname, levels = rev(levels(factor(constructorname)))),
+  ggplot(aes(x = "",
+             y = n,
              fill = constructorname)) +
-  geom_col(aes()) + 
- scale_fill_manual(values = team_colours) +
+  geom_bar(stat = "identity") + 
+  coord_polar('y', start = 0) +
+  scale_fill_manual(values = key_team_colours_wins) +
   labs(title = "Race Wins by Constructor",
        subtitle = "In the hybrid era (2014-2020)",
-       x = "Race Wins",
-      y = "Constructor") +
-  guides(fill = "none")
+       fill = "Constructor") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x  = element_blank()) +
+  theme_void() +
+  annotate(geom = "text", x = "", y = 68,  label = "74%", 
+           color = "white", size = 12, fontface = "bold") +     #Mercedes
+  annotate(geom = "text", x = "", y = 18,  label = "<1%",  
+           color = "white", size = 3.5, fontface = "bold") +    #Racing Point
+  annotate(geom = "text", x = "", y = 11.5,  label = "12%", 
+           color = "white", size = 5, fontface = "bold") +      #Red Bull
+  annotate(geom = "text", x = "", y = 126, label = "12%", 
+           color = "white", size = 5, fontface = "bold") +      #Ferrari
+  annotate(geom = "text", x = "", y = 138,   label = "<1%",  
+           color = "white", size = 3.5, fontface = "bold")      #Alpha Tauri
 ```
 
-## Do Faster Cars Have More Wins, Not Just Mercedes?
+# Could a single driver be the reason for Mercedes' Success?
 
-```{r datasets-and-variables, message = FALSE, echo=FALSE}
-key_teams <- c("Ferrari", 
-               "McLaren",
-               "Mercedes",
-               "Red Bull",
-               "Williams")
+. . .
 
-key_team_colours <- c("Mercedes" = "#00d2be",
-                  "Red Bull" = "#0600ef",
-                  "Ferrari" = "#dc0000",
-                  "McLaren" = "#ff8700",
-                  "Williams" = "#0082fa")
+```{r car-finish-race, echo = FALSE, out.width = "30%", fig.align = "left"}
+include_graphics("https://thumbs.dreamstime.com/b/vector-formula-racing-car-reach-finish-line-formula-racing-car-reach-finish-line-110888315.jpg")
 ```
 
-```{r constructor-speeds, echo=FALSE}
+<div>
+  <div style="float: right; width: 60%;font size='5';">Is it possible that one skilled Mercedes driver consistently finishes first whilst the others don't perform as well?</div>
+</div>
+
+---
+
+```{r finishing-position-by-constructor, echo = FALSE, warning = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  ggplot(aes(x = position, y = constructorname,
+             fill = constructorname,
+             color = constructorname)) +
+  geom_boxplot(alpha = 0.6) +
+  scale_fill_manual(values = key_team_colours) +
+  scale_color_manual(values = key_team_colours_darker) +
+  scale_x_reverse() +
+  scale_y_discrete(position = "right") +
+  labs(title = "Finishing Position by Constructor",
+       x = "Finishing Position",
+       y = "",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        
+        #Creates road line effect
+        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
+  
+  #Finish Lines
+  geom_vline(xintercept = 0, color = "black", size = 3) +
+  geom_vline(xintercept = 0, color = "white", size = 3, linetype = "dashed") +
+  
+  #Constructor Labels
+  annotate(geom = "label", x = 18, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 8, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 4.5, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 3.5) +
+  annotate(geom = "label", x = 15, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 8, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
+```
+
+. . .
+
+<font size='6'>It's clear that Mercedes drivers tend to finish in the top 5.</font>
+
+# Are Mercedes Cars Faster?
+
+```{r finish-flag, echo = FALSE, out.width = "100%", fig.align = "center"}
+include_graphics("https://media.istockphoto.com/vectors/start-and-finish-flags-vector-id642616400?k=20&m=642616400&s=612x612&w=0&h=LN_OhnEamH3DhUiLNTBkhw1pXvwCbnPjZs8b84mBQ7Q=")
+```
+
+---
+
+```{r constructor-speeds, echo = FALSE}
 f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
   drop_na() %>%
@@ -93,167 +235,62 @@ f1merged_hybrid %>%
             "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5)) %>%
   group_by(constructorname) %>%
   ggplot(aes(x = avg_lap_time_min, y = constructorname, 
-             fill = constructorname)) +
-  geom_boxplot(alpha = 0.7, width = 0.5) +
+             fill = constructorname,
+             color = constructorname)) +
+  geom_boxplot(alpha = 0.6, width = 0.7) +
   scale_x_reverse() +
   coord_cartesian(xlim = c(2.5,1)) +
   scale_fill_manual(values = key_team_colours) +
-  theme(legend.position = "none") +
-  labs(title = "Average Lap Time of Formula 1 Racers",
-       x = "Lap Time (Minutes)",
-       y = "Constructor")
+  scale_color_manual(values = key_team_colours_darker) +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        
+        #Creates road line effect
+        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
+  
+  labs(title = "Average Lap Time Per Race by Constructor",
+       x = "Mean Lap Time (Minutes)",
+       y = "Constructor",
+       subtitle = "In the hybrid era (2014-2020)") +
+  
+  #Constructor Labels
+  annotate(geom = "label", x = 1.25, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 1.25, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
 ```
 
-# Hello World
 
-- Click the `Knit` button to compile your presentation
+## Does a Tiny Speed Advantage Make a Difference during the Race?
 
-- Make sure to commit and push all resulting files to your GitHub repo
+---
 
-# Using reveal.js
-
-It's possible to have a horizontal sliding transition as well as nest multiple slides to create a vertical stack.
-
-When presenting, you use the left/right arrows to step through the top-level (horizontal) slides. When you arrive at a vertical stack you can optionally press the up/down arrows to view the vertical slides or skip past them by pressing the right arrow.
-
-(click the down key now)
-
-## reveal.js
-
-- The presentation is created using the `reveal.js` package
-
-- You can create a slide show broken up into sections by using the # and ## heading tags
-
-- You can also create a new slide without a header using a horizontal rule (----)
-
-----
-
-- You can also add pauses between content on a slide using (". . .")
+```{r lap-time-vs-finishing-position, echo = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  summarise(constructorname, 
+            "avg_lap_time_min" = ((milliseconds/laps)/60000) %>% round(5),
+            position) %>%
+  drop_na() %>%
+  ggplot(aes(x = avg_lap_time_min, y = position)) +
+  scale_x_reverse() +
+  scale_y_reverse() +
+  geom_jitter(alpha = 0.5, color = "azure4") +
+  geom_smooth(method = lm, formula = y ~ x, color = "black") +
+  theme_minimal() +
+  labs(title = "Effect of Lap Time on Finishing Position",
+       x = "Mean Lap Time (minutes)",
+       y = "Finishing Position",
+       subtitle = "In the hybrid era (2014-2020)")
+```
 
 . . .
 
-Like this.
-
-...or using "::: fragment"
-
-::: fragment
-
-Like this.
-
-:::
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-<div>
-  <div style="float: left; width: 50%;">or text in two columns</div>
-  <div style="float: left; width: 50%;">like this</div>
-</div>
-
-because you can combine HTML and Markdown syntax.
-
-<p style="font-size: 8pt; position: absolute; bottom: -5em; width: 100%; text-align: center;">*You can also add footnotes</p>
-
-# Code
-
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
-```
-
-# Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
-```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
-## Plot and text
-
-::: columns
-:::: column
-* Some text
-* goes here
-::::
-
-:::: column
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-::::
-:::
-
-## Different widths
-
-::: columns
-:::: {.column width="40%"}
-* Some text
-* goes here
-::::
-
-:::: {.column width="60%"}
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-::::
-:::
-
-# Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
-```
-
-# Images
-
-```{r castle, echo = FALSE, out.width = "60%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80")
-```
-
-Or you can also include a full page image. See next slide.
-
-## {data-background-image="https://images.unsplash.com/photo-1535448033526-c0e85c9e6968?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80"}
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs (\$...\$), e.g. $\alpha+\beta$. You can use the display style with double dollar signs:
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-# Feeling adventurous?
-
-You can learn more about the options available at the following pages:
-
-- https://github.com/rstudio/revealjs
-
-- https://bookdown.org/yihui/rmarkdown/revealjs.html
-
-- http://www.jenniferbradham.org/post/reveal_js_markdown/
-
-- https://revealjs.com/
+In short, no.
