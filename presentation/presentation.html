@@ -642,7 +642,7 @@ Williams
 </tbody>
 </table>
 <div class="fragment">
-<p><font style="float: center; width: 60%;font size='5';"> Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position. </font></p>
+<p><font size='5'> Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position. </font></p>
 </div>
 </section></section>
 <section>
@@ -653,10 +653,95 @@ Williams
 <section id="section-12" class="slide level2">
 <h2></h2>
 <p><img src="presentation_files/figure-revealjs/retirements-vs-points-1.png" width="80%" /></p>
+</section>
+<section id="in-short" class="slide level2">
+<h2>In short</h2>
+<p><font size = '6'> Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish. </font></p>
 <div class="fragment">
-<p>(explanation here)</p>
+<p><font size = '6'> We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the amount of data we are provided. </font></p>
 </div>
 </section></section>
+<section>
+<section id="section-13" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
+<h1 data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="></h1>
+<p><font style="font size='7'; color:white;"> Does the driver’s <strong>pit stop team</strong> have a large impact on their performance? </font></p>
+<div class="fragment">
+<p><font style="font size='5';color:white;"> We measure a pit stop team’s quality by how much time a driver spends in the pit stop. </font></p>
+</div>
+<div class="fragment">
+<p><font style="font size='5';color:white;"> However, if we try to plot the pit stop time for each constructor… </font></p>
+</div>
+</section>
+<section id="section-14" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/pit-stop-time-vs-points-per-season-skewed-1.png" width="80%" /></p>
+<div class="fragment">
+<p><font size='5'> This is due to an error in collecting data, where red flag stops were recorded as pit stops. Thus, we filtered out any pit stop beyond 15 minutes. </font></p>
+</div>
+</section>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/pit-stop-time-vs-points-per-season-red-flags-removed-1.png" width="80%" /></p>
+<div class="fragment">
+<p><font size='5'> There isn’t much difference between each constructor, however we know that a fraction of a second can be vital here. </font></p>
+</div>
+</section>
+<section id="does-pit-stop-time-have-an-impact-on-total-points" class="slide level2">
+<h2><font size='7'>Does pit stop time have an impact on total points?</font></h2>
+<div class="fragment">
+<p><img src="presentation_files/figure-revealjs/stops-points-season-1.png" width="80%" /></p>
+</div>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p><font size='5'> This doesn’t seem like an accurate fit, but if we look at the summary statistics and the residual plot… </font></p>
+<div class="fragment">
+<pre><code>## # A tibble: 3 × 5
+##   term            estimate std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)     6202.    1636.          3.79 0.000627
+## 2 median_stoptime   -0.241    0.0692     -3.48 0.00148 
+## 3 retirements      -35.0      9.60       -3.65 0.000928</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.432         0.397  187.      12.2 0.000116     2  -231.  471.  477.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</section>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/stops-rets-points-model-residuals-1.png" width="80%" /></p>
+</section></section>
+<section id="conclusion" class="title-slide slide level1">
+<h1>Conclusion</h1>
+<p>Overall, there are multiple factors that can create a good Formula 1 racer.</p>
+<div class="fragment">
+<ul>
+<li>A fast car (in order to perform well in qualifying)</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>A reliable car</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Quick and consistent pit stops</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>A skilled driver (this is beyond the scope of this project)</li>
+</ul>
+</div>
+</section>
+
+<section id="section-18" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
+<h1 data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="></h1>
+<p><font style="color:white;size='10'"><strong>Thank you for Listening</strong></font></p>
+</section>
     </div>
   </div>
 
