@@ -90,15 +90,14 @@ Formula One is the highest class of single-seater racing in the world.
 The racers compete in over 20 circuits across the globe.
 
 ```{r track-map, echo = FALSE, out.width = "40%", fig.align = "center"}
-include_graphics("https://us.123rf.com/450wm/magicleaf/magicleaf1809/magicleaf180909627/108799095-vector-illustration-of-car-and-rally-icon-collection-of-car-and-race-stock-vector-illustration-.jpg?ver=6")
+include_graphics("https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Tuscany_Circuit.png.transform/9col/image.png")
 ```
 
-----
+#
 
 <font size='5'>We wanted to investigate one question:</font>
 
 . . . 
-
 
 <font size='7'>**What makes a good Formula One team?**</font>
 
@@ -121,7 +120,7 @@ f1merged_hybrid %>%
   head(8) %>% kable(format = "html")
 ```
 
-----
+##
 
 <font size='6'>Specifically, we wanted to investigate the Mercedes-AMG Petronas team's success in the hybrid era. The reason for our choice:</font>
 
@@ -156,6 +155,7 @@ count(constructorname, sort = TRUE) %>%
            color = "white", size = 3.5, fontface = "bold")      #Alpha Tauri
 ```
 
+
 # Could a single driver be the reason for Mercedes' Success?
 
 . . .
@@ -164,11 +164,11 @@ count(constructorname, sort = TRUE) %>%
 include_graphics("https://thumbs.dreamstime.com/b/vector-formula-racing-car-reach-finish-line-formula-racing-car-reach-finish-line-110888315.jpg")
 ```
 
-<div>
-  <div style="float: right; width: 60%;font size='5';">Is it possible that one skilled Mercedes driver consistently finishes first whilst the others don't perform as well?</div>
-</div>
+<font style="float: right; width: 60%;font size='5';">
+Is it possible that one skilled Mercedes driver consistently finishes first whilst the others don't perform as well?
+</font>
 
----
+## 
 
 ```{r finishing-position-by-constructor, echo = FALSE, warning = FALSE}
 f1merged_hybrid %>%
@@ -181,7 +181,7 @@ f1merged_hybrid %>%
   scale_color_manual(values = key_team_colours_darker) +
   scale_x_reverse() +
   scale_y_discrete(position = "right") +
-  labs(title = "Finishing Position by Constructor",
+  labs(title = "Finishing Position of F1 Car Constructors",
        x = "Finishing Position",
        y = "",
        subtitle = "In the hybrid era (2014-2020)") +
@@ -209,7 +209,7 @@ f1merged_hybrid %>%
            color = "#dc0000", size = 4)
 ```
 
-. . .
+. . . 
 
 <font size='6'>It's clear that Mercedes drivers tend to finish in the top 5.</font>
 
@@ -219,7 +219,7 @@ f1merged_hybrid %>%
 include_graphics("https://media.istockphoto.com/vectors/start-and-finish-flags-vector-id642616400?k=20&m=642616400&s=612x612&w=0&h=LN_OhnEamH3DhUiLNTBkhw1pXvwCbnPjZs8b84mBQ7Q=")
 ```
 
----
+##
 
 ```{r constructor-speeds, echo = FALSE}
 f1merged_hybrid %>%
@@ -262,8 +262,47 @@ f1merged_hybrid %>%
 ```
 
 
-## Does a Tiny Speed Advantage Make a Difference during the Race?
+## <font size='6'>Does a Tiny Speed Advantage Make a Difference during the Race?</font>
 
+
+```{r speed-of-constructors, echo = FALSE, warning = FALSE}
+f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  ggplot(aes(x = position, y = constructorname,
+             fill = constructorname,
+             color = constructorname)) +
+  geom_boxplot(alpha = 0.6) +
+  scale_fill_manual(values = key_team_colours) +
+  scale_color_manual(values = key_team_colours_darker) +
+  scale_x_reverse() +
+  scale_y_discrete(position = "right") +
+  labs(title = "Finishing Position by Constructor",
+       x = "Finishing Position",
+       y = "",
+       subtitle = "In the hybrid era (2014-2020)") +
+  theme(legend.position = "none",
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        
+        #Creates road line effect
+        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
+  
+  #Finish Lines
+  geom_vline(xintercept = 0, color = "black", size = 3) +
+  geom_vline(xintercept = 0, color = "white", size = 3, linetype = "dashed") +
+  
+  #Constructor Labels
+  annotate(geom = "label", x = 18, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 8, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 4.5, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 3.5) +
+  annotate(geom = "label", x = 15, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 8, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
+```
 . . .
 
 ```{r lap-time-vs-finishing-position, echo = FALSE}
@@ -291,7 +330,7 @@ In short, not really.
 
 
 
-## {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
+# {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
 
 <font style="font size='12'; color:white;">
 
@@ -397,3 +436,38 @@ f1merged_hybrid %>%
   scale_x_reverse() +
   scale_y_reverse()
 ```
+
+##
+
+```{r poles-wins-summary-statistics-1, echo = FALSE} 
+f1merged_hybrid %>%
+  filter(position == 1) %>%
+  count(constructorname) %>%
+  rename(race_wins = n) %>%
+  mutate(percent = (race_wins / sum(race_wins)) * 100) %>%
+  kable(format = "html")
+```
+
+<font style="font size='4';color:white;">
+This text is just to separate the tables
+</font>
+
+```{r poles-wins-summary-statistics-2, echo = FALSE}
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100) %>%
+  kable(format = "html")
+```
+
+##
+
+<font style="float: center; width: 60%;font size='5';">
+Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position.
+</font>
+
+
+# How does the **Reliability** of the car affect performance?
+
+Yes
