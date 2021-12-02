@@ -469,20 +469,7 @@ glance(posi_grid_fit_rest)
 
 ```
 
-##
 
-```{r qualifying_vs_finishing_rest_residuals, echo = FALSE}
-posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
-
-posi_grid_fit_rest_aug %>%
-  ggplot(aes(x = .fitted, y = .resid)) + 
-  geom_jitter() +
-  geom_hline(yintercept = 0,
-             linetype = "dashed") +
-  labs(x = "Predicted Value",
-       y = "Residuals",
-       title = "Predicted Values vs Residuals")
-```
 
 ##
 
