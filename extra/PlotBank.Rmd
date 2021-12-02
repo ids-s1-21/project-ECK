@@ -288,6 +288,8 @@ f1merged_hybrid %>%
   scale_x_reverse() +
   scale_y_reverse()
 ```
+
+
 ```{r quali_grid_model_rest, echo = FALSE}
 quali_grid_tidy_rest <- f1merged_hybrid %>%
  filter(!is.na(position) & grid > 5)

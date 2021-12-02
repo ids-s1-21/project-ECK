@@ -131,9 +131,9 @@ helped Mercedes go from a good team to one of the all-time greats.
 
 #### Limitations
 
-\*We were not able to separate mechanical retirements from other
-retirements in our analysis, so used retirements for any reason as an
-imperfect proxy.
+\*We were not able to separate mechanical from non-mechanical
+retirements (collisions etc.) in our analysis, so used retirements for
+any reason as proxy.
 
 As comparing driver skill between teams is extremely difficult and
 comparing between teammates would not help to answer our question, we

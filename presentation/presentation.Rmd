@@ -19,7 +19,6 @@ library(here)
 library(forcats)
 library(tidymodels)
 library(rmarkdown)
-library(palmerpenguins)
 library(knitr)
 library(revealjs)
 ```
@@ -264,47 +263,6 @@ f1merged_hybrid %>%
 
 ## <font size='6'>Does a Tiny Speed Advantage Make a Difference during the Race?</font>
 
-
-```{r speed-of-constructors, echo = FALSE, warning = FALSE}
-f1merged_hybrid %>%
-  filter(constructorname %in% key_teams) %>%
-  ggplot(aes(x = position, y = constructorname,
-             fill = constructorname,
-             color = constructorname)) +
-  geom_boxplot(alpha = 0.6) +
-  scale_fill_manual(values = key_team_colours) +
-  scale_color_manual(values = key_team_colours_darker) +
-  scale_x_reverse() +
-  scale_y_discrete(position = "right") +
-  labs(title = "Finishing Position by Constructor",
-       x = "Finishing Position",
-       y = "",
-       subtitle = "In the hybrid era (2014-2020)") +
-  theme(legend.position = "none",
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        
-        #Creates road line effect
-        panel.grid.major.y = element_line(linetype = "dashed", size = 2.5)) +
-  
-  #Finish Lines
-  geom_vline(xintercept = 0, color = "black", size = 3) +
-  geom_vline(xintercept = 0, color = "white", size = 3, linetype = "dashed") +
-  
-  #Constructor Labels
-  annotate(geom = "label", x = 18, y = "Williams",  label = "Williams", 
-           color = "#0082fa", size = 4) +
-  annotate(geom = "label", x = 8, y = "Red Bull",  label = "Red Bull", 
-           color = "#0600ef", size = 4) +
-  annotate(geom = "label", x = 4.5, y = "Mercedes",  label = "Mercedes", 
-           color = "#00d2be", size = 3.5) +
-  annotate(geom = "label", x = 15, y = "McLaren",  label = "McLaren", 
-           color = "#ff8700", size = 4) +
-  annotate(geom = "label", x = 8, y = "Ferrari",  label = "Ferrari", 
-           color = "#dc0000", size = 4)
-```
-. . .
-
 ```{r lap-time-vs-finishing-position, echo = FALSE}
 f1merged_hybrid %>%
   filter(constructorname %in% key_teams) %>%
@@ -332,7 +290,7 @@ In short, not really.
 
 # {data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"}
 
-<font style="font size='12'; color:white;">
+<font style="font size='12'; color:red;">
 
 **When is this speed difference most important?**
 
@@ -387,7 +345,7 @@ f1merged_hybrid %>%
 . . .
 
 <font size='5'>
-There is a pretty big cluster at the top 5 positions.
+There appears to be heavier clustering near the top 5 positions.
 </font>
 
 
@@ -401,6 +359,7 @@ f1merged_hybrid %>%
   geom_smooth(method = lm,
               formula = y ~ x,
               colour = "black") +
+  theme_classic() +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
@@ -411,9 +370,56 @@ f1merged_hybrid %>%
   annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4") +
   scale_x_reverse() +
   scale_y_reverse()
+
+
+```
+
+##
+
+<font size='5'>
+Linear Model - Qualifying vs Finishing position (Top 5 Qualifiers)
+</font>
+
+
+```{r qualifying_vs_finishing_top_5_model, echo = FALSE}
+quali_grid_tidy_leaders <- f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0 & grid <= 5)
+
+posi_grid_fit_leaders <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_leaders)
+
+tidy(posi_grid_fit_leaders) %>%
+  kable(format = "html")
+
+glance(posi_grid_fit_leaders)
+
+```
+
+##
+
+<font size='5'>
+Residuals - Qualifying vs Finishing position (Top 5 Qualifiers)
+</font>
+
+```{r qualifying_vs_finishing_top_5_residuals, echo = FALSE}
+posi_grid_fit_leaders_aug <- augment(posi_grid_fit_leaders$fit)
+
+posi_grid_fit_leaders_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
 ```
 
 ## 
+
+<font size='5'>
+Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers)
+</font>
 
 ```{r qualifying-vs-finishing-rest, echo = FALSE}
 f1merged_hybrid %>%
@@ -448,11 +454,43 @@ f1merged_hybrid %>%
   kable(format = "html")
 ```
 
-<font style="font size='4';color:white;">
-This text is just to separate the tables
+```{r poles-wins-summary-statistics-2, echo = FALSE}
+quali_grid_tidy_rest <- f1merged_hybrid %>%
+ filter(!is.na(position) & grid > 5)
+
+posi_grid_fit_rest <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_rest)
+
+tidy(posi_grid_fit_rest) %>%
+  kable(format = "html")
+
+glance(posi_grid_fit_rest)
+
+```
+
+##
+
+```{r qualifying_vs_finishing_rest_residuals, echo = FALSE}
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+##
+
+<font size='5'>
+Pole Positions (1st place in qualifying) by Constructor (2014-2020)
 </font>
 
-```{r poles-wins-summary-statistics-2, echo = FALSE}
+```{r mercedes_poles, echo = FALSE}
 f1merged_hybrid %>%
   filter(grid == 1) %>%
   count(constructorname) %>%
@@ -461,7 +499,7 @@ f1merged_hybrid %>%
   kable(format = "html")
 ```
 
-##
+. . . 
 
 <font style="float: center; width: 60%;font size='5';">
 Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position.
@@ -470,4 +508,44 @@ Overall, speed does affect a drivers performance - a faster car can lead to a be
 
 # How does the **Reliability** of the car affect performance?
 
-Yes
+```{r car-mechanic, echo = FALSE, out.width = "50%", fig.align = "center"}
+include_graphics("https://www.kindpng.com/picc/m/240-2401493_car-tire-transprent-png-free-download-organization-car.png")
+```
+
+## 
+
+```{r retirements-vs-points, echo = FALSE, message = FALSE}
+
+ret_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams & positionText == "R") %>%
+  group_by(year, constructorname) %>%
+  count(constructorname) %>%
+  summarise(retirements = n, .groups = "drop")
+
+points_season <- f1merged_hybrid %>%
+  filter(constructorname %in% key_teams) %>%
+  group_by(year, constructorname) %>%
+  summarise(total_points = sum(points), .groups = "drop")
+
+rets_points_season <- inner_join(points_season, ret_season)
+
+ rets_points_season %>%
+  ggplot(aes(x = retirements, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Retirements",
+       y = "Total Championship Points",
+       title = "Retirements vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours) +
+  theme_classic()
+  
+```
+
+. . . 
+
+(explanation here)

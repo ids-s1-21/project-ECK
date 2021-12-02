@@ -321,7 +321,6 @@ NA
 </section>
 <section id="does-a-tiny-speed-advantage-make-a-difference-during-the-race" class="slide level2">
 <h2><font size='6'>Does a Tiny Speed Advantage Make a Difference during the Race?</font></h2>
-<p><img src="presentation_files/figure-revealjs/speed-of-constructors-1.png" width="80%" /> . . .</p>
 <p><img src="presentation_files/figure-revealjs/lap-time-vs-finishing-position-1.png" width="80%" /></p>
 <div class="fragment">
 <p>In short, not really.</p>
@@ -330,7 +329,7 @@ NA
 <section>
 <section id="section-4" class="title-slide slide level1" data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg">
 <h1 data-background-image="https://www.formula1.com/content/dam/fom-website/manual/Misc/2021manual/2021QatarGrandPrixmanuals/Saturday/GettyImages-1354433381.jpg"></h1>
-<p><font style="font size='12'; color:white;"></p>
+<p><font style="font size='12'; color:red;"></p>
 <p><strong>When is this speed difference most important?</strong></p>
 <p></font></p>
 <div class="fragment">
@@ -347,7 +346,7 @@ NA
 <p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-1.png" width="80%" /></p>
 </div>
 <div class="fragment">
-<p><font size='5'> There is a pretty big cluster at the top 5 positions. </font></p>
+<p><font size='5'> There appears to be heavier clustering near the top 5 positions. </font></p>
 </div>
 </section>
 <section id="section-6" class="slide level2">
@@ -356,9 +355,81 @@ NA
 </section>
 <section id="section-7" class="slide level2">
 <h2></h2>
-<p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-rest-1.png" width="80%" /></p>
+<p><font size='5'> Linear Model - Qualifying vs Finishing position (Top 5 Qualifiers) </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.9539665
+</td>
+<td style="text-align:right;">
+0.2441884
+</td>
+<td style="text-align:right;">
+3.906682
+</td>
+<td style="text-align:right;">
+0.0001039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grid
+</td>
+<td style="text-align:right;">
+0.9536451
+</td>
+<td style="text-align:right;">
+0.0747105
+</td>
+<td style="text-align:right;">
+12.764541
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+</tbody>
+</table>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.209         0.208  2.61      163. 2.84e-33     1 -1468. 2943. 2956.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
 </section>
 <section id="section-8" class="slide level2">
+<h2></h2>
+<p><font size='5'> Residuals - Qualifying vs Finishing position (Top 5 Qualifiers) </font></p>
+<p><img src="presentation_files/figure-revealjs/qualifying_vs_finishing_top_5_residuals-1.png" width="80%" /></p>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<p><font size='5'> Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers) </font></p>
+<p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-rest-1.png" width="80%" /></p>
+</section>
+<section id="section-10" class="slide level2">
 <h2></h2>
 <table>
 <thead>
@@ -432,7 +503,76 @@ Red Bull
 </tr>
 </tbody>
 </table>
-<p><font style="font size='4';color:white;"> This text is just to separate the tables </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+3.9021785
+</td>
+<td style="text-align:right;">
+0.2588235
+</td>
+<td style="text-align:right;">
+15.07660
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grid
+</td>
+<td style="text-align:right;">
+0.5374981
+</td>
+<td style="text-align:right;">
+0.0186653
+</td>
+<td style="text-align:right;">
+28.79663
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.330         0.329  3.49      829. 1.16e-148     1 -4505. 9016. 9032.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</section>
+<section id="section-11" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/qualifying_vs_finishing_rest_residuals-1.png" width="80%" /></p>
+</section>
+<section id="section-12" class="slide level2">
+<h2></h2>
+<p><font size='5'> Pole Positions (1st place in qualifying) by Constructor (2014-2020) </font></p>
 <table>
 <thead>
 <tr>
@@ -505,15 +645,22 @@ Williams
 </tr>
 </tbody>
 </table>
-</section>
-<section id="section-9" class="slide level2">
-<h2></h2>
+<div class="fragment">
 <p><font style="float: center; width: 60%;font size='5';"> Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position. </font></p>
+</div>
 </section></section>
+<section>
 <section id="how-does-the-reliability-of-the-car-affect-performance" class="title-slide slide level1">
 <h1>How does the <strong>Reliability</strong> of the car affect performance?</h1>
-<p>Yes</p>
+<p><img src="https://www.kindpng.com/picc/m/240-2401493_car-tire-transprent-png-free-download-organization-car.png" width="50%" style="display: block; margin: auto;" /></p>
 </section>
+<section id="section-13" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/retirements-vs-points-1.png" width="80%" /></p>
+<div class="fragment">
+<p>(explanation here)</p>
+</div>
+</section></section>
     </div>
   </div>
 
