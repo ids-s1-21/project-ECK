@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="ECK  Eila Tether, Callum Stewart &amp; Kai Morgan" />
-  <meta name="dcterms.date" content="2021-12-01" />
+  <meta name="dcterms.date" content="2021-12-02" />
   <title>What Makes a Successful Formula One Team?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -74,7 +74,7 @@
   <h1 class="subtitle"><font size='6'>An analysis of Mercedes-AMG Petronas F1 Team in the turbo hybrid era</font></h1>
   <h2 class="author"><font size='6'>ECK <br>Eila Tether, Callum Stewart &amp; Kai Morgan</font></h2>
   <h3 class="institute"><font size='7'>University of Edinburgh</font></h2>
-  <h3 class="date"><font size = '6'>2021-12-01</font></h3>
+  <h3 class="date"><font size = '6'>2021-12-02</font></h3>
 </section>
 
 <section class="slide level2">
@@ -350,7 +350,7 @@ Is it possible that one skilled Mercedes driver consistently finishes first whil
 <p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-1.png" width="80%" /></p>
 </div>
 <div class="fragment">
-<p><font size='5'> There is a pretty big cluster at the top 5 positions. </font></p>
+<p><font size='5'> There appears to be heavier clustering near the top 5 positions. </font></p>
 </div>
 </section>
 <section id="section-2" class="slide level2">
@@ -359,7 +359,119 @@ Is it possible that one skilled Mercedes driver consistently finishes first whil
 </section>
 <section id="section-3" class="slide level2">
 <h2></h2>
+<p><font size='5'> Linear Model - Qualifying vs Finishing position (Top 5 Qualifiers) </font></p>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    0.954    0.244       3.91 1.04e- 4
+## 2 grid           0.954    0.0747     12.8  2.84e-33</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.209         0.208  2.61      163. 2.84e-33     1 -1468. 2943. 2956.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/qualifying_vs_finishing_top_5_residuals-1.png" width="80%" /></p>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
 <p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-rest-1.png" width="80%" /></p>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p><font size='5'> Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers) </font></p>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)    3.90     0.259       15.1 2.78e- 48
+## 2 grid           0.537    0.0187      28.8 1.16e-148</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.330         0.329  3.49      829. 1.16e-148     1 -4505. 9016. 9032.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p><img src="presentation_files/figure-revealjs/qualifying_vs_finishing_rest_residuals-1.png" width="80%" /></p>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p><font size='5'> Pole Positions (1st place in qualifying) by Constructor (2014-2020) </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+constructorname
+</th>
+<th style="text-align:right;">
+pole_positions
+</th>
+<th style="text-align:right;">
+percent
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Ferrari
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+15.2173913
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mercedes
+</td>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:right;">
+78.9855072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Racing Point
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7246377
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Red Bull
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+4.3478261
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Williams
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.7246377
+</td>
+</tr>
+</tbody>
+</table>
 </section></section>
     </div>
   </div>

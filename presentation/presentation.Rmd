@@ -19,7 +19,6 @@ library(here)
 library(forcats)
 library(tidymodels)
 library(rmarkdown)
-library(palmerpenguins)
 library(knitr)
 library(revealjs)
 ```
@@ -348,7 +347,7 @@ f1merged_hybrid %>%
 . . .
 
 <font size='5'>
-There is a pretty big cluster at the top 5 positions.
+There appears to be heavier clustering near the top 5 positions.
 </font>
 
 
@@ -362,6 +361,7 @@ f1merged_hybrid %>%
   geom_smooth(method = lm,
               formula = y ~ x,
               colour = "black") +
+  theme_classic() +
   labs(x = "Qualifying Position",
        y = "Race Finishing Position",
        title = "Qualifying Position vs. Finishing Position (Top 5 Qualifiers)",
@@ -372,6 +372,44 @@ f1merged_hybrid %>%
   annotate(geom = "label", x = 0.88, y = 16.6, label = "Other", color = "azure4") +
   scale_x_reverse() +
   scale_y_reverse()
+
+
+```
+
+##
+
+<font size='5'>
+Linear Model - Qualifying vs Finishing position (Top 5 Qualifiers)
+</font>
+
+
+```{r qualifying_vs_finishing_top_5_model, echo = FALSE}
+quali_grid_tidy_leaders <- f1merged_hybrid %>%
+  filter(!is.na(position) & grid != 0 & grid <= 5)
+
+posi_grid_fit_leaders <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_leaders)
+
+tidy(posi_grid_fit_leaders)
+
+glance(posi_grid_fit_leaders)
+
+```
+
+##
+
+```{r qualifying_vs_finishing_top_5_residuals, echo = FALSE}
+posi_grid_fit_leaders_aug <- augment(posi_grid_fit_leaders$fit)
+
+posi_grid_fit_leaders_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
 ```
 
 ## 
@@ -397,3 +435,59 @@ f1merged_hybrid %>%
   scale_x_reverse() +
   scale_y_reverse()
 ```
+
+##
+
+<font size='5'>
+Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers)
+</font>
+
+
+```{r qualifying_vs_finishing_rest_model, echo = FALSE}
+quali_grid_tidy_rest <- f1merged_hybrid %>%
+ filter(!is.na(position) & grid > 5)
+
+posi_grid_fit_rest <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(position ~ grid, data = quali_grid_tidy_rest)
+
+tidy(posi_grid_fit_rest)
+
+glance(posi_grid_fit_rest)
+
+```
+
+##
+
+```{r qualifying_vs_finishing_rest_residuals, echo = FALSE}
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
+
+##
+
+<font size='5'>
+Pole Positions (1st place in qualifying) by Constructor (2014-2020)
+</font>
+
+```{r mercedes_poles, echo = FALSE}
+f1merged_hybrid %>%
+  filter(grid == 1) %>%
+  count(constructorname) %>%
+  rename(pole_positions = n) %>%
+  mutate(percent = (pole_positions / sum(pole_positions)) * 100) %>%
+  kable(format = "html")
+
+
+```
+
+
+
