@@ -501,7 +501,7 @@ f1merged_hybrid %>%
 
 . . . 
 
-<font style="float: center; width: 60%;font size='5';">
+<font size='5'>
 Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position.
 </font>
 
@@ -546,6 +546,201 @@ rets_points_season <- inner_join(points_season, ret_season)
   
 ```
 
+## In short
+
+<font size = '6'>
+Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish.
+</font>
+
 . . . 
 
-(explanation here)
+<font size = '6'>
+We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the amount of data we are provided.
+</font>
+
+# {data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&m=1133992467&s=170667a&w=0&h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="}
+
+<font style="font size='7'; color:white;">
+Does the driver's **pit stop team** have a large impact on their performance?
+</font>
+
+. . . 
+
+<font style="font size='5';color:white;">
+We measure a pit stop team's quality by how much time a driver spends in the pit stop.
+</font>
+
+. . . 
+
+<font style="font size='5';color:white;">
+However, if we try to plot the pit stop time for each constructor...
+</font>
+
+## 
+
+```{r pit-stop-time-vs-points-per-season-skewed, echo = FALSE}
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)) %>%
+  ggplot(aes(x = milliseconds, 
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             fill = constructorname)) +
+  geom_boxplot() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 1/60000)) +
+  guides(fill = "none") +
+  labs(x = "Pit Stop Time (Minutes)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       caption = "A pit stop is recorded here as the total time in the pit lane")
+```
+
+. . . 
+
+<font size='5'>
+This is due to an error in collecting data, where red flag stops were recorded as pit stops. Thus, we filtered out any pit stop beyond 15 minutes.
+</font>
+
+## 
+
+```{r pit-stop-time-vs-points-per-season-red-flags-removed, echo = FALSE}
+stops_merged %>%
+ filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  ggplot(aes(x = milliseconds,
+             y = factor(constructorname, levels = rev(levels(factor(constructorname)))), 
+             color = constructorname,
+             fill = constructorname)) +
+  geom_violin(alpha = 0.7) +
+  theme_classic() +
+  scale_fill_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001)) +
+  guides(fill = "none") +
+  coord_cartesian(xlim = c(14000, 35000)) +
+  #stat_summary(fun.x = median, geom = "point", size = 1, color = "white") +
+  labs(x = "Pit Stop Time (Seconds)",
+       y = "Constructor",
+       title = "Pit Stop Times by Constructor",
+       subtitle = "In the hybrid era (2014-2020)",
+       caption = "A pit stop is recorded here as the total time in the pit lane") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.position = "none") +
+  
+  #Creates darker outline
+  scale_color_manual(values = key_team_colours_darker) +
+  
+  geom_boxplot(width = 0.1, fill = "white", alpha = 0.5, outlier.shape = NA) +
+  
+  #Constructor Labels
+  annotate(geom = "label", x = 34000, y = "Williams",  label = "Williams", 
+           color = "#0082fa", size = 4) +
+  annotate(geom = "label", x = 34000, y = "Red Bull",  label = "Red Bull", 
+           color = "#0600ef", size = 4) +
+  annotate(geom = "label", x = 34000, y = "Mercedes",  label = "Mercedes", 
+           color = "#00d2be", size = 4) +
+  annotate(geom = "label", x = 34000, y = "McLaren",  label = "McLaren", 
+           color = "#ff8700", size = 4) +
+  annotate(geom = "label", x = 34000, y = "Ferrari",  label = "Ferrari", 
+           color = "#dc0000", size = 4)
+```
+
+. . . 
+
+<font size='5'>
+There isn't much difference between each constructor, however we know that a fraction of a second can be vital here.
+</font>
+
+## <font size='7'>Does pit stop time have an impact on total points?</font>
+
+. . . 
+
+```{r stops-points-season, echo = FALSE, message = FALSE}
+stops_season <- stops_merged %>%
+  group_by(year, constructorname) %>%
+  filter(constructorname %in% key_teams & !is.na(milliseconds)
+        & milliseconds < 9*10^5) %>%
+  summarise(median_stoptime = median(milliseconds))
+
+stops_points_season <- inner_join(points_season, stops_season)
+
+stops_points_season %>%
+  ggplot(aes(x = median_stoptime, y = total_points, colour = constructorname)) +
+  geom_point(size = 2.5) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              colour = "black",
+              se = FALSE) +
+  labs(x = "Median Pit Stop Time (Seconds)",
+       y = "Total Championship Points",
+       title = "Pit Stop Time vs Total Points",
+       subtitle = "Per Season",
+       colour = "Constructor") +
+  scale_colour_manual(values = key_team_colours) +
+  scale_x_continuous(labels = label_number(scale = 0.001))
+```
+
+. . . 
+
+##
+
+<font size='5'>
+This doesn't seem like an accurate fit, but if we look at the summary statistics and the residual plot...
+</font>
+
+. . . 
+
+```{r stops-rets-points-model-summ-stats, echo = FALSE,  message = FALSE}
+
+stops_rets_points <- inner_join(rets_points_season, stops_points_season)
+
+stops_rets_points_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
+
+tidy(stops_rets_points_fit)
+
+glance(stops_rets_points_fit)
+
+```
+
+##
+
+```{r stops-rets-points-model-residuals, echo = FALSE, message = FALSE}
+
+stops_rets_points_fit_aug <- augment(stops_rets_points_fit$fit)
+
+stops_rets_points_fit_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+
+```
+
+# Conclusion
+
+Overall, there are multiple factors that can create a good Formula 1 racer.
+
+. . . 
+
+* A fast car (in order to perform well in qualifying)
+
+. . . 
+
+* A reliable car
+
+. . . 
+
+* Quick and consistent pit stops
+
+. . . 
+
+* A skilled driver (this is beyond the scope of this project)
+
+# {data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&m=1133992467&s=170667a&w=0&h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="}
+
+<font style="color:white;size='10'">**Thank you for Listening**</font>
