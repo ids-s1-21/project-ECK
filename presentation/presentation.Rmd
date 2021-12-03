@@ -641,23 +641,14 @@ stops_points_season %>%
   scale_x_continuous(labels = label_number(scale = 0.001))
 ```
 
-. . . 
+
 
 ##
 
 
-
-
-<font size='8'>
-Again, there appears to be a negative linear relationship here. Teams with marginally quicker median stop times would be expected to score significantly more points across an entire season.
+<font size='6'>
+Combined Linear Model - Predicting Total Points from Median Stop Time *and* Retirements per Season
 </font>
-
-<font size='8'>
-What if we were to combine our previous models and try to predict total points per season using *multiple* predictor variables?
-</font>
-
-##
-. . . 
 
 ```{r stops-rets-points-model-summ-stats, echo = FALSE,  message = FALSE}
 
@@ -676,6 +667,11 @@ tidy(stops_rets_points_fit) %>%
 Our combined model predicts that, on average, for every 1 millisecond increase in median pit stop time a team would be expected to score 0.24 fewer points per season on average. 
 
 For each additional retirement a team has in a season our model would expect them to score 35 points fewer on average.
+</font>
+
+##
+<font size='6'>
+Combined Model Fit
 </font>
 
 ```{r r stops-rets-points-model-2, echo = FALSE,  message = FALSE}
