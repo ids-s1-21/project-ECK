@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="ECK  Eila Tether, Callum Stewart &amp; Kai Morgan" />
-  <meta name="dcterms.date" content="2021-12-02" />
+  <meta name="dcterms.date" content="2021-12-03" />
   <title>What Makes a Successful Formula One Team?</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -74,7 +74,7 @@
   <h1 class="subtitle"><font size='6'>An analysis of Mercedes-AMG Petronas F1 Team in the turbo hybrid era</font></h1>
   <h2 class="author"><font size='6'>ECK <br>Eila Tether, Callum Stewart &amp; Kai Morgan</font></h2>
   <h3 class="institute"><font size='7'>University of Edinburgh</font></h2>
-  <h3 class="date"><font size = '6'>2021-12-02</font></h3>
+  <h3 class="date"><font size = '6'>2021-12-03</font></h3>
 </section>
 
 <section class="slide level2">
@@ -413,11 +413,48 @@ grid
 </tr>
 </tbody>
 </table>
-<pre><code>## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.209         0.208  2.61      163. 2.84e-33     1 -1468. 2943. 2956.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p><font size='5'> Our model of top 5 qualifiers predicts that, on average, for every 1 place further back a driver qualifies they will finish 0.954 places further back. </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.2091751
+</td>
+<td style="text-align:right;">
+0.2078913
+</td>
+<td style="text-align:right;">
+2.607967
+</td>
+<td style="text-align:right;">
+162.9335
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p><font size='5'> 20.9% of the variation in finishing position can be explained by this model. </font></p>
 </section>
 <section id="section-8" class="slide level2">
 <h2></h2>
@@ -426,83 +463,11 @@ grid
 </section>
 <section id="section-9" class="slide level2">
 <h2></h2>
-<p><font size='5'> Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers) </font></p>
 <p><img src="presentation_files/figure-revealjs/qualifying-vs-finishing-rest-1.png" width="80%" /></p>
 </section>
 <section id="section-10" class="slide level2">
 <h2></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-constructorname
-</th>
-<th style="text-align:right;">
-race_wins
-</th>
-<th style="text-align:right;">
-percent
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-AlphaTauri
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7246377
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ferrari
-</td>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:right;">
-12.3188406
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Mercedes
-</td>
-<td style="text-align:right;">
-102
-</td>
-<td style="text-align:right;">
-73.9130435
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Racing Point
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.7246377
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Red Bull
-</td>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:right;">
-12.3188406
-</td>
-</tr>
-</tbody>
-</table>
+<p><font size='5'> Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers) </font></p>
 <table>
 <thead>
 <tr>
@@ -560,13 +525,55 @@ grid
 </tr>
 </tbody>
 </table>
-<pre><code>## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.330         0.329  3.49      829. 1.16e-148     1 -4505. 9016. 9032.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p><font size='5'> Our model without top 5 qualifiers predicts that, on average, for every 1 place further back a driver qualifies they will finish 0.537 places further back. </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.3295568
+</td>
+<td style="text-align:right;">
+0.3291593
+</td>
+<td style="text-align:right;">
+3.486213
+</td>
+<td style="text-align:right;">
+829.2458
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p><font size='5'> 33% of the variation in finishing position can be explained by this model. </font></p>
 </section>
 <section id="section-11" class="slide level2">
+<h2></h2>
+<p><font size='5'> Residuals - Qualifying vs Finishing position (Top 5 Qualifiers) </font></p>
+<p><img src="presentation_files/figure-revealjs/qualifying_vs_finishing_rest_residuals-1.png" width="80%" /></p>
+</section>
+<section id="section-12" class="slide level2">
 <h2></h2>
 <p><font size='5'> Pole Positions (1st place in qualifying) by Constructor (2014-2020) </font></p>
 <table>
@@ -642,7 +649,7 @@ Williams
 </tbody>
 </table>
 <div class="fragment">
-<p><font size='5'> Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position. </font></p>
+<p><font size='5'> Overall, a small advantage in speed <em>can</em> have a significant impact on a drivers performance - a marginally faster car can lead to a better qualifying session, which will likely result in a better finishing position. </font></p>
 </div>
 </section></section>
 <section>
@@ -650,7 +657,7 @@ Williams
 <h1>How does the <strong>Reliability</strong> of the car affect performance?</h1>
 <p><img src="https://www.kindpng.com/picc/m/240-2401493_car-tire-transprent-png-free-download-organization-car.png" width="50%" style="display: block; margin: auto;" /></p>
 </section>
-<section id="section-12" class="slide level2">
+<section id="section-13" class="slide level2">
 <h2></h2>
 <p><img src="presentation_files/figure-revealjs/retirements-vs-points-1.png" width="80%" /></p>
 </section>
@@ -658,11 +665,11 @@ Williams
 <h2>In short</h2>
 <p><font size = '6'> Teams with fewer retirements in a season would be expected to score far more points than those who frequently failed to finish. </font></p>
 <div class="fragment">
-<p><font size = '6'> We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the amount of data we are provided. </font></p>
+<p><font size = '6'> We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the data set used. </font></p>
 </div>
 </section></section>
 <section>
-<section id="section-13" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
+<section id="section-14" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
 <h1 data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="></h1>
 <p><font style="font size='7'; color:white;"> Does the driver’s <strong>pit stop team</strong> have a large impact on their performance? </font></p>
 <div class="fragment">
@@ -672,14 +679,14 @@ Williams
 <p><font style="font size='5';color:white;"> However, if we try to plot the pit stop time for each constructor… </font></p>
 </div>
 </section>
-<section id="section-14" class="slide level2">
+<section id="section-15" class="slide level2">
 <h2></h2>
 <p><img src="presentation_files/figure-revealjs/pit-stop-time-vs-points-per-season-skewed-1.png" width="80%" /></p>
 <div class="fragment">
 <p><font size='5'> This is due to an error in collecting data, where red flag stops were recorded as pit stops. Thus, we filtered out any pit stop beyond 15 minutes. </font></p>
 </div>
 </section>
-<section id="section-15" class="slide level2">
+<section id="section-16" class="slide level2">
 <h2></h2>
 <p><img src="presentation_files/figure-revealjs/pit-stop-time-vs-points-per-season-red-flags-removed-1.png" width="80%" /></p>
 <div class="fragment">
@@ -692,25 +699,136 @@ Williams
 <p><img src="presentation_files/figure-revealjs/stops-points-season-1.png" width="80%" /></p>
 </div>
 </section>
-<section id="section-16" class="slide level2">
-<h2></h2>
-<p><font size='5'> This doesn’t seem like an accurate fit, but if we look at the summary statistics and the residual plot… </font></p>
-<div class="fragment">
-<pre><code>## # A tibble: 3 × 5
-##   term            estimate std.error statistic  p.value
-##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)     6202.    1636.          3.79 0.000627
-## 2 median_stoptime   -0.241    0.0692     -3.48 0.00148 
-## 3 retirements      -35.0      9.60       -3.65 0.000928</code></pre>
-<pre><code>## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.432         0.397  187.      12.2 0.000116     2  -231.  471.  477.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
-</div>
-</section>
 <section id="section-17" class="slide level2">
 <h2></h2>
+<p><font size='10'> Again there appears to be a negative linear relationship here. Teams with marginally quicker median stop times would be expected to score significantly more points across an entire season. </font></p>
+<p><font size='10'> What if we were to combine our previous models and try to predict total points per season using <em>multiple</em> predictor variables? </font></p>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<div class="fragment">
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+6202.2064080
+</td>
+<td style="text-align:right;">
+1635.9064593
+</td>
+<td style="text-align:right;">
+3.791297
+</td>
+<td style="text-align:right;">
+0.0006271
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+median_stoptime
+</td>
+<td style="text-align:right;">
+-0.2406337
+</td>
+<td style="text-align:right;">
+0.0691734
+</td>
+<td style="text-align:right;">
+-3.478702
+</td>
+<td style="text-align:right;">
+0.0014752
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+retirements
+</td>
+<td style="text-align:right;">
+-35.0179337
+</td>
+<td style="text-align:right;">
+9.5958518
+</td>
+<td style="text-align:right;">
+-3.649278
+</td>
+<td style="text-align:right;">
+0.0009275
+</td>
+</tr>
+</tbody>
+</table>
+<p><font size='5'> Our combined model predicts that, on average, for every 1 millisecond increase in median pit stop time a team would be expected to score 0.24 fewer points per season on average.</p>
+<p>For each additional retirement a team has in a season our model would expect them to score 35 points fewer on average. </font></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.4324231
+</td>
+<td style="text-align:right;">
+0.3969495
+</td>
+<td style="text-align:right;">
+187.4766
+</td>
+<td style="text-align:right;">
+12.19001
+</td>
+<td style="text-align:right;">
+0.000116
+</td>
+</tr>
+</tbody>
+</table>
+<p><font size='5'> The adjusted R-Squared value suggests that 39.7% of the variation in finishing position can be explained by this combined model. </font></p>
+</div>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p><font size='5'> Residuals - Combined Model </font></p>
 <p><img src="presentation_files/figure-revealjs/stops-rets-points-model-residuals-1.png" width="80%" /></p>
 </section></section>
 <section id="conclusion" class="title-slide slide level1">
@@ -733,12 +851,12 @@ Williams
 </div>
 <div class="fragment">
 <ul>
-<li>A skilled driver (this is beyond the scope of this project)</li>
+<li>A skilled driver (unfortunately beyond the scope of this project)</li>
 </ul>
 </div>
 </section>
 
-<section id="section-18" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
+<section id="section-20" class="title-slide slide level1" data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU=">
 <h1 data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&amp;m=1133992467&amp;s=170667a&amp;w=0&amp;h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="></h1>
 <p><font style="color:white;size='10'"><strong>Thank you for Listening</strong></font></p>
 </section>

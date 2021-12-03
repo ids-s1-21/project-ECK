@@ -392,9 +392,21 @@ posi_grid_fit_leaders <- linear_reg() %>%
 tidy(posi_grid_fit_leaders) %>%
   kable(format = "html")
 
-glance(posi_grid_fit_leaders)
-
 ```
+
+<font size='5'>
+Our model of top 5 qualifiers predicts that, on average, for every 1 place further back a driver qualifies they will finish 0.954 places further back.
+</font>
+
+```{r qualifying_vs_finishing_top_5_model_2, echo = FALSE}
+glance(posi_grid_fit_leaders) %>%
+  select(r.squared, adj.r.squared, sigma, statistic, p.value) %>% 
+  kable(format = "html")
+```
+
+<font size='5'>
+20.9% of the variation in finishing position can be explained by this model.
+</font>
 
 ##
 
@@ -417,9 +429,6 @@ posi_grid_fit_leaders_aug %>%
 
 ## 
 
-<font size='5'>
-Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers)
-</font>
 
 ```{r qualifying-vs-finishing-rest, echo = FALSE}
 f1merged_hybrid %>%
@@ -445,16 +454,11 @@ f1merged_hybrid %>%
 
 ##
 
-```{r poles-wins-summary-statistics-1, echo = FALSE} 
-f1merged_hybrid %>%
-  filter(position == 1) %>%
-  count(constructorname) %>%
-  rename(race_wins = n) %>%
-  mutate(percent = (race_wins / sum(race_wins)) * 100) %>%
-  kable(format = "html")
-```
+<font size='5'>
+Linear Model - Qualifying vs Finishing position (Without Top 5 Qualifiers)
+</font>
 
-```{r poles-wins-summary-statistics-2, echo = FALSE}
+```{r qualifying_vs_finishing_rest_model_1, echo = FALSE}
 quali_grid_tidy_rest <- f1merged_hybrid %>%
  filter(!is.na(position) & grid > 5)
 
@@ -465,10 +469,40 @@ posi_grid_fit_rest <- linear_reg() %>%
 tidy(posi_grid_fit_rest) %>%
   kable(format = "html")
 
-glance(posi_grid_fit_rest)
-
 ```
 
+<font size='5'>
+Our model without top 5 qualifiers predicts that, on average, for every 1 place further back a driver qualifies they will finish 0.537 places further back.
+</font>
+
+```{r qualifying_vs_finishing_rest_model_2, echo = FALSE}
+glance(posi_grid_fit_rest) %>%
+  select(r.squared, adj.r.squared, sigma, statistic, p.value) %>% 
+  kable(format = "html")
+```
+
+<font size='5'>
+33% of the variation in finishing position can be explained by this model.
+</font>
+
+##
+
+<font size='5'>
+Residuals - Qualifying vs Finishing position (Top 5 Qualifiers)
+</font>
+
+```{r qualifying_vs_finishing_rest_residuals, echo = FALSE}
+posi_grid_fit_rest_aug <- augment(posi_grid_fit_rest$fit)
+
+posi_grid_fit_rest_aug %>%
+  ggplot(aes(x = .fitted, y = .resid)) + 
+  geom_jitter() +
+  geom_hline(yintercept = 0,
+             linetype = "dashed") +
+  labs(x = "Predicted Value",
+       y = "Residuals",
+       title = "Predicted Values vs Residuals")
+```
 
 
 ##
@@ -489,7 +523,7 @@ f1merged_hybrid %>%
 . . . 
 
 <font size='5'>
-Overall, speed does affect a drivers performance - a faster car can lead to a better qualifying race, which can result in a better finishing position.
+Overall, a small advantage in speed *can* have a significant impact on a drivers performance - a marginally faster car can lead to a better qualifying session, which will likely result in a better finishing position. 
 </font>
 
 
@@ -542,7 +576,7 @@ Teams with fewer retirements in a season would be expected to score far more poi
 . . . 
 
 <font size = '6'>
-We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the amount of data we are provided.
+We were not able to separate mechanical from non-mechanical retirements (like collisions) in our analysis - this is a limitation due to the data set used.
 </font>
 
 # {data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&m=1133992467&s=170667a&w=0&h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="}
@@ -671,10 +705,18 @@ stops_points_season %>%
 
 ##
 
-<font size='5'>
-This doesn't seem like an accurate fit, but if we look at the summary statistics and the residual plot...
+
+
+
+<font size='10'>
+Again there appears to be a negative linear relationship here. Teams with marginally quicker median stop times would be expected to score significantly more points across an entire season.
 </font>
 
+<font size='10'>
+What if we were to combine our previous models and try to predict total points per season using *multiple* predictor variables?
+</font>
+
+##
 . . . 
 
 ```{r stops-rets-points-model-summ-stats, echo = FALSE,  message = FALSE}
@@ -685,13 +727,32 @@ stops_rets_points_fit <- linear_reg() %>%
   set_engine("lm") %>%
   fit(total_points ~ median_stoptime + retirements, data = stops_rets_points)
 
-tidy(stops_rets_points_fit)
-
-glance(stops_rets_points_fit)
+tidy(stops_rets_points_fit) %>%
+  kable(format = "html")
 
 ```
 
+<font size='5'>
+Our combined model predicts that, on average, for every 1 millisecond increase in median pit stop time a team would be expected to score 0.24 fewer points per season on average. 
+
+For each additional retirement a team has in a season our model would expect them to score 35 points fewer on average.
+</font>
+
+```{r r stops-rets-points-model-2, echo = FALSE,  message = FALSE}
+glance(stops_rets_points_fit) %>%
+  select(r.squared, adj.r.squared, sigma, statistic, p.value) %>% 
+  kable(format = "html")
+```
+
+<font size='5'>
+The adjusted R-Squared value suggests that 39.7% of the variation in finishing position can be explained by this combined model.
+</font>
+
 ##
+
+<font size='5'>
+Residuals - Combined Model
+</font>
 
 ```{r stops-rets-points-model-residuals, echo = FALSE, message = FALSE}
 
@@ -726,7 +787,7 @@ Overall, there are multiple factors that can create a good Formula 1 racer.
 
 . . . 
 
-* A skilled driver (this is beyond the scope of this project)
+* A skilled driver (unfortunately beyond the scope of this project)
 
 # {data-background-image="https://media.istockphoto.com/photos/racing-team-working-at-pit-stop-picture-id1133992467?k=20&m=1133992467&s=170667a&w=0&h=kHULFh4WtrevU6XJaaNTt8zath4w9sWDCcrJ73i3jaU="}
 
